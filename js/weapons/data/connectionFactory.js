@@ -1,23 +1,26 @@
 define(
 	[
-		'./MockServiceConnection',
-		'../../registry'
+		'../../base/data/ConnectionFactory',
+		'./ServiceConnection',
+		'./MockServiceConnection'
 	],
 	function(
-		MockWeaponsServiceConnection,
-		registry
+		ConnectionFactory,
+		WeaponsServiceConnection,
+		MockWeaponsDataConnection
 	) {
 
 
-		function WeaponsDataConnectionFactory() {}
-		WeaponsDataConnectionFactory.prototype.getConnection = function(user,ship) {
-			var mock = registry.get('mock');
-			if(mock) {
-				return new MockWeaponsServiceConnection(user,ship);
-			} else {
-				return new WeaponsServiceConnection(user,ship);
-			}
+		function WeaponsDataConnectionFactory() {
+			ConnectionFactory.apply(
+				this,
+				[
+					WeaponsServiceConnection,
+					MockWeaponsDataConnection
+				]
+			);
 		}
+		WeaponsDataConnectionFactory.prototype = new ConnectionFactory();
 
 		var connectionFactory = new WeaponsDataConnectionFactory();
 		return connectionFactory;

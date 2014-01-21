@@ -2,29 +2,40 @@ define(
 	[
 		'react',
 		'../PhasersModel',
-		'jsx!../../base/ui/Control'
+		'jsx!../../base/ui/Control',
+		'../data/connectionFactory'
 	],
 	function(
 		React,
 		PhasersModel,
-		Control
+		Control,
+		weaponsDataConnectionFactory
 	) {
 
 		var PhasersSwitchControl = React.createClass({
-			getInitialState: function() {
+			getDefaultProps: function() {
+				var phasers = this.props.ship.weapons.phasers;
 				var view = this;
-				this.model = this.props.ship.weapons.phasers;
-				this.model.subscribeTo(function(model) {
-					view.setState(model);
+				var handler = phasers.subscribeTo(function(phasers) {
+					view.forceUpdate();
 				});
-				return new PhasersModel();
+				return {
+					phasers: phasers,
+					dataConnection: weaponsDataConnectionFactory.getConnection(
+						this.props.user,
+						this.props.ship
+					)
+				};
 			},
 			render: function() {
-				return <Control className="phasers-switch-control">Phasers: <button type="button" onClick={this.test}>{this.state.enabled ? "on" : "off"}</button></Control>;
+				return <Control className="phasers-switch-control">Phasers: <button type="button" onClick={this.toggle}>{this.props.phasers.enabled ? "on" : "off"}</button></Control>;
 			},
-			test: function() {
-				this.model.enabled = !this.model.enabled;
-				this.model.setUpdated();
+			toggle: function() {
+				if(this.props.phasers.enabled) {
+					this.props.dataConnection.disablePhasers();
+				} else {
+					this.props.dataConnection.enablePhasers();
+				}
 			}
 		});
 

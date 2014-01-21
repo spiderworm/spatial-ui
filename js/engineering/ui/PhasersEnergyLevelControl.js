@@ -1,20 +1,34 @@
 define(
 	[
 		'react',
-		'jsx!../../base/ui/Control'
+		'jsx!../../base/ui/Control',
+		'../data/connectionFactory'
 	],
 	function(
 		React,
-		Control
+		Control,
+		engineeringDataConnectionFactory
 	) {
 
 		var PhasersEnergyLevelControl = React.createClass({
-			getInitialState: function() {
+			getDefaultProps: function() {
 				var view = this;
-				this.model = this.props.ship.engineering.energy.levels;
-				this.model.subscribeTo('phasers',function(phasersEnergy) {
-					view.setState({energy: phasersEnergy});
-				});
+				this.props.ship.engineering.energy.levels.subscribeTo(
+					'phasers',
+					function(phasersEnergy) {
+						view.setState({energy: phasersEnergy});
+					}
+				);
+				return {
+					ship: null,
+					user: null,
+					dataConnection: engineeringDataConnectionFactory.getConnection(
+						this.props.user,
+						this.props.ship
+					)
+				};
+			},
+			getInitialState: function() {
 				return {energy: 0};
 			},
 			render: function() {
@@ -33,8 +47,7 @@ define(
 				);
 			},
 			handleChange: function(event) {
-				this.model.phasers = event.target.value;
-				this.model.setUpdated();
+				this.props.dataConnection.setPhasersEnergyLevel(event.target.value);
 			}
 		});
 

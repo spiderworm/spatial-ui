@@ -2,30 +2,38 @@ define(
 	[
 		'react',
 		'../PhasersModel',
-		'jsx!../../base/ui/Control'
+		'jsx!../../base/ui/Control',
+		'../data/connectionFactory'
 	],
 	function(
 		React,
 		PhasersModel,
-		Control
+		Control,
+		weaponsDataConnectionFactory
 	) {
 
 		var PhasersFrequencyControl = React.createClass({
-			getInitialState: function() {
+			getDefaultProps: function() {
 				var view = this;
-				this.model = this.props.ship.weapons.phasers;
-				this.model.subscribeTo(function(phasers) {
-					view.setState(phasers);
+				var phasers = this.props.ship.weapons.phasers;
+				phasers.subscribeTo(function(phasers) {
+					view.forceUpdate();
 				});
-				return new PhasersModel();
+				return {
+					phasers: phasers,
+					dataConnection: weaponsDataConnectionFactory.getConnection(
+						this.props.user,
+						this.props.ship
+					)
+				};
 			},
 			render: function() {
-				var frequency = this.state.frequency;
+				var frequency = this.props.phasers.frequency;
 				return (
 					<Control className="phasers-frequency-control">
 						Phasers Frequency:
 						<select name="phasers-frequency" value={frequency} onChange={this.handleChange}>
-							{this.state.availableFrequencies.map(function(frequencyOption) {
+							{this.props.phasers.availableFrequencies.map(function(frequencyOption) {
 								return (
 									<option value={frequencyOption}>
 										{frequencyOption}
@@ -37,8 +45,7 @@ define(
 				);
 			},
 			handleChange: function(event) {
-				this.model.frequency = event.target.value;
-				this.model.setUpdated();
+				this.props.dataConnection.setPhaserFrequency(event.target.value);
 			}
 		});
 

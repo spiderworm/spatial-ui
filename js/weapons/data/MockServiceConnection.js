@@ -37,6 +37,18 @@ define(
 		MockServiceConnection.prototype.getModel = function() {
 			return this._model;
 		}
+		MockServiceConnection.prototype.setPhaserFrequency = function(frequency) {
+			this._model.phasers.frequency = frequency;
+			this._model.phasers.setUpdated();
+		}
+		MockServiceConnection.prototype.enablePhasers = function() {
+			this._model.phasers.enabled = true;
+			this._model.phasers.setUpdated();
+		}
+		MockServiceConnection.prototype.disablePhasers = function() {
+			this._model.phasers.enabled = false;
+			this._model.phasers.setUpdated();
+		}
 		MockServiceConnection.prototype.setKeepLoaded = function(tube,keepLoaded) {
 			tube.keepLoaded = keepLoaded ? true : false;
 			tube.setUpdated();
