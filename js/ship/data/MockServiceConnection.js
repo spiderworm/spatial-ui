@@ -1,21 +1,23 @@
 define(
 	[
-		'../Model'
+		'../Model',
+		'../../util/InstanceStore'
 	],
 	function(
-		ShipModel
+		ShipModel,
+		InstanceStore
 	) {
 
-		function MockServiceConnection() {
-			this._model = new ShipModel();
+		var instances = new InstanceStore();
 
-			var model = this._model;
+		function MockServiceConnection(user,ship) {
+			var instance = instances.find(arguments);
+			if(instance) {
+				return instance;
+			}
+			instances.add(this,arguments);
 
-			setInterval(function() {
-				model.weapons.ammo.torpedos++;
-				model.weapons.ammo.setUpdated();
-			},10);
-
+			this._model = ship;
 		}
 		MockServiceConnection.prototype.getModel = function() {
 			return this._model;

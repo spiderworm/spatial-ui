@@ -1,17 +1,21 @@
 define(
 	[
-		'./MockDataConnection'
+		'./MockDataConnection',
+		'../../registry'
 	],
 	function(
-		MockViewDataConnection
+		MockViewDataConnection,
+		registry
 	) {
 
 
 		function ViewDataConnectionFactory() {
-			this.__connection = new MockViewDataConnection();
 		}
-		ViewDataConnectionFactory.prototype.getConnection = function() {
-			return this.__connection;
+		ViewDataConnectionFactory.prototype.getConnection = function(user) {
+			var mock = registry.get('mock');
+			if(mock) {
+				return new MockViewDataConnection(user);
+			}
 		}
 
 		var connectionFactory = new ViewDataConnectionFactory();

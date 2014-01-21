@@ -16,7 +16,12 @@ define(
 			render: function() {
 				if(this.state.Module) {
 					return (
-						this.state.Module({ship: this.props.ship})
+						this.state.Module(
+							{
+								ship: this.props.ship,
+								user: this.props.user
+							}
+						)
 					);
 				} else {
 					return <span>loading</span>;

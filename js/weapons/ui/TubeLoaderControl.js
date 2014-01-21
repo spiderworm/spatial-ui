@@ -1,66 +1,90 @@
 define(
 	[
 		'react',
-		'jsx!../../base/ui/Control'
+		'jsx!../../base/ui/Control',
+		'../data/connectionFactory'
 	],
 	function(
 		React,
-		Control
+		Control,
+		weaponsDataConnectionFactory
 	) {
 
+
 		var TubeLoaderControl = React.createClass({
-			getInitialState: function() {
+			getDefaultProps: function() {
 				var view = this;
-				this.props.ammo.subscribeTo(function(ammo) {
-					view.setState({ammo: ammo});
+				this.props.ship.weapons.ammo.subscribeTo(function(ammo) {
+					view.forceUpdate();
 				});
 				this.props.tube.subscribeTo(function(tube) {
-					view.setState({tube: tube});
-				})
-				return null;
+					view.forceUpdate();
+				});
+				return {
+					user: null,
+					ammo: this.props.ship.weapons.ammo,
+					weaponsData: weaponsDataConnectionFactory.getConnection(
+						this.props.user,
+						this.props.ship
+					)
+				};
+			},
+			getInitialState: function() {
+				return {
+					targetAmmo: this.props.tube.targetAmmo
+				};
 			},
 			render: function() {
-				if(this.state && this.state.tube && this.state.ammo) {
-					return (
-						<Control className="tube-loader-control">			
-							<select name="ammo-select" value={this.state.tube.currentAmmo || "none"} onChange={this.changeAmmo}>
-								<option value="none">none</option>
-								{this.state.ammo.mapToArray(function(name,value) {
-									if(!value) {
-										return;
-									} else {
-										return <option value={name}>{name}</option>;
-									}
-								})}
-							</select>
-							<label>
-								<input type="checkbox" checked={this.state.tube.keepLoaded} onChange={this.toggleKeepLoaded} />
-								keep loaded
-							</label>
-							<button type="button" disabled={this.state.tube.keepLoaded}>
-								load
-							</button>
-							<button type="button" disabled={this.state.tube.currentAmmo == null} onClick={this.unload}>
-								unload
-							</button>
-						</Control>
-					);
-				} else {
-					return <div>...loading...</div>;
-				}
+				return (
+					<Control className="tube-loader-control">			
+						<select name="ammo-select" value={this.state.targetAmmo || "none"} onChange={this.changeAmmo}>
+							<option value="none">none</option>
+							{this.props.ammo.mapToArray(function(name,value) {
+								if(!value) {
+									return;
+								} else {
+									return <option value={name}>{name}</option>;
+								}
+							})}
+						</select>
+						<label>
+							<input type="checkbox" checked={this.props.tube.keepLoaded} onChange={this.toggleKeepLoaded} />
+							keep loaded
+						</label>
+						<button type="button" disabled={this.props.tube.keepLoaded || !this.state.targetAmmo} onClick={this.load}>
+							load
+						</button>
+						<button type="button" disabled={this.props.tube.currentAmmo == null} onClick={this.unload}>
+							unload
+						</button>
+					</Control>
+				);
 			},
 			toggleKeepLoaded: function() {
-				this.state.tube.keepLoaded = !this.state.tube.keepLoaded;
-				this.state.tube.setUpdated();
+				this.props.weaponsData.setKeepLoaded(
+					this.props.tube,
+					!this.props.tube.keepLoaded
+				);
+				if(this.props.tube.keepLoaded) {
+					this.load();
+				}
+			},
+			load: function() {
+				this.props.weaponsData.loadTube(this.props.tube,this.state.targetAmmo);
 			},
 			unload: function() {
-				this.state.tube.keepLoaded = false;
-				this.state.tube.currentAmmo = null;
-				this.state.tube.setUpdated();
+				this.props.weaponsData.unloadTube(this.props.tube);
 			},
 			changeAmmo: function(event) {
-				this.state.tube.currentAmmo = event.target.value;
-				this.state.tube.setUpdated();
+				var ammo = null;
+				if(event.target.value !== "none") {
+					ammo = event.target.value;
+				}
+				this.state.targetAmmo = ammo;
+				this.setState({targetAmmo:ammo});
+				if(this.props.tube.keepLoaded) {
+					this.load();
+				}
 			}
 		});
 

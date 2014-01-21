@@ -1,8 +1,10 @@
 define(
 	[
+		'../../registry',
 		'./MockServiceConnection'
 	],
 	function(
+		registry,
 		MockShipServiceConnection
 	) {
 
@@ -10,33 +12,13 @@ define(
 		function ShipDataConnectionFactory() {
 			this.__connections = [];
 		}
-		ShipDataConnectionFactory.prototype.getConnection = function(ship,mock) {
-			var connections = this.__findShipConnections(ship);
+		ShipDataConnectionFactory.prototype.getConnection = function(user,ship) {
+			var mock = registry.get('mock');
 			if(mock) {
-				if(!connections.mock) {
-					connections.mock = new MockShipServiceConnection();
-				}
-				return connections.mock;
+				return new MockShipServiceConnection(user,ship);
 			} else {
-				if(!connections.connection) {
-					connections.connection = new MockShipServiceConnection();
-				}
-				return connections.connection;
+				return new ShipServiceConnection(user,ship);
 			}
-		}
-		ShipDataConnectionFactory.prototype.__findShipConnections = function(ship) {
-			for(var i=0; i<this.__connections.length; i++) {
-				if(this.__connections[i].ship === ship) {
-					return this.__connections[i];
-				}
-			}
-			var connections = {
-				ship: ship,
-				mock: null,
-				connection: null
-			};
-			this.__connections.push(connections);
-			return connections;
 		}
 
 		var connectionFactory = new ShipDataConnectionFactory();

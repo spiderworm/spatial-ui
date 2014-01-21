@@ -11,29 +11,28 @@ define(
 	) {
 
 		var TubesControl = React.createClass({
-			getInitialState: function() {
+			getDefaultProps: function() {
 				var view = this;
-				this.model = this.props.ship.systems.weapons.tubes;
-				this.model.subscribeTo(function(tubes) {
-					view.setState({tubes: tubes});
+				var props = {
+					tubes: this.props.ship.systems.weapons.tubes
+				};
+				props.tubes.subscribeTo(function(tubes) {
+					view.forceUpdate();
 				});
-				return null;
+				return props;
 			},
 			render: function() {
-				var ammo = this.props.ship.weapons.ammo;
-				if(this.state) {
-					return (
-						<Control className="tubesControl">
-							{this.state.tubes.map(function(tube) {
-								return (
-									<TubeControl tube={tube} ammo={ammo}></TubeControl>
-								);
-							})}
-						</Control>
-					);
-				} else {
-					return <div>No tubes found</div>;
-				}
+				var ship = this.props.ship;
+				var user = this.props.user;
+				return (
+					<Control className="tubes-control">
+						{this.props.tubes.map(function(tube) {
+							return (
+								<TubeControl tube={tube} ship={ship} user={user}></TubeControl>
+							);
+						})}
+					</Control>
+				);
 			}
 		});
 

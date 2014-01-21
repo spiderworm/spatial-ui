@@ -1,7 +1,7 @@
 define(
 	[
 		'../base/Model',
-		'./WeaponsSystemsModel'
+		'../weapons/SystemsModel'
 	],
 	function(
 		Model,

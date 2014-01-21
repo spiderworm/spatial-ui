@@ -1,14 +1,23 @@
 define(
 	[
-		'../../base/Model'
+		'../../base/Model',
+		'../../util/InstanceStore'
 	],
 
 	function(
-		Model
+		Model,
+		InstanceStore
 	) {
 
+		var instances = new InstanceStore();
 
-		function MockViewDataConnection() {
+		function MockViewDataConnection(user) {
+
+			var instance = instances.find(arguments);
+			if(instance) {
+				return instance;
+			}
+			instances.add(this,arguments);
 
 			this._model = new Model(
 				{

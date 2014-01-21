@@ -1,32 +1,21 @@
 define(
 	[
 		'./base/App',
-		'./ship/data/connectionFactory',
-		'./base/Model',
-		'./ui/data/connectionFactory'
+		'./registry'
 	],
 	function(
 		App,
-		shipDataConnectionFactory,
-		Model,
-		viewDataConnectionFactory
+		registry
 	) {
 
+
+
 		function MockApp() {
+			registry.set('mock',true);
+
 			App.apply(this);
 
-			var myShip = {};
-
-			var myShipDataConnection = shipDataConnectionFactory.getConnection(myShip,true);
-			var myShipModel = myShipDataConnection.getModel();
-			this._registerModel('myShip',myShipModel);
-
-			var myViewModel = viewDataConnectionFactory.getConnection().getModel();
-			this._registerModel('view',myViewModel);
-
 			window.model = this.model;
-
-			this._render();
 
 		}
 		MockApp.prototype = new App();

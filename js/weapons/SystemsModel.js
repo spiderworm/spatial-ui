@@ -13,11 +13,17 @@ define(
 					{
 						display: 'Tube 1',
 						currentAmmo: null,
+						loadedPercent: 0,
+						loadSpeed: .005,
+						targetAmmo: null,
 						keepLoaded: true
 					},
 					{
 						display: 'Tube 2',
 						currentAmmo: 'torpedos',
+						loadedPercent: 1,
+						loadSpeed: .005,
+						targetAmmo: 'torpedos',
 						keepLoaded: false
 					}
 				]

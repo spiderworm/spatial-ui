@@ -11,33 +11,32 @@ define(
 	) {
 
 		var TubeControl = React.createClass({
-			getInitialState: function() {
+			getDefaultProps: function() {
 				var view = this;
 				this.props.tube.subscribeTo(function(tube) {
-					view.setState(tube);
+					view.forceUpdate();
 				});
-				return null;
+				return {};
 			},
 			render: function() {
-				if(this.state) {
-					return (
-						<Control className="tube">
-							<span className="tube-name">
-								{this.state.display}
-							</span>
-							<span className="loaded-weapon">
-								{
-									this.state.loaded ?
-									this.state.loaded.display :
-									"None"
-								}
-							</span>
-							<TubeLoaderControl tube={this.props.tube} ammo={this.props.ammo}></TubeLoaderControl>
-						</Control>
-					);
-				} else {
-					return <div>... getting tube info ...</div>;
-				}
+				return (
+					<Control className="tube-control">
+						<span className="tube-name">
+							{this.props.tube.display}
+						</span>
+						<span className="loaded-weapon">
+							{
+								this.props.tube.currentAmmo ?
+								this.props.tube.currentAmmo :
+								"None"
+							}
+						</span>
+						<span className ="loaded-percent">
+							{Math.round(this.props.tube.loadedPercent * 100)}
+						</span>
+						<TubeLoaderControl tube={this.props.tube} ship={this.props.ship} user={this.props.user}></TubeLoaderControl>
+					</Control>
+				);
 			}
 		});
 
