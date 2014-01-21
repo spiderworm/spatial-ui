@@ -56,6 +56,10 @@ define(
 				this.__updateTubeLoading(tube);
 			}
 		}
+		MockServiceConnection.prototype.setTubeAutoFire = function(tube,autoFire) {
+			tube.autoFire = autoFire ? true : false;
+			tube.setUpdated();
+		}
 		MockServiceConnection.prototype.loadTube = function(tube,ammo) {
 			tube.targetAmmo = ammo;
 			this.__updateTubeLoading(tube);

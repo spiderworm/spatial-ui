@@ -34,6 +34,9 @@ define(
 										},
 										{
 											path: 'jsx!weapons/ui/TubesControl'
+										},
+										{
+											path: 'jsx!engineering/ui/TubesEnergyLevelControl'
 										}
 									]
 								},

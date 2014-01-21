@@ -10,7 +10,7 @@ define(
 		function EnergyLevelsModel() {
 			Model.apply(this,[{
 				phasers: 100,
-				torpedos: 100
+				tubes: 100
 			}]);
 		}
 		EnergyLevelsModel.prototype = new Model();

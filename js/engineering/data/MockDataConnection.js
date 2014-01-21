@@ -20,11 +20,10 @@ define(
 			EngineeringDataConnection.apply(this,[user,ship]);
 		}
 		MockEngineeringDataConnection.prototype = new EngineeringDataConnection();
-		MockEngineeringDataConnection.prototype.setPhasersEnergyLevel = function(level) {
-				this._energyLevels.phasers = level;
-				this._energyLevels.setUpdated();
+		MockEngineeringDataConnection.prototype.setSystemEnergyLevel = function(system,level) {
+				this._model.energy.levels[system] = level;
+				this._model.energy.levels.setUpdated();
 		}
-
 
 		return MockEngineeringDataConnection;
 		

@@ -16,7 +16,8 @@ define(
 						loadedPercent: 0,
 						loadSpeed: .005,
 						targetAmmo: null,
-						keepLoaded: true
+						keepLoaded: true,
+						autoFire: true
 					},
 					{
 						display: 'Tube 2',
@@ -24,7 +25,8 @@ define(
 						loadedPercent: 1,
 						loadSpeed: .005,
 						targetAmmo: 'torpedos',
-						keepLoaded: false
+						keepLoaded: false,
+						autoFire: false
 					}
 				]
 			}]);

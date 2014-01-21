@@ -9,12 +9,12 @@ define(
 	) {
 
 		var TubesEnergyLevelControl = React.createClass({
-			systemDataName: 'phasers',
+			systemDataName: 'tubes',
 			mixins: [systemEnergyLevelControlMixin],
 			render: function() {
 				return this.getNode(
-					'Phasers Energy',
-					'phasers-energy-level-control'
+					'Tubes Energy',
+					'tubes-energy-level-control'
 				);
 			}
 		});

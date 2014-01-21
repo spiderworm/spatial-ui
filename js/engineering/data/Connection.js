@@ -7,14 +7,15 @@ define(
 	) {
 
 		function EngineeringDataConnection(user,ship) {
-			DataConnection.apply(this);
+			var model;
+			if(ship) {
+				model = ship.engineering;
+			}
+			
+			DataConnection.apply(this,[model]);
 
 			this._user = user;
 			this._ship = ship;
-
-			if(ship) {
-				this._energyLevels = ship.engineering.energy.levels;
-			}
 		}
 		EngineeringDataConnection.prototype = new DataConnection();
 
