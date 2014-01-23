@@ -1,11 +1,11 @@
 define(
 	[
 		'react',
-		'jsx!./Panel'
+		'jsx!./Section'
 	],
 	function(
 		React,
-		Panel
+		Section
 	) {
 
 		var Screen = React.createClass({
@@ -17,8 +17,8 @@ define(
 						<h1>
 							<a name={"#" + this.props.id}>{this.props.display}</a>
 						</h1>
-						{this.props.panels.map(function(panel) {
-							return <Panel ship={ship} user={user} display={panel.display} controls={panel.controls}></Panel>;
+						{this.props.sections.map(function(section) {
+							return <Section ship={ship} user={user} display={section.display} panels={section.panels}></Section>;
 						})}
 						{this.props.children}
 					</article>

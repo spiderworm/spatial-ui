@@ -3,13 +3,13 @@ define(
 		'react',
 		'jsx!../../base/ui/Control',
 		'jsx!./TubeLoaderControl',
-		'../data/connectionFactory'
+		'../../ship/data/tube/connectionFactory'
 	],
 	function(
 		React,
 		Control,
 		TubeLoaderControl,
-		weaponsDataConnectionFactory
+		tubeDataConnectionFactory
 	) {
 
 		var TubeControl = React.createClass({
@@ -18,9 +18,9 @@ define(
 				this.props.tube.subscribeTo(function(tube) {
 					view.forceUpdate();
 				});
-				var dataConnection = weaponsDataConnectionFactory.getConnection(
+				var dataConnection = tubeDataConnectionFactory.getConnection(
 					this.props.user,
-					this.props.ship
+					this.props.tube
 				);
 				return {
 					dataConnection: dataConnection
@@ -46,7 +46,7 @@ define(
 							<input type="checkbox" checked={this.props.tube.autoFire} onChange={this.toggleAutoFire} />
 							auto fire
 						</label>
-						<button type="button" disabled={!this.props.tube.currentAmmo || this.props.tube.loadedPercent < 1}>
+						<button type="button" disabled={!this.props.tube.currentAmmo || this.props.tube.loadedPercent < 1} onClick={this.fire}>
 							Fire
 						</button>
 						<TubeLoaderControl tube={this.props.tube} ship={this.props.ship} user={this.props.user}></TubeLoaderControl>
@@ -54,10 +54,12 @@ define(
 				);
 			},
 			toggleAutoFire: function() {
-				this.props.dataConnection.setTubeAutoFire(
-					this.props.tube,
+				this.props.dataConnection.setAutoFire(
 					!this.props.tube.autoFire
 				);
+			},
+			fire: function() {
+				this.props.dataConnection.fire();
 			}
 		});
 

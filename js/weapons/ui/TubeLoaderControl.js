@@ -2,12 +2,12 @@ define(
 	[
 		'react',
 		'jsx!../../base/ui/Control',
-		'../data/connectionFactory'
+		'../../ship/data/tube/connectionFactory'
 	],
 	function(
 		React,
 		Control,
-		weaponsDataConnectionFactory
+		tubeDataConnectionFactory
 	) {
 
 
@@ -23,9 +23,9 @@ define(
 				return {
 					user: null,
 					ammo: this.props.ship.weapons.ammo,
-					weaponsData: weaponsDataConnectionFactory.getConnection(
+					tubeDataConnection: tubeDataConnectionFactory.getConnection(
 						this.props.user,
-						this.props.ship
+						this.props.tube
 					)
 				};
 			},
@@ -61,8 +61,7 @@ define(
 				);
 			},
 			toggleKeepLoaded: function() {
-				this.props.weaponsData.setKeepLoaded(
-					this.props.tube,
+				this.props.tubeDataConnection.setKeepLoaded(
 					!this.props.tube.keepLoaded
 				);
 				if(this.props.tube.keepLoaded) {
@@ -70,10 +69,10 @@ define(
 				}
 			},
 			load: function() {
-				this.props.weaponsData.loadTube(this.props.tube,this.state.targetAmmo);
+				this.props.tubeDataConnection.load(this.state.targetAmmo);
 			},
 			unload: function() {
-				this.props.weaponsData.unloadTube(this.props.tube);
+				this.props.tubeDataConnection.unload();
 			},
 			changeAmmo: function(event) {
 				var ammo = null;

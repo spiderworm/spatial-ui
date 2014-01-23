@@ -36,7 +36,7 @@ define(
 						<div>
 							{this.state.screens.map(function(screen) {
 								return (
-									<Screen ship={ship} user={user} id={screen.id} display={screen.display} panels={screen.panels}></Screen>
+									<Screen ship={ship} user={user} id={screen.id} display={screen.display} sections={screen.sections}></Screen>
 								);
 							})}
 						</div>

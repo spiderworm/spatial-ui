@@ -1,19 +1,63 @@
 define(
 	[
-		'react'
+		'react',
+		'jsx!./SliderControl',
+		'jsx!./OutputControl',
+		'jsx!./ButtonControl',
+		'jsx!./SelectControl'
 	],
 	function(
-		React
+		React,
+		SliderControl,
+		OutputControl,
+		ButtonControl,
+		SelectControl
 	) {
 
 		var ControlLoader = React.createClass({
-			getInitialState: function() {
-				this.__loadModule();
+			getDefaultProps: function() {
+				var controlDefinition = this.props.ship.controls[this.props.path];
+
 				return {
-					Module: null
+					controlDefinition: controlDefinition
 				};
 			},
 			render: function() {
+				if(this.props.controlDefinition) {
+
+					if(SliderControl.supportsDefinition(this.props.controlDefinition)) {
+						return (
+							<SliderControl definition={this.props.controlDefinition} baseModel={this.props.ship}></SliderControl>
+						);
+					} 
+
+					if(OutputControl.supportsDefinition(this.props.controlDefinition)) {
+						return (
+							<OutputControl definition={this.props.controlDefinition} baseModel={this.props.ship}></OutputControl>
+						);
+					}
+
+					if(ButtonControl.supportsDefinition(this.props.controlDefinition)) {
+						return (
+							<ButtonControl definition={this.props.controlDefinition} baseModel={this.props.ship}></ButtonControl>
+						);
+					}
+
+					if(SelectControl.supportsDefinition(this.props.controlDefinition)) {
+						return (
+							<SelectControl definition={this.props.controlDefinition} baseModel={this.props.ship}></SelectControl>
+						);
+					}
+
+				}
+
+				return (
+					<div>
+						Control "{this.props.path}" unavailable.
+					</div>
+				);
+
+				/*
 				if(this.state.Module) {
 					return (
 						this.state.Module(
@@ -25,17 +69,7 @@ define(
 					);
 				} else {
 					return <span>loading</span>;
-				};
-			},
-			__loadModule: function() {
-				var loader = this;
-				require(
-					[this.props.path],
-					function(ControlModule) {
-						loader.state.Module = ControlModule;
-						loader.forceUpdate();
-					}
-				);
+				};*/
 			}
 		});
 

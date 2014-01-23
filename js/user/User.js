@@ -1,18 +1,15 @@
 define(
 	[
-		'./data/connectionFactory'
+		'./data/connectionFactory',
+		'../base/Model'
 	],
 	function(
-		userDataConnectionFactory
+		userDataConnectionFactory,
+		Model
 	) {
 
 		function User(){
 			
-		}
-		User.prototype.getShip = function() {
-			var userDataConnection = userDataConnectionFactory.getConnection(this);
-			ship = userDataConnection.getShip();
-			return ship;
 		}
 
 		return User;

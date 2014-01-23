@@ -12,12 +12,12 @@ define(
 		function ShipDataConnectionFactory() {
 			this.__connections = [];
 		}
-		ShipDataConnectionFactory.prototype.getConnection = function(user,ship) {
+		ShipDataConnectionFactory.prototype.getConnection = function(shipID) {
 			var mock = registry.get('mock');
 			if(mock) {
-				return new MockShipServiceConnection(user,ship);
+				return new MockShipServiceConnection(shipID);
 			} else {
-				return new ShipServiceConnection(user,ship);
+				return new ShipServiceConnection(shipID);
 			}
 		}
 

@@ -13,6 +13,7 @@ define(
 		}
 		ConnectionFactory.prototype.getConnection = function() {
 			var Constructor = this.__Constructor;
+
 			if(registry.get('mock')) {
 				Constructor = this.__MockConstructor;
 			}

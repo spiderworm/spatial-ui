@@ -5,7 +5,7 @@ define(
 		'../base/Model',
 		'../user/userManager',
 		'../ship/data/connectionFactory',
-		'../ui/data/connectionFactory'
+		'../user/data/ship/connectionFactory'
 	],
 	function(
 		React,
@@ -13,7 +13,7 @@ define(
 		Model,
 		userManager,
 		shipDataConnectionFactory,
-		viewDataConnectionFactory
+		userShipDataConnectionFactory
 	) {
 		
 		function App() {
@@ -25,12 +25,9 @@ define(
 
 			this._registerModel('user',user);
 
-			var myShipModel = user.getShip();
-
-			this._registerModel('myShip',myShipModel);
-
-			var myViewModel = viewDataConnectionFactory.getConnection(user).getModel();
-			this._registerModel('view',myViewModel);
+			var userShipModel = userShipDataConnectionFactory.getConnection(user).getModel();
+			this._registerModel('view',userShipModel.view);
+			this._registerModel('ship',userShipModel.ship);
 
 			this._render();
 		}
@@ -55,8 +52,8 @@ define(
 			React.renderComponent(
 				MasterUI({
 					app: this,
-					user: userManager.getCurrentUser(),
-					ship: this.model.myShip
+					user: this.model.user,
+					ship: this.model.ship
 				}),
 				document.body
 			);
