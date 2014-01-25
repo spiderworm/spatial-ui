@@ -24,17 +24,12 @@ define(
 				var view = this;
 
 				return (
-					<Control>
-						<label>
-							<span title={this.props.definition.description}>
-								{this.props.definition.label}
-							</span>
-							<select value={this.state.value} onChange={this.handleValueChange}>
-								{this.props.definition.allowedValues.map(function(allowedValue) {
-									return <option value={allowedValue}>{view._getValueOutput(allowedValue)}</option>;
-								})}
-							</select>
-						</label>
+					<Control definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
+						<select value={this.state.value} onChange={this.handleValueChange}>
+							{this.props.definition.allowedValues.map(function(allowedValue) {
+								return <option value={allowedValue}>{view._getValueDisplay(allowedValue)}</option>;
+							})}
+						</select>
 					</Control>
 				);
 

@@ -22,21 +22,16 @@ define(
 			render: function() {
 
 				return (
-					<Control>
-						<label>
-							<span title={this.props.definition.description}>
-								{this.props.definition.label}
-							</span>
-							{
-								this.state.editValueMode ?
-									<input type="text" value={this.state.temporaryValue} onChange={this.handleTemporaryValueUpdate} onBlur={this.handleTemporaryValueReady} />
-								:
-									<span onClick={this.enterEditValueMode}>
-										{this.state.value}
-									</span>
-							}
-							<input type="range" value={this.state.value} min={this.props.definition.min} max={this.props.definition.max} onChange={this.handleValueChange} />
-						</label>
+					<Control definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
+						{
+							this.state.editValueMode ?
+								<input type="text" value={this.state.temporaryValue} onChange={this.handleTemporaryValueUpdate} onBlur={this.handleTemporaryValueReady} />
+							:
+								<span onClick={this.enterEditValueMode}>
+									{this._getValueDisplay()}
+								</span>
+						}
+						<input type="range" value={this.state.value} min={this.props.definition.min} max={this.props.definition.max} onChange={this.handleValueChange} />
 					</Control>
 				);
 

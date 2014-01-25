@@ -20,15 +20,10 @@ define(
 			render: function() {
 
 				return (
-					<Control>
-						<label>
-							<span title={this.props.definition.description}>
-								{this.props.definition.label}
-							</span>
-							<button type="button" onClick={this._nextValue}>
-								{this._getValueOutput()}
-							</button>
-						</label>
+					<Control definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
+						<button type="button" onClick={this._nextValue}>
+							{this._getValueDisplay()}
+						</button>
 					</Control>
 				);
 

@@ -1,75 +1,89 @@
 define(
 	[
-		'react',
-		'jsx!./SliderControl',
-		'jsx!./OutputControl',
-		'jsx!./ButtonControl',
-		'jsx!./SelectControl'
+		'react'
 	],
 	function(
-		React,
-		SliderControl,
-		OutputControl,
-		ButtonControl,
-		SelectControl
+		React
 	) {
 
 		var ControlLoader = React.createClass({
 			getDefaultProps: function() {
-				var controlDefinition = this.props.ship.controls[this.props.path];
+				var view = this;
+				require(
+					[
+						'jsx!base/ui/SliderControl',
+						'jsx!base/ui/OutputControl',
+						'jsx!base/ui/ButtonControl',
+						'jsx!base/ui/SelectControl',
+						'jsx!base/ui/MultiControl',
+						'jsx!base/ui/TextControl'
+					],
+					function(
+						SliderControl,
+						OutputControl,
+						ButtonControl,
+						SelectControl,
+						MultiControl,
+						TextControl
+					) {
+						view.setState({
+							Controls: [
+								SliderControl,
+								OutputControl,
+								ButtonControl,
+								SelectControl,
+								MultiControl,
+								TextControl
+							]
+						});
+					}
+				);
 
 				return {
-					controlDefinition: controlDefinition
+					path: '',
+					definition: null,
+					inline: false
 				};
 			},
 			render: function() {
-				if(this.props.controlDefinition) {
 
-					if(SliderControl.supportsDefinition(this.props.controlDefinition)) {
-						return (
-							<SliderControl definition={this.props.controlDefinition} baseModel={this.props.ship}></SliderControl>
-						);
-					} 
+				var definition = this.props.definition;
+				if(!definition && this.props.path && this.props.baseModel && this.props.baseModel.controls) {
+					definition = this.props.baseModel.controls[this.props.path];
+				}
 
-					if(OutputControl.supportsDefinition(this.props.controlDefinition)) {
-						return (
-							<OutputControl definition={this.props.controlDefinition} baseModel={this.props.ship}></OutputControl>
-						);
-					}
+				if(definition) {
 
-					if(ButtonControl.supportsDefinition(this.props.controlDefinition)) {
-						return (
-							<ButtonControl definition={this.props.controlDefinition} baseModel={this.props.ship}></ButtonControl>
-						);
-					}
+					if(this.state && this.state.Controls) {
 
-					if(SelectControl.supportsDefinition(this.props.controlDefinition)) {
-						return (
-							<SelectControl definition={this.props.controlDefinition} baseModel={this.props.ship}></SelectControl>
-						);
+						for(var i=0; i<this.state.Controls.length; i++) {
+							if(this.state.Controls[i].supportsDefinition(definition)) {
+								return new this.state.Controls[i]({
+									definition: definition,
+									baseModel: this.props.baseModel,
+									inline: this.props.inline
+								});
+							}
+						}
+
+					} else {
+
+						if(this.props.inline) {
+							return <span>Loading...</span>;
+						} else {
+							return <div>Loading...</div>;
+						}
+
 					}
 
 				}
 
-				return (
-					<div>
-						Control "{this.props.path}" unavailable.
-					</div>
-				);
-
-				/*
-				if(this.state.Module) {
-					return (
-						this.state.Module(
-							{
-								ship: this.props.ship,
-								user: this.props.user
-							}
-						)
-					);
+				if(this.props.inline) {
+					return <span>Control "{this.props.path}" unavailable.</span>;
 				} else {
-					return <span>loading</span>;
-				};*/
+					return <div>Control "{this.props.path}" unavailable.</div>;
+				}
+
 			}
 		});
 

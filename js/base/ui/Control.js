@@ -1,39 +1,32 @@
 define(
 	[
-		'react'
+		'react',
+		'./ControlLoader'
 	],
 	function(
-		React
+		React,
+		ControlLoader
 	) {
 
-		var Control = React.createClass({
-			render: function() {
-				return (
-					<div
-						className={
-							"control" + (this.props.className ? " " + this.props.className : "")
-						}
-					>
-						{this.props.children}
-					</div>
-				);
-			}
-		});
-
-		Control.mixin = {
+		var controlMixin = {
 			getDefaultProps: function() {
 
 				var vals = this.__findModelAndProperty();
 
-				var view = this;
-				vals.model.subscribeTo(
-					vals.modelPropertyName,
-					function(value) {
-						view.setState({value: value});
-					}
-				);
+				if(vals.model) {
+					var view = this;
+					vals.model.subscribeTo(
+						vals.modelPropertyName,
+						function(value) {
+							view.setState({value: value});
+						}
+					);
+				}
 
-				return vals;
+				return {
+					model: vals.model,
+					modelPropertyName: vals.modelPropertyName
+				};
 
 			},
 			_nextValue: function() {
@@ -60,43 +53,129 @@ define(
 				this.props.model[this.props.modelPropertyName] = value;
 				this.props.model.setUpdated();
 			},
-			_getValueOutput: function(value) {
-				value = arguments.length !== 0 ? value : this.state.value;
-				var output = value;
+			_getValueDisplay: function(value) {
+				if(this.state) {
+					value = arguments.length !== 0 ? value : this.state.value;
+				}
+				return this.__getPropertyForValue('display',value) || value;
+			},
+			_getClassName: function(value) {
+				if(this.state) {
+					value = arguments.length !== 0 ? value : this.state.value;
+				}
+				return this.__getPropertyForValue('className',value) || "";
+			},
+			_getDescription: function(value) {
+				if(this.state) {
+					value = arguments.length !== 0 ? value : this.state.value;
+				}
+				return this.__getPropertyForValue('description',value) || "";
+			},
+			_getLabel: function(value) {
+				if(this.state) {
+					value = arguments.length !== 0 ? value : this.state.value;
+				}
+				return this.__getPropertyForValue('label',value) || "";
+			},
+			_getSubControls: function(value) {
+				if(this.state) {
+					value = arguments.length !== 0 ? value : this.state.value;
+				}
+				return this.__getPropertyForValue('subControls',value) || [];
+			},
+			__getPropertyForValue: function(property,value) {
+				var map = this.__getValueMap(value);
+				if(map && map.hasOwnProperty(property)) {
+					return map[property];
+				}
+				if(this.props.definition.hasOwnProperty(property)) {
+					return this.props.definition[property];
+				}
+				return null;
+			},
+			__getValueMap: function(value) {
+
 				if(this.props.definition.valuesMap) {
 					for(var i=0; i<this.props.definition.valuesMap.length; i++) {
 						if(this.props.definition.valuesMap[i].value === value) {
-							output = this.props.definition.valuesMap[i].label;
-							break;
+							return this.props.definition.valuesMap[i];
 						}
 					}
 				}
-				return output;
+
+				return null;
+
 			},
 			__findModelAndProperty: function() {
 
-				var propertyName = this.props.definition.dataPath;
-				var model = this.props.baseModel;
-				var matches;
+				var result = {
+					model: null,
+					modelPropertyName: null
+				}
 
-				do {
-					matches = propertyName.match(/^([^\/]*)\/(.*)$/);
-					if(matches) {
-						model = model[matches[1]];
-						propertyName = matches[2];
-					}
-				} while(matches);
+				if(this.props.definition.dataPath) {
 
-				return {
-					model: model,
-					modelPropertyName: propertyName
-				};
+					var propertyName = this.props.definition.dataPath;
+					var model = this.props.baseModel;
+					var matches;
 
+					do {
+						matches = propertyName.match(/^([^\/]*)\/(.*)$/);
+						if(matches) {
+							model = model[matches[1]];
+							propertyName = matches[2];
+						}
+					} while(matches);
+
+					result.model = model;
+					result.modelPropertyName = propertyName;
+				}
+
+				return result;
 			}
 		};
 
+
+		var Control = React.createClass({
+			mixins: [controlMixin],
+			render: function() {
+				var className = "control " + this._getClassName();
+				className = className.match(/^(.*[^ ]) ?$/)[0];
+				var subControls = this._getSubControls();
+				var baseModel = this.props.baseModel;
+				var contents = (
+					<label>
+						<span title={this._getDescription()}>
+							{this._getLabel()}
+						</span>
+						{this.props.children}
+						{subControls.map(function(val) {
+							var path=undefined, definition=undefined;
+
+							if(typeof val === "string") {
+								path = val;
+							} else if(val && typeof val === "object") {
+								definition = val;
+							}
+
+							return (
+								<ControlLoader baseModel={baseModel} definition={definition} path={path}></ControlLoader>
+							);
+						})}
+					</label>
+				);
+				if(this.props.inline) {
+					return <span className={className}>{contents}</span>;
+				} else {
+					return <div className={className}>{contents}</div>;
+				}
+			}
+		});
+
+		Control.mixin = controlMixin;
+
 		Control.supportsDefinition = function(definition) {
-			return definition && definition.dataPath;
+			return definition && typeof definition === "object";
 		}
 
 		return Control;

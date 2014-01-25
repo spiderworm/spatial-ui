@@ -61,11 +61,11 @@ define(
 						valuesMap: [
 							{
 								value: true,
-								label: 'enabled'
+								display: 'enabled'
 							},
 							{
 								value: false,
-								label: 'disabled'
+								display: 'disabled'
 							}
 						],
 						dataPath: 'weapons/phasers/enabled'
@@ -75,6 +75,52 @@ define(
 						description: 'set phasers frequency',
 						allowedValues: ['A','B','C','D'],
 						dataPath: 'weapons/phasers/frequency'
+					},
+					'systems/tubes': {
+						label: 'tubes',
+						description: 'stuff',
+						subControls: [
+							'systems/tubes/1',
+							'systems/tubes/2'
+						]
+					},
+					'systems/tubes/1': {
+						label: 'tube 1',
+						inlineControls: [
+							{
+								dataPath: 'systems/tubes/1/currentAmmo',
+								outputOnly: true
+							},
+							{
+								dataPath: 'systems/tubes/1/loadedPercent',
+								outputOnly: true
+							},
+							{
+								dataPath: 'systems/tubes/1/fire',
+								button: true,
+								allowedValues: [true,false],
+								display: 'fire'
+							}
+						]
+					},
+					'systems/tubes/2': {
+						label: 'tube 2',
+						inlineControls: [
+							{
+								dataPath: 'systems/tubes/2/currentAmmo',
+								outputOnly: true
+							},
+							{
+								dataPath: 'systems/tubes/2/loadedPercent',
+								outputOnly: true
+							},
+							{
+								dataPath: 'systems/tubes/2/fire',
+								button: true,
+								allowedValues: [true,false],
+								display: 'fire'
+							}
+						]
 					}
 				},
 				helm: {
@@ -96,6 +142,20 @@ define(
 					phasers: {
 						enabled: true,
 						frequency: 'C'
+					}
+				},
+				systems: {
+					tubes: {
+						1: {
+							currentAmmo: 'torpedo',
+							loadedPercent: .5,
+							fire: false
+						},
+						2: {
+							currentAmmo: 'nuke',
+							loadedPercent: 1,
+							fire: false
+						}
 					}
 				}
 			});
