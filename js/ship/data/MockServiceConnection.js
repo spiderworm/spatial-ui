@@ -58,7 +58,7 @@ define(
 						description: 'enable/disable phasers',
 						button: true,
 						allowedValues: [true,false],
-						valuesMap: [
+						valueMap: [
 							{
 								value: true,
 								display: 'enabled'
@@ -100,6 +100,45 @@ define(
 								button: true,
 								allowedValues: [true,false],
 								display: 'fire'
+							},
+							{
+								label: 'auto fire',
+								dataPath: 'systems/tubes/1/autoFire',
+								checkbox: true,
+								allowedValues: [true,false]
+							}
+						],
+						subControls: [
+							{
+								inlineControls: [
+									{
+										allowedValues: [null,'torpedos'],
+										valueMap: [
+											{
+												value: null,
+												display: 'none'
+											}
+										]
+									},
+									{
+										button: true,
+										allowedValues: [true,false],
+										dataPath: 'systems/tubes/1/load',
+										display: 'load'
+									},
+									{
+										button: true,
+										allowedValues: [true,false],
+										dataPath: 'systems/tubes/1/unload',
+										display: 'unload'
+									},
+									{
+										checkbox: true,
+										allowedValues: [true,false],
+										dataPath: 'systems/tubes/1/keepLoaded',
+										label: 'keep loaded'
+									}
+								]
 							}
 						]
 					},
@@ -119,6 +158,45 @@ define(
 								button: true,
 								allowedValues: [true,false],
 								display: 'fire'
+							},
+							{
+								label: 'auto fire',
+								dataPath: 'systems/tubes/2/autoFire',
+								checkbox: true,
+								allowedValues: [true,false]
+							}
+						],
+						subControls: [
+							{
+								inlineControls: [
+									{
+										allowedValues: [null,'torpedos'],
+										valueMap: [
+											{
+												value: null,
+												display: 'none'
+											}
+										]
+									},
+									{
+										button: true,
+										allowedValues: [true,false],
+										dataPath: 'systems/tubes/2/load',
+										display: 'load'
+									},
+									{
+										button: true,
+										allowedValues: [true,false],
+										dataPath: 'systems/tubes/2/unload',
+										display: 'unload'
+									},
+									{
+										checkbox: true,
+										allowedValues: [true,false],
+										dataPath: 'systems/tubes/2/keepLoaded',
+										label: 'keep loaded'
+									}
+								]
 							}
 						]
 					}

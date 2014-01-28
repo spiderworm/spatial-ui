@@ -53,6 +53,40 @@ define(
 				this.props.model[this.props.modelPropertyName] = value;
 				this.props.model.setUpdated();
 			},
+			_getControlNode: function(children) {
+				var className = "control " + this._getClassName();
+				className = className.match(/^(.*[^ ]) ?$/)[0];
+				if(this.props.inline) {
+					return <span className={className}>{children}</span>;
+				} else {
+					return <div className={className}>{children}</div>;
+				}
+			},
+			_getLabelTextNode: function() {
+				return (
+					<span title={this._getDescription()}>
+						{this._getLabel()}
+					</span>
+				);
+			},
+			_getSubControlNodes: function() {
+				var baseModel = this.props.baseModel;
+
+				return this._getSubControls().map(function(val) {
+					var path=undefined, definition=undefined;
+
+					if(typeof val === "string") {
+						path = val;
+					} else if(val && typeof val === "object") {
+						definition = val;
+					}
+
+					return (
+						<ControlLoader baseModel={baseModel} definition={definition} path={path}></ControlLoader>
+					);
+				});
+
+			},
 			_getValueDisplay: function(value) {
 				if(this.state) {
 					value = arguments.length !== 0 ? value : this.state.value;
@@ -95,10 +129,10 @@ define(
 			},
 			__getValueMap: function(value) {
 
-				if(this.props.definition.valuesMap) {
-					for(var i=0; i<this.props.definition.valuesMap.length; i++) {
-						if(this.props.definition.valuesMap[i].value === value) {
-							return this.props.definition.valuesMap[i];
+				if(this.props.definition.valueMap) {
+					for(var i=0; i<this.props.definition.valueMap.length; i++) {
+						if(this.props.definition.valueMap[i].value === value) {
+							return this.props.definition.valueMap[i];
 						}
 					}
 				}
@@ -139,36 +173,14 @@ define(
 		var Control = React.createClass({
 			mixins: [controlMixin],
 			render: function() {
-				var className = "control " + this._getClassName();
-				className = className.match(/^(.*[^ ]) ?$/)[0];
-				var subControls = this._getSubControls();
-				var baseModel = this.props.baseModel;
 				var contents = (
 					<label>
-						<span title={this._getDescription()}>
-							{this._getLabel()}
-						</span>
+						{this._getLabelTextNode()}
 						{this.props.children}
-						{subControls.map(function(val) {
-							var path=undefined, definition=undefined;
-
-							if(typeof val === "string") {
-								path = val;
-							} else if(val && typeof val === "object") {
-								definition = val;
-							}
-
-							return (
-								<ControlLoader baseModel={baseModel} definition={definition} path={path}></ControlLoader>
-							);
-						})}
 					</label>
 				);
-				if(this.props.inline) {
-					return <span className={className}>{contents}</span>;
-				} else {
-					return <div className={className}>{contents}</div>;
-				}
+				var subControls = this._getSubControlNodes();
+				return this._getControlNode([contents,subControls]);
 			}
 		});
 

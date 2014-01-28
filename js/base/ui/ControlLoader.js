@@ -14,6 +14,7 @@ define(
 						'jsx!base/ui/SliderControl',
 						'jsx!base/ui/OutputControl',
 						'jsx!base/ui/ButtonControl',
+						'jsx!base/ui/CheckboxControl',
 						'jsx!base/ui/SelectControl',
 						'jsx!base/ui/MultiControl',
 						'jsx!base/ui/TextControl'
@@ -22,6 +23,7 @@ define(
 						SliderControl,
 						OutputControl,
 						ButtonControl,
+						CheckboxControl,
 						SelectControl,
 						MultiControl,
 						TextControl
@@ -31,6 +33,7 @@ define(
 								SliderControl,
 								OutputControl,
 								ButtonControl,
+								CheckboxControl,
 								SelectControl,
 								MultiControl,
 								TextControl

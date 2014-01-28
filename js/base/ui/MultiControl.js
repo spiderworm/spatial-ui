@@ -21,13 +21,16 @@ define(
 			},
 			render: function() {
 				var baseModel = this.props.baseModel;
-				return (
-					<Control definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
-						{this.props.definition.inlineControls.map(function(definition) {
-							return <ControlLoader baseModel={baseModel} definition={definition} inline={true}></ControlLoader>;
-						})}
-					</Control>
-				);
+				var inlineControls = this.props.definition.inlineControls.map(function(definition) {
+					return <ControlLoader baseModel={baseModel} definition={definition} inline={true}></ControlLoader>;
+				});
+				var subControls = this._getSubControlNodes();
+
+				return this._getControlNode([
+					this._getLabelTextNode(),
+					inlineControls,
+					subControls
+				]);
 
 			}
 
