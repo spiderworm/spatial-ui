@@ -23,7 +23,7 @@ define(
 							display: "Weapons",
 							sections: [
 								{
-									id: 'top',
+									id: 'one',
 									panels: [
 										{
 											display: 'Torpedos',
@@ -62,7 +62,7 @@ define(
 							display: "Engineering",
 							sections: [
 								{
-									id: 'top',
+									id: 'one',
 									panels: [
 										{
 											display: 'Weapon Power Levels',
@@ -92,7 +92,7 @@ define(
 							display: "Helm",
 							sections: [
 								{
-									id: 'top',
+									id: 'one',
 									panels: [
 										{
 											display: 'stuff',

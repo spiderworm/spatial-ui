@@ -1,0 +1,55 @@
+html {
+	height: 100%;
+}
+
+body {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+.screen {
+	position: relative;
+	min-height: 18cm;
+}
+
+.section.one,
+.section.two,
+.section.three,
+.section.four {
+	position: absolute;
+	text-align: center;
+	white-space: nowrap;
+}
+
+.section.one > *,
+.section.two > *,
+.section.three > *,
+.section.right > * {
+	text-align: left;
+	white-space: normal;
+}
+
+.section.one {
+	top: 100px;
+	left: 0;
+	right: 0;
+}
+
+.section.one > * {
+	vertical-align: top;
+	margin-top: 0;
+}
+
+.section.two {
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.section.two > * {
+	vertical-align: bottom;
+	margin-bottom: 0;
+}

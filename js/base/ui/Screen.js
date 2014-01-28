@@ -18,7 +18,7 @@ define(
 							<a name={"#" + this.props.id}>{this.props.display}</a>
 						</h1>
 						{this.props.sections.map(function(section) {
-							return <Section ship={ship} user={user} display={section.display} panels={section.panels}></Section>;
+							return <Section ship={ship} user={user} display={section.display} panels={section.panels} id={section.id}></Section>;
 						})}
 						{this.props.children}
 					</article>

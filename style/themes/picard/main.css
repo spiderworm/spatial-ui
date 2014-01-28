@@ -8,10 +8,13 @@ html {
 }
 
 .panel {
+	display: inline-block;
+	vertical-align: top;
 	border: 0 solid white;
 	border-width: 0 2px 4px;
 	padding: 10px;
 	margin-bottom: 10px;
+	margin-right: 10px;
 }
 
 .panel,

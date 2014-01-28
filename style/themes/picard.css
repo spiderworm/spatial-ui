@@ -1,1 +1,2 @@
 @import url('./picard/main.css');
+@import url('./picard/layout-wide.css') screen and (min-width: 20cm);
