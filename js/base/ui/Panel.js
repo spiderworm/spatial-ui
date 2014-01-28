@@ -14,7 +14,7 @@ define(
 				var user = this.props.user;
 
 				return (
-					<section class="panel">
+					<section className="panel">
 						<h1>{this.props.display}</h1>
 						{this.props.controls.map(function(control) {
 							return <ControlLoader baseModel={baseModel} path={control.path} user={user} />;

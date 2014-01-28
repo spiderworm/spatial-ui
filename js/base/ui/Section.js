@@ -13,7 +13,7 @@ define(
 				var ship = this.props.ship;
 				var user = this.props.user;
 				return (
-					<div class="section">
+					<div className="section">
 						{this.props.panels.map(function(panel) {
 							return <Panel ship={ship} user={user} display={panel.display} controls={panel.controls}></Panel>;
 						})}

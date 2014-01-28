@@ -21,7 +21,7 @@ define(
 
 				return (
 					<Control definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
-						<button type="button" onClick={this._nextValue}>
+						<button type="button" name={this.props.modelPropertyName} onClick={this._nextValue}>
 							{this._getValueDisplay()}
 						</button>
 					</Control>

@@ -1,0 +1,90 @@
+html {
+	background-color: black;
+	color: white;
+}
+
+:link {
+	color: inherit;
+}
+
+.panel {
+	border: 0 solid white;
+	border-width: 0 2px 4px;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.panel,
+.panel > h1 {
+	border-radius: 0 15px;
+}
+
+.panel > h1 {
+	margin: -11px -10px 0 -11px;
+	background-color: white;
+	color: black;
+	padding: 2px 5px;
+	text-transform: uppercase;
+}
+
+.panel > .control {
+	padding-left: 3.25cm;
+	margin: .5cm 0;
+}
+
+.panel > .control > .label-text,
+.panel > .control > label > .label-text {
+	display: inline-block;
+	margin-left: -3.25cm;
+	margin-right: .25cm;
+	width: 3cm;
+	vertical-align: top;
+}
+
+.panel > .control > .control > .label-text,
+.panel > .control > .control > label > .label-text {
+	display: inline-block;
+	margin-left: -2.75cm;
+	margin-right: .25cm;
+	width: 2.5cm;
+	vertical-align: top;
+}
+
+.control {
+	margin: .1cm 0;
+	display: block;
+}
+
+.control .label-text {
+	margin-right: .2cm;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.control.inline-control {
+	margin: 0 .25cm 0 0;
+	display: inline-block;
+}
+
+.control.inline-control .label-text {
+	text-transform: none;
+	font-weight: normal;
+	min-width: 0;
+	margin-right: 0;
+}
+
+.control input {
+	vertical-align: middle;
+}
+
+.slider-control.control > label > .value-display {
+	border: 1px solid white;
+}
+
+.slider-control.control > label > .value-display,
+.slider-control.control > label > .value-editor {
+	margin-right: .25cm;
+	width: 2cm;
+	text-align: right;
+	display: inline-block;
+}

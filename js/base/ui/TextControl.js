@@ -20,7 +20,7 @@ define(
 			render: function() {
 
 				return (
-					<Control definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
+					<Control className="text-control" definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
 						<span>
 							{this._getValueDisplay()}
 						</span>

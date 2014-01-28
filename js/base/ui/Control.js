@@ -54,17 +54,27 @@ define(
 				this.props.model.setUpdated();
 			},
 			_getControlNode: function(children) {
-				var className = "control " + this._getClassName();
-				className = className.match(/^(.*[^ ]) ?$/)[0];
+				var clss = "control ";
 				if(this.props.inline) {
-					return <span className={className}>{children}</span>;
+					clss += "inline-control ";
+				}
+				if(this.props.className) {
+					clss += this.props.className;
+				}
+				clss += this._getClassName();
+				clss = clss.match(/^(.*[^ ]) ?$/)[1];
+				if(this.props.inline) {
+					return <span className={clss} title={this._getDescription()}>{children}</span>;
 				} else {
-					return <div className={className}>{children}</div>;
+					return <div className={clss} title={this._getDescription()}>{children}</div>;
 				}
 			},
 			_getLabelTextNode: function() {
+				if(!this._getLabel() || this._getLabel().length === 0) {
+					return "";
+				}
 				return (
-					<span title={this._getDescription()}>
+					<span className="label-text">
 						{this._getLabel()}
 					</span>
 				);
@@ -88,10 +98,28 @@ define(
 
 			},
 			_getValueDisplay: function(value) {
+				if(!this.props.definition.dataPath) {
+					return "";
+				}
 				if(this.state) {
 					value = arguments.length !== 0 ? value : this.state.value;
 				}
-				return this.__getPropertyForValue('display',value) || value;
+				var display = this.__getPropertyForValue('display',value) || value;
+				var format = this._getDisplayFormat();
+				switch(format) {
+					case "%":
+						return (display * 100) + "%";
+					break;
+					default:
+						return display;
+					break;
+				}
+			},
+			_getDisplayFormat: function(value) {
+				if(this.state) {
+					value = arguments.length !== 0 ? value : this.state.value;
+				}
+				return this.__getPropertyForValue('format',value) || null;
 			},
 			_getClassName: function(value) {
 				if(this.state) {

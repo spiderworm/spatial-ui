@@ -78,7 +78,6 @@ define(
 					},
 					'systems/tubes': {
 						label: 'tubes',
-						description: 'stuff',
 						subControls: [
 							'systems/tubes/1',
 							'systems/tubes/2'
@@ -88,20 +87,25 @@ define(
 						label: 'tube 1',
 						inlineControls: [
 							{
+								description: 'current ammo in tube',
 								dataPath: 'systems/tubes/1/currentAmmo',
 								outputOnly: true
 							},
 							{
+								description: 'percentage that current ammo is loaded',
 								dataPath: 'systems/tubes/1/loadedPercent',
+								format: '%',
 								outputOnly: true
 							},
 							{
+								description: 'attack target with tube contents',
 								dataPath: 'systems/tubes/1/fire',
 								button: true,
 								allowedValues: [true,false],
 								display: 'fire'
 							},
 							{
+								description: 'automatically fire when ammo is loaded',
 								label: 'auto fire',
 								dataPath: 'systems/tubes/1/autoFire',
 								checkbox: true,
@@ -118,7 +122,8 @@ define(
 												value: null,
 												display: 'none'
 											}
-										]
+										],
+										dataPath: 'systems/tubes/1/selectedAmmo'
 									},
 									{
 										button: true,
@@ -150,7 +155,9 @@ define(
 								outputOnly: true
 							},
 							{
+								description: 'percentage that current ammo is loaded',
 								dataPath: 'systems/tubes/2/loadedPercent',
+								format: "%",
 								outputOnly: true
 							},
 							{
@@ -176,7 +183,8 @@ define(
 												value: null,
 												display: 'none'
 											}
-										]
+										],
+										dataPath: 'systems/tubes/2/selectedAmmo'
 									},
 									{
 										button: true,
@@ -227,12 +235,16 @@ define(
 						1: {
 							currentAmmo: 'torpedo',
 							loadedPercent: .5,
-							fire: false
+							fire: false,
+							keepLoaded: false,
+							autoFire: false
 						},
 						2: {
 							currentAmmo: 'nuke',
 							loadedPercent: 1,
-							fire: false
+							fire: false,
+							keepLoaded: true,
+							autoFire: true
 						}
 					}
 				}

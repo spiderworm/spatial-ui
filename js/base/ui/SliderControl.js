@@ -22,12 +22,12 @@ define(
 			render: function() {
 
 				return (
-					<Control definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
+					<Control className="slider-control" definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
 						{
 							this.state.editValueMode ?
-								<input type="text" value={this.state.temporaryValue} onChange={this.handleTemporaryValueUpdate} onBlur={this.handleTemporaryValueReady} />
+								<input className="value-editor" type="text" name="value" value={this.state.temporaryValue} onChange={this.handleTemporaryValueUpdate} onBlur={this.handleTemporaryValueReady} />
 							:
-								<span onClick={this.enterEditValueMode}>
+								<span className="value-display" onClick={this.enterEditValueMode}>
 									{this._getValueDisplay()}
 								</span>
 						}

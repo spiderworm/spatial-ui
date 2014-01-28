@@ -13,7 +13,7 @@ define(
 				var ship = this.props.ship;
 				var user = this.props.user;
 				return (
-					<article class="screen">
+					<article className="screen">
 						<h1>
 							<a name={"#" + this.props.id}>{this.props.display}</a>
 						</h1>
