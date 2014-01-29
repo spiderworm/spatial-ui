@@ -1,5 +1,6 @@
 html {
 	background-color: black;
+	background-image: url('./images/Gliese_667.jpg');
 	color: white;
 }
 
@@ -52,6 +53,11 @@ html {
 	border: .05cm solid white;
 }
 
+.spatial-master > .screens-nav > .active {
+	background-color: white;
+	color: black;
+}
+
 .spatial-master > .screens-nav [role="menuitem"] :link,
 .spatial-master > .screens-nav [role="menuitem"] :visited {
 	text-decoration: none;
@@ -84,6 +90,10 @@ html {
 	z-index: 2;
 }
 
+.spatial-master .screen > h1 {
+	display: none;
+}
+
 .spatial-master .screen.hidden {
 	opacity: 0;
 	margin: .5cm -50% -100%;
@@ -94,10 +104,11 @@ html {
 
 
 .panel {
+	background-color: rgba(0,0,0,.7);
 	display: inline-block;
 	vertical-align: top;
-	border: 0 solid white;
-	border-width: 0 2px 4px;
+	border: 0 solid rgba(0,0,0,1);
+	border-width: 0 4px 8px;
 	padding: 10px 10px 0 10px;
 	margin-bottom: 10px;
 	margin-right: 10px;
@@ -110,8 +121,8 @@ html {
 
 .panel > h1 {
 	margin: -11px -10px 0 -11px;
-	background-color: white;
-	color: black;
+	background-color: rgba(255,255,255,.1);
+	color: white;
 	padding: 2px 5px;
 	text-transform: uppercase;
 }
