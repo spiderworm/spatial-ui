@@ -102,7 +102,8 @@ define(
 								dataPath: 'systems/tubes/1/fire',
 								button: true,
 								allowedValues: [true,false],
-								display: 'fire'
+								display: 'fire',
+								disabled: true
 							},
 							{
 								description: 'automatically fire when ammo is loaded',

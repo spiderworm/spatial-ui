@@ -25,13 +25,13 @@ define(
 					<Control className="slider-control" definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
 						{
 							this.state.editValueMode ?
-								<input className="value-editor" type="text" name="value" value={this.state.temporaryValue} onChange={this.handleTemporaryValueUpdate} onBlur={this.handleTemporaryValueReady} />
+								<input className="value-editor" type="text" name="value" value={this.state.temporaryValue} onChange={this.handleTemporaryValueUpdate} onBlur={this.handleTemporaryValueReady} disabled={this._isDisabled()} />
 							:
 								<span className="value-display" onClick={this.enterEditValueMode}>
 									{this._getValueDisplay()}
 								</span>
 						}
-						<input type="range" value={this.state.value} min={this.props.definition.min} max={this.props.definition.max} onChange={this.handleValueChange} />
+						<input type="range" value={this.state.value} min={this.props.definition.min} max={this.props.definition.max} onChange={this.handleValueChange} disabled={this._isDisabled()} />
 					</Control>
 				);
 
@@ -49,10 +49,12 @@ define(
 				});
 			},
 			enterEditValueMode: function() {
-				this.setState({
-					editValueMode: true,
-					temporaryValue: this.state.value
-				});
+				if(!this.props.definition.disabled) {
+					this.setState({
+						editValueMode: true,
+						temporaryValue: this.state.value
+					});
+				}
 			},
 			handleValueChange: function(event) {
 				this.setValue(event.target.value);

@@ -26,9 +26,10 @@ define(
 						[
 							React.DOM.input(
 								{
-									type:"checkbox",
-									checked:this.state.value === this.props.definition.allowedValues[0],
-									onClick:this._nextValue
+									type: "checkbox",
+									checked: this.state.value === this.props.definition.allowedValues[0],
+									onClick: this._nextValue,
+									disabled: this._isDisabled()
 								}
 							),
 							this._getLabelTextNode()

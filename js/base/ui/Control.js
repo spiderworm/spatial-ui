@@ -145,6 +145,12 @@ define(
 				}
 				return this.__getPropertyForValue('subControls',value) || [];
 			},
+			_isDisabled: function(value) {
+				if(this.state) {
+					value = arguments.length !== 0 ? value : this.state.value;
+				}
+				return this.__getPropertyForValue('disabled',value) || false;
+			},
 			__getPropertyForValue: function(property,value) {
 				var map = this.__getValueMap(value);
 				if(map && map.hasOwnProperty(property)) {

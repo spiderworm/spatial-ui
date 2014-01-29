@@ -25,7 +25,7 @@ define(
 
 				return (
 					<Control definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
-						<select value={this.state.value} onChange={this.handleValueChange}>
+						<select value={this.state.value} onChange={this.handleValueChange} disabled={this._isDisabled()}>
 							{this.props.definition.allowedValues.map(function(allowedValue) {
 								return <option value={allowedValue}>{view._getValueDisplay(allowedValue)}</option>;
 							})}
