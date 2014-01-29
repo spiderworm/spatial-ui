@@ -3,16 +3,102 @@ html {
 	color: white;
 }
 
-:link {
+.spatial-master {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	font-size: .35cm;
+}
+
+.spatial-master :link,
+.spatial-master :visited {
 	color: inherit;
 }
+
+.spatial-master button,
+.spatial-master input,
+.spatial-master select {
+	font-size: inherit;
+}
+
+.spatial-master h1 {
+	margin-top: 0;
+}
+
+.spatial-master > .screens-nav {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 1cm;
+	display: block;
+	padding: .25cm .5cm;
+}
+
+.spatial-master > .screens-nav[role="menu"] {
+	list-style-type: none;
+	margin: 0;
+}
+
+.spatial-master > .screens-nav > * {
+	display: inline-block;
+	margin-right: .5cm;
+	font-size: .5cm;
+	font-weight: bold;
+	text-transform: uppercase;
+	padding: .1cm .25cm;
+	border: .05cm solid white;
+}
+
+.spatial-master > .screens-nav [role="menuitem"] :link,
+.spatial-master > .screens-nav [role="menuitem"] :visited {
+	text-decoration: none;
+}
+
+.spatial-master > .screens {
+	position: absolute;
+	top: 1.5cm;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+	white-space: nowrap;
+	height: auto;
+	padding: 0 .5cm;
+}
+
+.spatial-master > .screens > .screen {
+	margin: .5cm .5cm .5cm 0;
+	display: inline-block;
+	vertical-align: top;
+	white-space: normal;
+}
+
+.spatial-master .screen {
+	width: 100%;
+	opacity: 1;
+	transition: all .2s ease-in-out;
+	z-index: 2;
+}
+
+.spatial-master .screen.hidden {
+	opacity: 0;
+	margin: .5cm -50% -100%;
+	z-index: 1;	
+	height: 0;
+	overflow: hidden;
+}
+
 
 .panel {
 	display: inline-block;
 	vertical-align: top;
 	border: 0 solid white;
 	border-width: 0 2px 4px;
-	padding: 10px;
+	padding: 10px 10px 0 10px;
 	margin-bottom: 10px;
 	margin-right: 10px;
 }
@@ -31,25 +117,25 @@ html {
 }
 
 .panel > .control {
-	padding-left: 3.25cm;
+	padding-left: 2.25cm;
 	margin: .5cm 0;
 }
 
 .panel > .control > .label-text,
 .panel > .control > label > .label-text {
 	display: inline-block;
-	margin-left: -3.25cm;
+	margin-left: -2.25cm;
 	margin-right: .25cm;
-	width: 3cm;
+	width: 2cm;
 	vertical-align: top;
 }
 
 .panel > .control > .control > .label-text,
 .panel > .control > .control > label > .label-text {
 	display: inline-block;
-	margin-left: -2.75cm;
+	margin-left: -1.75cm;
 	margin-right: .25cm;
-	width: 2.5cm;
+	width: 1.5cm;
 	vertical-align: top;
 }
 
@@ -61,7 +147,7 @@ html {
 .control .label-text {
 	margin-right: .2cm;
 	font-weight: bold;
-	text-transform: uppercase;
+	text-transform: lowercase;
 }
 
 .control.inline-control {

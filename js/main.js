@@ -1,6 +1,6 @@
 
 var baseUrl = (function() {
-	var loc = document.location.href;
+	var loc = document.location.pathname;
 	loc = loc.match(/^(.*\/)[^\/]*$/)[0] + "js/";
 	return loc;
 })();

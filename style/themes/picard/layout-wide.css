@@ -12,7 +12,6 @@ body {
 
 .screen {
 	position: relative;
-	min-height: 18cm;
 }
 
 .section.one,
@@ -33,7 +32,7 @@ body {
 }
 
 .section.one {
-	top: 100px;
+	top: 1cm;
 	left: 0;
 	right: 0;
 }
