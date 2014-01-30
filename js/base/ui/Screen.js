@@ -13,7 +13,7 @@ define(
 				var ship = this.props.ship;
 				var user = this.props.user;
 				return (
-					<article className={"screen" + (this.props.hidden ? " hidden" : "")}>
+					<article className={"screen" + (this.props.hidden ? " hidden" : "")} data-layout="left">
 						<h1>
 							<a name={this.props.id}>{this.props.display}</a>
 						</h1>

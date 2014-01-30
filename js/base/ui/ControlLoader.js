@@ -28,17 +28,19 @@ define(
 						MultiControl,
 						TextControl
 					) {
-						view.setState({
-							Controls: [
-								SliderControl,
-								OutputControl,
-								ButtonControl,
-								CheckboxControl,
-								SelectControl,
-								MultiControl,
-								TextControl
-							]
-						});
+						setTimeout(function() {
+							view.setState({
+								Controls: [
+									SliderControl,
+									OutputControl,
+									ButtonControl,
+									CheckboxControl,
+									SelectControl,
+									MultiControl,
+									TextControl
+								]
+							});
+						},100);
 					}
 				);
 

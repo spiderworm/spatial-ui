@@ -52,8 +52,30 @@ define(
 													path: 'engineering/energy/levels/phasers'
 												}
 											]
+										},
+										{
+											display: 'a test',
+											controls: [
+											]
+										},
+										{
+											display: 'another test',
+											controls: [
+											]
 										}
 									]
+								},
+								{
+									id: 'two',
+									panels: []
+								},
+								{
+									id: 'three',
+									panels: []
+								},
+								{
+									id: 'four',
+									panels: []
 								}
 							]
 						},

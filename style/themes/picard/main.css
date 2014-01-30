@@ -4,6 +4,10 @@ html {
 	color: white;
 }
 
+body {
+	margin: 0;
+}
+
 .spatial-master {
 	position: absolute;
 	top: 0;
