@@ -10,6 +10,40 @@ define(
 		dragTracker
 	) {
 
+
+
+
+		function PositionHelper() {}
+		PositionHelper.prototype.getElementCoord = function(element) {
+			var result = {
+				x:element.offsetLeft,
+				y:element.offsetTop
+			};
+			if(element !== element.ownerDocument.documentElement && element.offsetParent) {
+				var parentResult = this.getElementCoord(element.offsetParent);
+				result.x += parentResult.x;
+				result.y += parentResult.y;
+			}
+			return result;
+		}
+		PositionHelper.prototype.globalCoordToLocalCoord = function(globalCoord,element) {
+			var elementPos = this.getElementCoord(element);
+			return {
+				x: globalCoord.x - elementPos.x,
+				y: globalCoord.y - elementPos.y
+			};
+		}
+		PositionHelper.prototype.getElementLocalCenter = function(element) {
+			return {
+				x: element.offsetLeft + (element.offsetWidth/2),
+				y: element.offsetTop + (element.offsetHeight/2)
+			};
+		}
+
+		var positionHelper = new PositionHelper();
+
+
+
 		var Section = React.createClass({
 			getDefaultProps: function() {
 				for(var i=0; i<this.props.panels.length; i++) {
@@ -52,39 +86,54 @@ define(
 
 					if(draggedItem.canMove) {
 
+						var mouseLocalCoord = positionHelper.globalCoordToLocalCoord(
+							{
+								x: event.clientX,
+								y: event.clientY
+							},
+							this.getDOMNode()
+						);
+
+						var draggedElement = draggedItem.instance.getDOMNode();
+						var draggedCoord = positionHelper.getElementLocalCenter(draggedElement);
+						//console.info(draggedCoord.x,draggedCoord.y);
+
+						var myNode = this.getDOMNode();
+
 						var distance = Infinity;
 						var position = 0;
-						var children = this.getDOMNode().childNodes;
+						var children = Array.prototype.slice.apply(myNode.childNodes);
 						for(var i=0; i<children.length; i++) {
 							if(children[i].nodeType===1) {
+
+								//if(children[i] === myNode) 
+
+								var childCoord = positionHelper.getElementLocalCenter(children[i]);
+
 								var nodeDist = Math.sqrt(
-									Math.pow(
-										event.clientX-(children[i].offsetLeft + (.5 * children[i].offsetWidth)),
-										2
-									) +
-									Math.pow(
-										event.clientY-(children[i].offsetHeight + (.5 * children[i].offsetHeight)),
-										2
-									)
+									Math.pow(draggedCoord.x - childCoord.x,2) +
+									Math.pow(draggedCoord.y - childCoord.y,2)
 								);
+
 								if(nodeDist < distance) {
 									distance = nodeDist;
 									position = i;
 								}
 							}
 						}
-						//console.info('position',position);
 						if(draggedItem.parentModel) {
 							var i = draggedItem.parentModel.indexOf(draggedItem.model);
-							if(i !== -1) {
-								draggedItem.parentModel.splice(i,1);
-								if(draggedItem.parentSection !== this) {
-									draggedItem.parentSection.forceUpdate();
+							if(i !== position) {
+								if(i !== -1) {
+									draggedItem.parentModel.splice(i,1);
+									if(draggedItem.parentSection !== this) {
+										draggedItem.parentSection.forceUpdate();
+									}
 								}
-							}
 
-							this.props.panels.splice(position,0,draggedItem.model);
-							this.forceUpdate();
+								this.props.panels.splice(position,0,draggedItem.model);
+								this.forceUpdate();
+							}
 						}
 
 					}

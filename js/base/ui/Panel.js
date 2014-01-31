@@ -2,18 +2,32 @@ define(
 	[
 		'react',
 		'jsx!./ControlLoader',
-		'../../util/dragTracker'
+		'../../util/dragTracker',
+		'../../util/InstanceStore'
 	],
 	function(
 		React,
 		ControlLoader,
-		dragTracker
+		dragTracker,
+		InstanceStore
 	) {
 
 
+		var gridTileSizeCM = 1;
+		var gridTileSizePX = gridTileSizeCM * 38;
 
 		var Panel = React.createClass({
 			getDefaultProps: function() {
+				Panel.addInstance(this,[this.props.definition]);
+				this.props.definition.x = this.props.definition.x || 0;
+				this.props.definition.y = this.props.definition.y || 0;
+				this.props.definition.z = this.props.definition.z || 1;
+
+				var view = this;
+				this.props.definition.subscribeTo(function() {
+					view.forceUpdate();
+				});
+
 				return {
 					controls: this.props.definition.controls
 				};
@@ -27,16 +41,34 @@ define(
 				var baseModel = this.props.ship;
 				var user = this.props.user;
 
+				if(this.props.gridMode) {
+
+					var style = {
+						position: 'absolute',
+						left: (this.props.definition.x*gridTileSizeCM) + 'cm',
+						top: (this.props.definition.y*gridTileSizeCM) + 'cm',
+						zIndex: this.props.definition.z
+					};
+
+				} else {
+
+					style = {
+						position: 'relative'
+					};
+					
+				}
+
 				return (
 					<section
+						style={style}
 						className={"panel" + (this.state.dragging ? " dragging" : "")} 
 						draggable="true"
 						onDragStart={this.__handleDragStarted}
+						onDrag={this.__handleDrag}
 						onDragEnd={this.__handleDragEnded}
-						onDragEnter={this.__handleDragEnter}
-						onDragLeave={this.__handleDragLeave}
+						onMouseDown={this.__handleMouseDown}
 					>
-						<h1>{this.props.display}</h1>
+						<h1>{this.props.definition.display}</h1>
 						{this.props.controls.map(function(control) {
 							return <ControlLoader baseModel={baseModel} path={control.path} user={user} />;
 						})}
@@ -44,34 +76,54 @@ define(
 					</section>
 				);
 			},
-			__handleDragStarted: function() {
+			__handleDragStarted: function(event) {
 				this.setState({dragging:true});
 				dragTracker.setDraggedItem(
 					{
 						type: Panel,
 						instance: this,
-						model: this.props.definition,
+						startMouseX: event.clientX,
+						startMouseY: event.clientY,
+						startPanelX: this.props.definition.x,
+						startPanelY: this.props.definition.y,
 						canMove: false
 					}
 				);
 			},
-			__handleDragLeave: function() {
-				var draggedItem = dragTracker.getDraggedItem();
-				if(draggedItem.model === this.props.definition) {
-					draggedItem.canMove = true;
-				}
-			},
-			__handleDragEnter: function() {
-				var draggedItem = dragTracker.getDraggedItem();
-				if(draggedItem.model === this.props.definition) {
-					draggedItem.canMove = false;
+			__handleDrag: function(event) {
+				var item = dragTracker.getDraggedItem();
+				if(item.instance === this && event.clientX && event.clientY) {
+					var mouseDX = event.clientX - item.startMouseX;
+					var mouseDY = event.clientY - item.startMouseY;
+					var dx = Math.round(mouseDX/gridTileSizePX);
+					var dy = Math.round(mouseDY/gridTileSizePX);
+					var newX = item.startPanelX + dx;
+					if(newX < 0) newX = 0;
+					var newY = item.startPanelY + dy;
+					if(newY < 0) newY = 0;
+					if(newX !== this.props.definition.x || newY !== this.props.definition.y) {
+						this.props.definition.x = newX;
+						this.props.definition.y = newY;
+						this.props.definition.setUpdated();
+					}
 				}
 			},
 			__handleDragEnded: function() {
 				this.setState({dragging:false});
 				dragTracker.setDragStopped();
+			},
+			__handleMouseDown: function() {
+				this.props.definition.z = Panel.getHighZ() + 1;
+				this.props.definition.setUpdated();
 			}
 		});
+
+
+		var panels = new InstanceStore();
+
+		Panel.addInstance = function(panel,signature) {
+			panels.add(panel,signature);
+		}
 
 
 		Panel.getUniqueID = function() {
@@ -79,6 +131,54 @@ define(
 			return Panel.getUniqueID.__last;
 		}
 		Panel.getUniqueID.__last = 0;
+
+
+		Panel.getHighZ = function() {
+			var z = undefined;
+			var instances = panels.getAllInstances();
+			for(var i=0; i<instances.length; i++) {
+				if(z === undefined || instances[i].props.definition.z > z) {
+					z = instances[i].props.definition.z;
+				}
+			}
+			return z;
+		}
+
+		Panel.getLowZ = function() {
+			var z = undefined;
+			var instances = panels.getAllInstances();
+			for(var i=0; i<instances.length; i++) {
+				if(z === undefined || instances[i].props.definition.z < z) {
+					z = instances[i].props.definition.z;
+				}
+			}
+			return z;
+		}
+
+		Panel.normalizeAllZ = function() {
+			var instances = panels.getAllInstances();
+			instances.sort(function(panelA,panelB) {
+				if(panelA.props.definition.z<panelB.props.definition.z) {
+					return -1;
+				}
+				if(panelA.props.definition.z>panelB.props.definition.z) {
+					return 1;
+				}
+				return 0;
+			});
+			for(var i=0; i<instances.length; i++) {
+				instances[i].props.definition.z = i+1;
+				instances[i].props.definition.setUpdated();
+			}
+		}
+
+		setInterval(
+			function() {
+				Panel.normalizeAllZ();
+			},
+			60000
+		);
+
 
 		return Panel;
 

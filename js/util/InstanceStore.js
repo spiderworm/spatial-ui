@@ -27,6 +27,13 @@ define(
 				}
 			);
 		}
+		InstanceStore.prototype.getAllInstances = function() {
+			var results =[];
+			for(var i=0; i<this.__instances.length; i++) {
+				results.push(this.__instances[i].instance);
+			}
+			return results;
+		}
 
 
 

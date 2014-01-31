@@ -1,3 +1,5 @@
+@import url('./screen-layouts/grid.css');
+
 html {
 	background-color: black;
 	background-image: url('./images/Gliese_667.jpg');
@@ -109,13 +111,13 @@ body {
 
 .panel {
 	background-color: rgba(0,0,0,.7);
-	display: inline-block;
 	vertical-align: top;
 	border: 0 solid rgba(0,0,0,1);
 	border-width: 0 4px 8px;
 	padding: 10px 10px 0 10px;
 	margin-bottom: 10px;
 	margin-right: 10px;
+	min-height: 3.25cm;
 }
 
 .panel,

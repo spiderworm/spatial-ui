@@ -1,4 +1,3 @@
-@import url('./screen-layouts/left.css');
 
 html {
 	height: 100%;
@@ -20,19 +19,23 @@ body {
 	margin-top: 0;
 }
 
-.section.one,
-.section.two,
-.section.three,
-.section.four {
+.screen[data-layout="left"] {
 	position: absolute;
-	text-align: center;
-	white-space: nowrap;
+	top: 0;
+	left: .5cm;
+	bottom: 0;
+	right: 0;
 }
 
-.section.one > *,
-.section.two > *,
-.section.three > *,
-.section.right > * {
-	text-align: left;
-	white-space: normal;
+.screen > .section {
+	top: 0;
+	left: .5cm;
+	bottom: 0;
+	width: 8cm;
+	border: 1px solid rgba(255,0,0,.25);
+}
+
+.screen > .section > * {
+	display: block;
+	position: absolute;
 }

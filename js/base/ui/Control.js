@@ -15,7 +15,7 @@ define(
 
 				if(vals.model) {
 					var view = this;
-					vals.model.subscribeTo(
+					var modelSubscription = vals.model.subscribeTo(
 						vals.modelPropertyName,
 						function(value) {
 							view.setState({value: value});
@@ -25,9 +25,15 @@ define(
 
 				return {
 					model: vals.model,
-					modelPropertyName: vals.modelPropertyName
+					modelPropertyName: vals.modelPropertyName,
+					modelSubscription: modelSubscription
 				};
 
+			},
+			componentWillUnmount: function() {
+				if(this.props.modelSubscription) {
+					this.props.modelSubscription.off();
+				}
 			},
 			_nextValue: function() {
 				if(!this.props.definition.allowedValues) {
