@@ -10,7 +10,13 @@ require.config({
 	paths: {
 		"react": "external/react",
 		"jsx": "external/require-jsx",
-		"JSXTransformer": "external/JSXTransformer"
+		"JSXTransformer": "external/JSXTransformer",
+		'THREE': 'external/three'
+	},
+	shim: {
+		'THREE': {
+			exports: 'THREE'
+		}
 	}
 });
 

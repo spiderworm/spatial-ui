@@ -2,12 +2,14 @@ define(
 	[
 		'react',
 		'jsx!./Section',
-		'jsx!./Panel'
+		'jsx!./Panel',
+		'jsx!./ThreeDPlanetDemo'
 	],
 	function(
 		React,
 		Section,
-		Panel
+		Panel,
+		ThreeDPlanetDemo
 	) {
 
 		var Screen = React.createClass({
@@ -36,7 +38,6 @@ define(
 							"screen" +
 							(this.props.hidden ? " hidden" : "")
 						}
-						style={{position:'relative'}}
 						data-layout={gridMode ? "grid" : "default"}
 					>
 						<h1>
@@ -53,6 +54,7 @@ define(
 								></Panel>
 							);
 						})}
+						<ThreeDPlanetDemo></ThreeDPlanetDemo>
 						{this.props.children}
 					</article>
 				);

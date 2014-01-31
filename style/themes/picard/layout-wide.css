@@ -15,27 +15,24 @@ body {
 	position: relative;
 }
 
+.spatial-master > .screens {
+	left: .5cm;
+	padding: 0;
+}
+
 .spatial-master > .screens > .screen {
 	margin-top: 0;
-}
-
-.screen[data-layout="left"] {
 	position: absolute;
 	top: 0;
-	left: .5cm;
-	bottom: 0;
+	left: 0;
 	right: 0;
-}
-
-.screen > .section {
-	top: 0;
-	left: .5cm;
 	bottom: 0;
-	width: 8cm;
-	border: 1px solid rgba(255,0,0,.25);
 }
 
-.screen > .section > * {
-	display: block;
+.screen > .three-dee {
 	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
