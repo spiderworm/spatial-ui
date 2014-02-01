@@ -73,7 +73,7 @@ define(
 									z: 4
 								}
 							]
-						},
+						}/*,
 						{
 							id: 'engineering',
 							display: "Engineering",
@@ -124,7 +124,7 @@ define(
 									z: 7
 								}
 							]
-						}
+						}*/
 					]
 				}
 			});

@@ -3,13 +3,13 @@ define(
 		'react',
 		'jsx!./Section',
 		'jsx!./Panel',
-		'jsx!./ThreeDPlanetDemo'
+		'jsx!./CameraViewport'
 	],
 	function(
 		React,
 		Section,
 		Panel,
-		ThreeDPlanetDemo
+		CameraViewport
 	) {
 
 		var Screen = React.createClass({
@@ -54,7 +54,7 @@ define(
 								></Panel>
 							);
 						})}
-						<ThreeDPlanetDemo></ThreeDPlanetDemo>
+						<CameraViewport></CameraViewport>
 						{this.props.children}
 					</article>
 				);

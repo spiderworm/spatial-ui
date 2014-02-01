@@ -11,11 +11,16 @@ require.config({
 		"react": "external/react",
 		"jsx": "external/require-jsx",
 		"JSXTransformer": "external/JSXTransformer",
-		'THREE': 'external/three'
+		'THREE': 'external/three',
+		'THREE.GeometryExporter': 'external/three.geometryExporter'
 	},
 	shim: {
 		'THREE': {
 			exports: 'THREE'
+		},
+		'THREE.GeometryExporter': {
+			exports: 'THREE.GeometryExporter',
+			deps: ['THREE']
 		}
 	}
 });
