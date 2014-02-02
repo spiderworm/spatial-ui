@@ -3,7 +3,7 @@ define(
 		'react',
 		'jsx!./Section',
 		'jsx!./Panel',
-		'jsx!./CameraViewport'
+		'jsx!./visualization/CameraViewport'
 	],
 	function(
 		React,

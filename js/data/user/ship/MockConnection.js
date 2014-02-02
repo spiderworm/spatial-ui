@@ -1,7 +1,7 @@
 define(
 	[
 		'../../../base/Model',
-		'../../../ship/data/connectionFactory'
+		'../../ship/controls/connectionFactory'
 	],
 	function(
 		Model,

@@ -1,7 +1,7 @@
 define(
 	[
 		'react',
-		'jsx!../base/ui/Screen'
+		'jsx!./Screen'
 	],
 	function(
 		React,

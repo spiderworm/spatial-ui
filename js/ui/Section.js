@@ -2,7 +2,7 @@ define(
 	[
 		'react',
 		'jsx!./Panel',
-		'../../util/dragTracker'
+		'./util/dragTracker'
 	],
 	function(
 		React,

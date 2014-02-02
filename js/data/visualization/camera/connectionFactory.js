@@ -1,6 +1,6 @@
 define(
 	[
-		'../../base/data/ConnectionFactory',
+		'../../base/ConnectionFactory',
 		'./MockConnection'
 	],
 	function(
@@ -14,7 +14,7 @@ define(
 
 
 
-		function UniverseDataConnectionFactory() {
+		function ViewportDataConnectionFactory() {
 			ConnectionFactory.apply(
 				this,
 				[
@@ -23,11 +23,11 @@ define(
 				]
 			);
 		}
-		UniverseDataConnectionFactory.prototype = new ConnectionFactory();
+		ViewportDataConnectionFactory.prototype = new ConnectionFactory();
 
 
 
-		var connectionFactory = new UniverseDataConnectionFactory();
+		var connectionFactory = new ViewportDataConnectionFactory();
 		return connectionFactory;
 
 	}

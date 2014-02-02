@@ -11,13 +11,13 @@ define(
 				var view = this;
 				require(
 					[
-						'jsx!base/ui/SliderControl',
-						'jsx!base/ui/OutputControl',
-						'jsx!base/ui/ButtonControl',
-						'jsx!base/ui/CheckboxControl',
-						'jsx!base/ui/SelectControl',
-						'jsx!base/ui/MultiControl',
-						'jsx!base/ui/TextControl'
+						'jsx!ui/controls/Slider',
+						'jsx!ui/controls/Output',
+						'jsx!ui/controls/Button',
+						'jsx!ui/controls/Checkbox',
+						'jsx!ui/controls/Select',
+						'jsx!ui/controls/Multi',
+						'jsx!ui/controls/Text'
 					],
 					function(
 						SliderControl,

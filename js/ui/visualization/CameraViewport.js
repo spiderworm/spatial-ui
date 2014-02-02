@@ -2,13 +2,13 @@ define(
 	[
 		'react',
 		'THREE',
-		'../../universe/data/connectionFactory',
+		'../../data/scene/connectionFactory',
 		'./THREEObject'
 	],
 	function(
 		React,
 		THREE,
-		universeDataConnectionFactory,
+		sceneDataConnectionFactory,
 		THREEObject
 	) {
 
@@ -77,9 +77,9 @@ define(
 
 		var Viewport = React.createClass({
 			getDefaultProps: function() {
-				var dataConnection = universeDataConnectionFactory.getConnection();
+				var dataConnection = sceneDataConnectionFactory.getConnection();
 				return {
-					model: dataConnection.getViewportConnection('12345').getModel()
+					model: dataConnection.getCameraConnection('12345').getModel()
 				};
 			},
 			getInitialState: function() {

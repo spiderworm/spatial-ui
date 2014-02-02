@@ -1,7 +1,7 @@
 define(
 	[
-		'../../base/Model',
-		'../../util/InstanceStore'
+		'../../../base/Model',
+		'../../../util/InstanceStore'
 	],
 	function(
 		Model,

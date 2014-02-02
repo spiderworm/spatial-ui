@@ -1,6 +1,6 @@
 define(
 	[
-		'./data/connectionFactory',
+		'../data/user/connectionFactory',
 		'../base/Model'
 	],
 	function(

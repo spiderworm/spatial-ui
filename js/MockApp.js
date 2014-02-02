@@ -1,6 +1,6 @@
 define(
 	[
-		'./base/App',
+		'./App',
 		'./registry'
 	],
 	function(

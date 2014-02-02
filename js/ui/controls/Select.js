@@ -2,7 +2,7 @@ define(
 	[
 		'react',
 		'jsx!./Control',
-		'jsx!./ButtonControl'
+		'jsx!./Button'
 	],
 	function(
 		React,

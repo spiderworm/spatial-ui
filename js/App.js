@@ -1,11 +1,11 @@
 define(
 	[
 		'react',
-		'jsx!../ui/Master',
-		'../base/Model',
-		'../user/userManager',
-		'../ship/data/connectionFactory',
-		'../user/data/ship/connectionFactory'
+		'jsx!./ui/Master',
+		'./base/Model',
+		'./user/userManager',
+		'./data/ship/controls/connectionFactory',
+		'./data/user/ship/connectionFactory'
 	],
 	function(
 		React,

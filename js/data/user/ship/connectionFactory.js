@@ -1,6 +1,6 @@
 define(
 	[
-		'../../../base/data/ConnectionFactory',
+		'../../base/ConnectionFactory',
 		'./MockConnection'
 	],
 	function(

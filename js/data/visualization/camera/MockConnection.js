@@ -1,6 +1,6 @@
 define(
 	[
-		'../../base/Model',
+		'../../../base/Model',
 		'THREE',
 		'THREE.GeometryExporter'
 	],

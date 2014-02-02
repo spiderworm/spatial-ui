@@ -1,9 +1,9 @@
 define(
 	[
 		'react',
-		'jsx!./ControlLoader',
-		'../../util/dragTracker',
-		'../../util/InstanceStore'
+		'jsx!./controls/Loader',
+		'./util/dragTracker',
+		'../util/InstanceStore'
 	],
 	function(
 		React,

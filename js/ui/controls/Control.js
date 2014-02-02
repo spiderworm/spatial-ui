@@ -1,7 +1,7 @@
 define(
 	[
 		'react',
-		'./ControlLoader'
+		'jsx!./Loader'
 	],
 	function(
 		React,

@@ -1,7 +1,7 @@
 define(
 	[
-		'../../registry',
-		'./MockServiceConnection'
+		'../../../registry',
+		'./MockConnection'
 	],
 	function(
 		registry,
