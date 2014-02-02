@@ -1,12 +1,10 @@
 define(
 	[
 		'react',
-		'../modelBinder',
 		'jsx!../base/ui/Screen'
 	],
 	function(
 		React,
-		modelBinder,
 		Screen
 	) {
 

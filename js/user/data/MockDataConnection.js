@@ -1,11 +1,11 @@
 define(
 	[
 		'../../util/InstanceStore',
-		'../../ship/Model'
+		'../../base/Model'
 	],
 	function(
 		InstanceStore,
-		ShipModel
+		Model
 	) {
 
 		var instances = new InstanceStore();
@@ -16,7 +16,7 @@ define(
 				return instance;
 			}
 			instances.add(this,arguments);
-			this._shipModel = new ShipModel();
+			this._shipModel = new Model();
 		}
 		MockUserDataConnection.prototype.getShip = function() {
 			return this._shipModel;
