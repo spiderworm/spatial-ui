@@ -21,10 +21,12 @@ define(
 				}
 			}
 			this.__modelizeRecursively();
+			/*
 			var model = this;
 			this.onUpdated(function() {
 				model.__modelizeRecursively();
 			});
+			*/
 		}
 		Model.prototype = new EventObject();
 		Model.prototype.subscribeTo = function(a,b) {
@@ -51,6 +53,7 @@ define(
 			return this._on('updated',callback);
 		}
 		Model.prototype.setUpdated = function() {
+			this.__modelizeRecursively();
 			this._fire('updated');
 		}
 		Model.prototype.mapToArray = function(callback) {
