@@ -22,7 +22,7 @@ define(
 			render: function() {
 
 				return (
-					<Control className="slider-control" definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
+					<Control className="slider-control" definition={this.props.definition} appModel={this.props.appModel} inline={this.props.inline}>
 						{
 							this.state.editValueMode ?
 								<input className="value-editor" type="text" name="value" value={this.state.temporaryValue} onChange={this.handleTemporaryValueUpdate} onBlur={this.handleTemporaryValueReady} disabled={this._isDisabled()} />

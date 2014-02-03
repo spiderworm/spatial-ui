@@ -28,9 +28,7 @@ define(
 					view.forceUpdate();
 				});
 
-				return {
-					controls: this.props.definition.controls
-				};
+				return {};
 			},
 			getInitialState: function() {
 				return {
@@ -38,8 +36,7 @@ define(
 				};
 			},
 			render: function() {
-				var baseModel = this.props.ship;
-				var user = this.props.user;
+				var appModel = this.props.appModel;
 
 				if(this.props.gridMode) {
 
@@ -69,8 +66,8 @@ define(
 						onMouseDown={this.__handleMouseDown}
 					>
 						<h1>{this.props.definition.display}</h1>
-						{this.props.controls.map(function(control) {
-							return <ControlLoader baseModel={baseModel} path={control.path} user={user} />;
+						{this.props.definition.controls.map(function(control) {
+							return <ControlLoader appModel={appModel} path={control.path} />;
 						})}
 						{this.props.children}
 					</section>

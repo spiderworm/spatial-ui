@@ -1,19 +1,21 @@
 define(
 	[
 		'react',
-		'jsx!./ui/Master',
+		'jsx!./ui/AppUI',
 		'./base/Model',
 		'./user/userManager',
+		'./data/ship/ui/connectionFactory',
 		'./data/ship/controls/connectionFactory',
-		'./data/user/ship/connectionFactory'
+		'./data/ship/connectionFactory'
 	],
 	function(
 		React,
-		MasterUI,
+		AppUI,
 		Model,
 		userManager,
-		shipDataConnectionFactory,
-		userShipDataConnectionFactory
+		shipUIConnectionFactory,
+		shipControlsConnectionFactory,
+		shipValuesConnectionFactory
 	) {
 		
 		function App() {
@@ -22,12 +24,16 @@ define(
 		App.prototype.start = function() {
 
 			var user = userManager.getCurrentUser();
-
 			this._registerModel('user',user);
 
-			var userShipModel = userShipDataConnectionFactory.getConnection(user).getModel();
-			this._registerModel('view',userShipModel.view);
-			this._registerModel('ship',userShipModel.ship);
+			var shipUIModel = shipUIConnectionFactory.getConnection(user).getModel();
+			this._registerModel('view',shipUIModel);
+
+			var controlsModel = shipControlsConnectionFactory.getConnection().getModel();
+			this._registerModel('controls',controlsModel);
+
+			var valuesModel = shipValuesConnectionFactory.getConnection().getModel();
+			this._registerModel('values',valuesModel);
 
 			this._render();
 		}
@@ -50,10 +56,8 @@ define(
 		App.prototype._render = function() {
 
 			React.renderComponent(
-				MasterUI({
-					app: this,
-					user: this.model.user,
-					ship: this.model.ship
+				AppUI({
+					appModel: this.model
 				}),
 				document.body
 			);

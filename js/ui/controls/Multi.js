@@ -20,9 +20,9 @@ define(
 				};
 			},
 			render: function() {
-				var baseModel = this.props.baseModel;
+				var appModel = this.props.appModel;
 				var inlineControls = this.props.definition.inlineControls.map(function(definition) {
-					return <ControlLoader baseModel={baseModel} definition={definition} inline={true}></ControlLoader>;
+					return <ControlLoader appModel={appModel} definition={definition} inline={true}></ControlLoader>;
 				});
 				var subControls = this._getSubControlNodes();
 

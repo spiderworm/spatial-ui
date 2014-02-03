@@ -52,9 +52,11 @@ define(
 			},
 			render: function() {
 
+				var appModel = this.props.appModel;
+
 				var definition = this.props.definition;
-				if(!definition && this.props.path && this.props.baseModel && this.props.baseModel.controls) {
-					definition = this.props.baseModel.controls[this.props.path];
+				if(!definition && this.props.path) {
+					definition = appModel.controls[this.props.path];
 				}
 
 				if(definition) {
@@ -65,7 +67,7 @@ define(
 							if(this.state.Controls[i].supportsDefinition(definition)) {
 								return new this.state.Controls[i]({
 									definition: definition,
-									baseModel: this.props.baseModel,
+									appModel: appModel,
 									inline: this.props.inline
 								});
 							}

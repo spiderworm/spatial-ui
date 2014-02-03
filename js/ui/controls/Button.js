@@ -20,7 +20,7 @@ define(
 			render: function() {
 
 				return (
-					<Control definition={this.props.definition} baseModel={this.props.baseModel} inline={this.props.inline}>
+					<Control definition={this.props.definition} appModel={this.props.appModel} inline={this.props.inline}>
 						<button type="button" name={this.props.modelPropertyName} onClick={this._nextValue} disabled={this._isDisabled()}>
 							{this._getValueDisplay()}
 						</button>

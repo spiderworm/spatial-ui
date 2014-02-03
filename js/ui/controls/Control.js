@@ -86,7 +86,7 @@ define(
 				);
 			},
 			_getSubControlNodes: function() {
-				var baseModel = this.props.baseModel;
+				var appModel = this.props.appModel;
 
 				return this._getSubControls().map(function(val) {
 					var path=undefined, definition=undefined;
@@ -98,7 +98,7 @@ define(
 					}
 
 					return (
-						<ControlLoader baseModel={baseModel} definition={definition} path={path}></ControlLoader>
+						<ControlLoader appModel={appModel} definition={definition} path={path}></ControlLoader>
 					);
 				});
 
@@ -190,7 +190,7 @@ define(
 				if(this.props.definition.dataPath) {
 
 					var propertyName = this.props.definition.dataPath;
-					var model = this.props.baseModel;
+					var model = this.props.appModel.values;
 					var matches;
 
 					do {

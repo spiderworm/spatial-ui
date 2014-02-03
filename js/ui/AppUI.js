@@ -8,7 +8,7 @@ define(
 		Screen
 	) {
 
-		var Master = React.createClass({
+		var AppUI = React.createClass({
 			getInitialState: function() {
 				var view = this;
 
@@ -16,21 +16,22 @@ define(
 					view.__focusOnScreenByID(document.location.hash.match(/^#(.*)$/)[1]);
 				});
 
-				this.props.app.model.view.screens.subscribeTo(function(screens) {
-					view.setState({screens: screens});
+				this.props.appModel.subscribeTo(function() {
+					view.forceUpdate();
+				});
+
+				this.props.appModel.view.screens.subscribeTo(function(screens) {
 					view.__showAScreen();
 				});
 
 				var state = {
-					screens: [],
 					activeScreen: null,
 					hidingScreen: null
 				};
 				return state;
 			},
 			render: function() {
-				var ship = this.props.ship;
-				var user = this.props.user;
+				var appModel = this.props.appModel;
 
 				var activeScreen = this.state.activeScreen;
 				var hidingScreen = this.state.hidingScreen;
@@ -39,7 +40,7 @@ define(
 				var dom = (
 					<main className="spatial-master">
 						<ol className="screens-nav" role="menu">
-							{this.state.screens.map(function(screen) {
+							{appModel.view.screens.map(function(screen) {
 								var a = <a href={"#" + screen.id} onClick={function() { masterUI.__focusOnScreen(screen); return false; }}>{screen.display}</a>;
 								if(screen === activeScreen) {
 									return <li role="menuitem" className="active">{a}</li>;
@@ -49,9 +50,9 @@ define(
 							})}
 						</ol>
 						<div className="screens">
-							{this.state.screens.map(function(screen) {
+							{appModel.view.screens.map(function(screen) {
 								return (
-									<Screen ship={ship} user={user} definition={screen} hidden={screen!==activeScreen}></Screen>
+									<Screen definition={screen} appModel={appModel} hidden={screen!==activeScreen}></Screen>
 								);
 							})}
 						</div>
@@ -74,27 +75,29 @@ define(
 				}
 			},
 			__getScreenByID: function(id) {
-				for(var i=0; i<this.state.screens.length; i++) {
-					if(this.state.screens[i].id === id) {
-						return this.state.screens[i];
+				for(var i=0; i<this.props.appModel.view.screens.length; i++) {
+					if(this.props.appModel.view.screens[i].id === id) {
+						return this.props.appModel.view.screens[i];
 					}
 				}
 				return null;
 			},
 			__showAScreen: function() {
 				if(
-					this.state.screens[0] &&
+					this.props.appModel.view.screens[0] &&
 					(
-						(this.state.activeScreen && this.state.screens.indexOf(this.state.activeScreen === -1)) ||
+						(this.state.activeScreen && this.props.appModel.view.screens.indexOf(this.state.activeScreen === -1)) ||
 						!this.state.activeScreen
 					)
 				) {
-					this.setState({activeScreen:this.state.screens[0]});
+					this.setState({
+						activeScreen: this.props.appModel.view.screens[0]
+					});
 				}
 			}
 		});
 
-		return Master;
+		return AppUI;
 
 	}
 );

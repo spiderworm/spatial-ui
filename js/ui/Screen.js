@@ -1,13 +1,11 @@
 define(
 	[
 		'react',
-		'jsx!./Section',
 		'jsx!./Panel',
 		'jsx!./visualization/CameraViewport'
 	],
 	function(
 		React,
-		Section,
 		Panel,
 		CameraViewport
 	) {
@@ -29,8 +27,7 @@ define(
 				};
 			},
 			render: function() {
-				var ship = this.props.ship;
-				var user = this.props.user;
+				var appModel = this.props.appModel;
 				var gridMode = this.state.gridMode;
 				return (
 					<article 
@@ -47,8 +44,7 @@ define(
 							return (
 								<Panel
 									key={panel.__panelID}
-									ship={ship}
-									user={user}
+									appModel={appModel}
 									definition={panel}
 									gridMode={gridMode}
 								></Panel>
