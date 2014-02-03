@@ -3,13 +3,15 @@ define(
 		'react',
 		'jsx!./controls/Loader',
 		'./util/dragTracker',
-		'../util/InstanceStore'
+		'../util/InstanceStore',
+		'./util/reactKeyGenerator'
 	],
 	function(
 		React,
 		ControlLoader,
 		dragTracker,
-		InstanceStore
+		InstanceStore,
+		keyGenerator
 	) {
 
 
@@ -17,6 +19,7 @@ define(
 		var gridTileSizePX = gridTileSizeCM * 38;
 
 		var Panel = React.createClass({
+			mixins: [keyGenerator.mixin],
 			getDefaultProps: function() {
 				Panel.addInstance(this,[this.props.definition]);
 				this.props.definition.x = this.props.definition.x || 0;
@@ -55,6 +58,8 @@ define(
 					
 				}
 
+				var view = this;
+
 				return (
 					<section
 						style={style}
@@ -67,7 +72,7 @@ define(
 					>
 						<h1>{this.props.definition.display}</h1>
 						{this.props.definition.controls.map(function(control) {
-							return <ControlLoader appModel={appModel} path={control.path} />;
+							return <ControlLoader key={view.getKey([control])} appModel={appModel} path={control.path} />;
 						})}
 						{this.props.children}
 					</section>

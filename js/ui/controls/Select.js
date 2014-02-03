@@ -27,7 +27,13 @@ define(
 					<Control definition={this.props.definition} appModel={this.props.appModel} inline={this.props.inline}>
 						<select value={this.state.value} onChange={this.handleValueChange} disabled={this._isDisabled()}>
 							{this.props.definition.allowedValues.map(function(allowedValue) {
-								return <option value={allowedValue}>{view._getValueDisplay(allowedValue)}</option>;
+								return (
+									<option
+										key={view.getKey([view,allowedValue])}
+									value={allowedValue}>
+										{view._getValueDisplay(allowedValue)}
+									</option>
+								);
 							})}
 						</select>
 					</Control>

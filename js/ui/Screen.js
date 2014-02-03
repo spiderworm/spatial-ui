@@ -41,6 +41,10 @@ define(
 							<a name={this.props.definition.id}>{this.props.definition.display}</a>
 						</h1>
 						{this.props.definition.panels.map(function(panel) {
+							if(!panel.__panelID) {
+								panel.__panelID = Panel.getUniqueID();
+							}
+
 							return (
 								<Panel
 									key={panel.__panelID}
@@ -68,6 +72,16 @@ define(
 				}
 			}
 		});
+
+
+
+		Screen.getUniqueID = function() {
+			Screen.getUniqueID.__last++;
+			return Screen.getUniqueID.__last;
+		}
+		Screen.getUniqueID.__last = 0;
+
+
 
 		return Screen;
 

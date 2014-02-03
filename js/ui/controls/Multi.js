@@ -21,8 +21,16 @@ define(
 			},
 			render: function() {
 				var appModel = this.props.appModel;
+				var view = this;
 				var inlineControls = this.props.definition.inlineControls.map(function(definition) {
-					return <ControlLoader appModel={appModel} definition={definition} inline={true}></ControlLoader>;
+					return (
+						<ControlLoader
+							key={view.getKey([view,definition])}
+							appModel={appModel}
+							definition={definition}
+							inline={true}
+						></ControlLoader>
+					);
 				});
 				var subControls = this._getSubControlNodes();
 

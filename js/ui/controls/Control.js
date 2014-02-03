@@ -1,14 +1,19 @@
 define(
 	[
 		'react',
-		'jsx!./Loader'
+		'jsx!./Loader',
+		'../util/reactKeyGenerator'
 	],
 	function(
 		React,
-		ControlLoader
+		ControlLoader,
+		keyGenerator
 	) {
 
 		var controlMixin = {
+			getKey: function(signature) {
+				return keyGenerator.mixin.getKey(signature);
+			},
 			getDefaultProps: function() {
 
 				var vals = this.__findModelAndProperty();
@@ -88,6 +93,8 @@ define(
 			_getSubControlNodes: function() {
 				var appModel = this.props.appModel;
 
+				var view = this;
+
 				return this._getSubControls().map(function(val) {
 					var path=undefined, definition=undefined;
 
@@ -98,7 +105,7 @@ define(
 					}
 
 					return (
-						<ControlLoader appModel={appModel} definition={definition} path={path}></ControlLoader>
+						<ControlLoader key={view.getKey([view,definition,path])} appModel={appModel} definition={definition} path={path}></ControlLoader>
 					);
 				});
 

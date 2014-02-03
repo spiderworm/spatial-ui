@@ -1,14 +1,17 @@
 define(
 	[
 		'react',
-		'jsx!./Screen'
+		'jsx!./Screen',
+		'./util/reactKeyGenerator'
 	],
 	function(
 		React,
-		Screen
+		Screen,
+		reactKeyGenerator
 	) {
 
 		var AppUI = React.createClass({
+			mixins: [reactKeyGenerator.mixin],
 			getInitialState: function() {
 				var view = this;
 
@@ -36,23 +39,23 @@ define(
 				var activeScreen = this.state.activeScreen;
 				var hidingScreen = this.state.hidingScreen;
 
-				var masterUI = this;
+				var appUI = this;
 				var dom = (
 					<main className="spatial-master">
 						<ol className="screens-nav" role="menu">
 							{appModel.view.screens.map(function(screen) {
-								var a = <a href={"#" + screen.id} onClick={function() { masterUI.__focusOnScreen(screen); return false; }}>{screen.display}</a>;
+								var a = <a href={"#" + screen.id} onClick={function() { appUI.__focusOnScreen(screen); return false; }}>{screen.display}</a>;
 								if(screen === activeScreen) {
-									return <li role="menuitem" className="active">{a}</li>;
+									return <li key={appUI.getKey([screen])} role="menuitem" className="active">{a}</li>;
 								} else {
-									return <li role="menuitem">{a}</li>;
+									return <li key={appUI.getKey([screen])} role="menuitem">{a}</li>;
 								}
 							})}
 						</ol>
 						<div className="screens">
 							{appModel.view.screens.map(function(screen) {
 								return (
-									<Screen definition={screen} appModel={appModel} hidden={screen!==activeScreen}></Screen>
+									<Screen key={appUI.getKey([screen])} definition={screen} appModel={appModel} hidden={screen!==activeScreen}></Screen>
 								);
 							})}
 						</div>
