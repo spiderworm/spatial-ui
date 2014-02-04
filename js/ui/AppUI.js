@@ -11,7 +11,8 @@ define(
 	) {
 
 		var AppUI = React.createClass({
-			getInitialState: function() {
+			getDefaultProps: function() {
+				console.info('AppUI');
 				var view = this;
 
 				this.props.definition.subscribeTo(function() {

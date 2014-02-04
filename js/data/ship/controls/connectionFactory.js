@@ -1,27 +1,33 @@
 define(
 	[
-		'../../../registry',
+		'../../base/ConnectionFactory',
 		'./MockConnection'
 	],
 	function(
-		registry,
-		MockShipServiceConnection
+		ConnectionFactory,
+		MockConnection
 	) {
 
 
-		function ShipDataConnectionFactory() {
-			this.__connections = [];
-		}
-		ShipDataConnectionFactory.prototype.getConnection = function(shipID) {
-			var mock = registry.get('mock');
-			if(mock) {
-				return new MockShipServiceConnection(shipID);
-			} else {
-				return new ShipServiceConnection(shipID);
-			}
-		}
+		function ServiceConnection() {}
 
-		var connectionFactory = new ShipDataConnectionFactory();
+
+
+
+		function ControlsConnectionFactory() {
+			ConnectionFactory.apply(
+				this,
+				[
+					ServiceConnection,
+					MockConnection
+				]
+			);
+		}
+		ControlsConnectionFactory.prototype = new ConnectionFactory();
+
+
+
+		var connectionFactory = new ControlsConnectionFactory();
 		return connectionFactory;
 
 	}

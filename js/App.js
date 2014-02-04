@@ -3,19 +3,13 @@ define(
 		'react',
 		'jsx!./ui/AppUI',
 		'./base/Model',
-		'./user/userManager',
-		'./data/ship/ui/connectionFactory',
-		'./data/ship/controls/connectionFactory',
-		'./data/ship/connectionFactory'
+		'./user/userManager'
 	],
 	function(
 		React,
 		AppUI,
 		Model,
-		userManager,
-		shipUIConnectionFactory,
-		shipControlsConnectionFactory,
-		shipValuesConnectionFactory
+		userManager
 	) {
 		
 		function App() {
@@ -33,18 +27,16 @@ define(
 
 			user.onConnectedToStory(function(storyConnection) {
 
-				console.info(storyConnection);
-
-				var controlsModel = shipControlsConnectionFactory.getConnection().getModel();
+				var controlsModel = storyConnection.getControlsConnection().getModel();
 				app.model.controls = controlsModel;
 
-				var valuesModel = shipValuesConnectionFactory.getConnection().getModel();
+				var valuesModel = storyConnection.getShipValuesConnection().getModel();
 				app.model.values = valuesModel;
 
-				var shipUIModel = shipUIConnectionFactory.getConnection(user).getModel();
-				app._setViewModel(shipUIModel);
-
 				app.model.setUpdated();
+
+				var shipUIModel = storyConnection.getShipUIConnection().getModel();
+				app._setViewModel(shipUIModel);
 
 			});
 
@@ -59,19 +51,16 @@ define(
 			else
 				return this.model[name];
 		}
-		App.prototype.subscribeTo = function(name) {
-			var val;
-		}
 		App.prototype._setViewModel = function(model) {
 			this.__viewModel = model;
 			this._render();
 		}
 		App.prototype._render = function() {
-
-			React.renderComponent(
+			React.unmountComponentAtNode(document.body);
+			var appUI = React.renderComponent(
 				AppUI({
-					definition: this.__viewModel,
-					appModel: this.model
+					appModel: this.model,
+					definition: this.__viewModel
 				}),
 				document.body
 			);

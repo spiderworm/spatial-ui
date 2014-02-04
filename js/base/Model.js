@@ -49,6 +49,19 @@ define(
 				});
 			}
 		}
+		Model.prototype.overwrite = function(vals) {
+			for(var name in this) {
+				if(this.hasOwnProperty(name) && name[0] !== "_") {
+					delete this[name];
+				}
+			}
+			for(var name in vals) {
+				if(vals.hasOwnProperty(name) && name[0] !== "_") {
+					this[name] = vals[name];
+				}
+			}
+			this.setUpdated();
+		}
 		Model.prototype.onUpdated = function(callback) {
 			return this._on('updated',callback);
 		}

@@ -36,7 +36,7 @@ define(
 		User.prototype.onConnectedToStory = function(callback) {
 			var handler = this._on('story-connected',callback);
 			if(this.__storyConnection.isConnected()) {
-				handler.fire();
+				handler.fire([this.__storyConnection]);
 			}
 		}
 		User.prototype.getStoryConnectionUIModel = function() {

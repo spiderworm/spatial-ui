@@ -22,7 +22,7 @@ define(
 						z: 1
 					}
 				],
-				url: 'http://nowhere'
+				url: '/spatial-ui/demo-resources/services/story.json'
 			});
 
 			return model;

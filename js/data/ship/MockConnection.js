@@ -1,76 +1,47 @@
 define(
 	[
+		'../base/Connection',
 		'../../base/Model',
-		'../../util/InstanceStore'
+		'../util/comm'
 	],
 	function(
+		Connection,
 		Model,
-		InstanceStore
+		comm
 	) {
 
-		var instances = new InstanceStore();
-
-		function MockShipValuesConnection(shipID) {
-			var instance = instances.find(arguments);
+		function MockShipValuesConnection(user,url) {
+			var instance = Connection.find(arguments);
 			if(instance) {
 				return instance;
 			}
-			instances.add(this,arguments);
+			Connection.add(this,arguments);
 
-			var model = this._model = new Model({
-				helm: {
-					impulse: 10
-				},
-				engineering: {
-					energy: {
-						levels: {
-							impulse: 150,
-							tubes: 100,
-							phasers: 25
-						}
-					}
-				},
-				weapons: {
-					ammo: {
-						torpedos: 15
-					},
-					phasers: {
-						enabled: true,
-						frequency: 'C'
-					}
-				},
-				systems: {
-					tubes: {
-						1: {
-							currentAmmo: 'torpedo',
-							loadedPercent: .5,
-							fire: false,
-							keepLoaded: false,
-							autoFire: false
+			var model = this._model = new Model();
+
+			Connection.apply(this,[model]);
+
+			var connection = this;
+
+			comm.ajax(
+				url,
+				function(response) {
+					model.overwrite(response);
+					connection._setConnected();
+					
+					window.setInterval(
+						function() {
+							model.weapons.ammo.torpedos++;
+							model.weapons.ammo.setUpdated();
 						},
-						2: {
-							currentAmmo: 'nuke',
-							loadedPercent: 1,
-							fire: false,
-							keepLoaded: true,
-							autoFire: true
-						}
-					}
-				}
-			});
+						1000
+					);
 
-			window.setInterval(
-				function() {
-					model.weapons.ammo.torpedos++;
-					model.weapons.ammo.setUpdated();
-				},
-				1000
+				}
 			);
 
 		}
-		MockShipValuesConnection.prototype.getModel = function() {
-			return this._model;
-		}
+		MockShipValuesConnection.prototype = new Connection();
 
 		return MockShipValuesConnection;
 

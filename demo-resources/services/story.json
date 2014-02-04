@@ -1,0 +1,13 @@
+{
+	"connectionDefinitions": {
+		"controls": {
+			"url": "/spatial-ui/demo-resources/services/controls.json"
+		},
+		"values": {
+			"url": "/spatial-ui/demo-resources/services/values.json"
+		},
+		"ui": {
+			"url": "/spatial-ui/demo-resources/services/ui.json"
+		}
+	}
+}

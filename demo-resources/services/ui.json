@@ -1,0 +1,89 @@
+{
+	"screens": [
+		{
+			"id": "weapons",
+			"display": "Weapons",
+			"panels": [
+				{
+					"display": "Torpedos",
+					"controls": [
+						"weapons/torpedos/stock",
+						"systems/tubes",
+						"engineering/energy/levels/tubes"
+					],
+					"x": 0,
+					"y": 0,
+					"z": 1
+				},
+				{
+					"display": "Phasers",
+					"controls": [
+						"weapons/phasers/switch",
+						"weapons/phasers/frequency",
+						"engineering/energy/levels/phasers"
+					],
+					"x": 0,
+					"y": 8,
+					"z": 2
+				},
+				{
+					"display": "a test",
+					"controls": [
+					],
+					"x": 0,
+					"y": 14,
+					"z": 3
+				},
+				{
+					"display": "another test",
+					"controls": [
+					],
+					"x": 7,
+					"y": 14,
+					"z": 4
+				}
+			]
+		},
+		{
+			"id": "engineering",
+			"display": "Engineering",
+			"panels": [
+				{
+					"display": "Weapon Power Levels",
+					"controls": [
+						"engineering/energy/levels/phasers",
+						"engineering/energy/levels/tubes"
+					],
+					"x": 0,
+					"y": 0,
+					"z": 5
+				},
+				{
+					"display": "Helm Power Levels",
+					"controls": [
+						"engineering/energy/levels/impulse"
+					],
+					"x": 9,
+					"y": 0,
+					"z": 6
+				}
+			]
+		},
+		{
+			"id": "helm",
+			"display": "Helm",
+			"panels": [
+				{
+					"display": "stuff",
+					"controls": [
+						"helm/impulse",
+						"engineering/energy/levels/impulse"
+					],
+					"x": 0,
+					"y": 0,
+					"z": 7
+				}
+			]
+		}	
+	]
+}
