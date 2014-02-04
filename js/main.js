@@ -27,14 +27,20 @@ require.config({
 
 require(
 	[
-		'MockApp'
+		'./registry'
 	],
 	function(
-		App
+		registry
 	) {
-
-		var app = new App();
-		app.start();
-
+		registry.set('mock',true);
+		require(
+			[
+				'./App'
+			],
+			function(App) {
+				var app = new App();
+				app.start();
+			}
+		);
 	}
 );

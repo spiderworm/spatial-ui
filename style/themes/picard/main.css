@@ -34,7 +34,7 @@ body {
 	margin-top: 0;
 }
 
-.spatial-master > .screens-nav {
+.spatial-master > .screen-group > .screens-nav {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -44,12 +44,12 @@ body {
 	padding: .25cm .5cm;
 }
 
-.spatial-master > .screens-nav[role="menu"] {
+.spatial-master > .screen-group > .screens-nav[role="menu"] {
 	list-style-type: none;
 	margin: 0;
 }
 
-.spatial-master > .screens-nav > * {
+.spatial-master > .screen-group > .screens-nav > * {
 	display: inline-block;
 	margin-right: .5cm;
 	font-size: .5cm;
@@ -59,17 +59,17 @@ body {
 	border: .05cm solid white;
 }
 
-.spatial-master > .screens-nav > .active {
+.spatial-master > .screen-group > .screens-nav > .active {
 	background-color: white;
 	color: black;
 }
 
-.spatial-master > .screens-nav [role="menuitem"] :link,
-.spatial-master > .screens-nav [role="menuitem"] :visited {
+.spatial-master > .screen-group > .screens-nav [role="menuitem"] :link,
+.spatial-master > .screen-group > .screens-nav [role="menuitem"] :visited {
 	text-decoration: none;
 }
 
-.spatial-master > .screens {
+.spatial-master > .screen-group > .screens {
 	position: absolute;
 	top: 1.5cm;
 	left: 0;
@@ -82,7 +82,7 @@ body {
 	padding: 0 .5cm;
 }
 
-.spatial-master > .screens > .screen {
+.spatial-master > .screen-group > .screens > .screen {
 	margin: .5cm .5cm .5cm 0;
 	display: inline-block;
 	vertical-align: top;

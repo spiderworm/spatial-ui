@@ -15,12 +15,12 @@ body {
 	position: relative;
 }
 
-.spatial-master > .screens {
+.spatial-master > .screen-group {
 	left: .5cm;
 	padding: 0;
 }
 
-.spatial-master > .screens > .screen {
+.spatial-master > .screen-group > .screens > .screen {
 	margin-top: 0;
 	position: absolute;
 	top: 0;

@@ -50,13 +50,29 @@ define(
 					inline: false
 				};
 			},
+			getInitialState: function() {
+
+				var path = this.props.path || '';
+				var definition = this.props.definition;
+
+				if(typeof this.props.definition === "string") {
+					path = this.props.definition;
+					definition = this.props.appModel.controls[path];
+				}
+
+				return {
+					path: path,
+					definition: definition
+				};
+
+			},
 			render: function() {
 
 				var appModel = this.props.appModel;
 
-				var definition = this.props.definition;
-				if(!definition && this.props.path) {
-					definition = appModel.controls[this.props.path];
+				var definition = this.state.definition;
+				if(!definition && this.state.path) {
+					definition = appModel.controls[this.state.path];
 				}
 
 				if(definition) {
@@ -86,9 +102,9 @@ define(
 				}
 
 				if(this.props.inline) {
-					return <span>Control "{this.props.path}" unavailable.</span>;
+					return <span>Control "{this.state.path}" unavailable.</span>;
 				} else {
-					return <div>Control "{this.props.path}" unavailable.</div>;
+					return <div>Control "{this.state.path}" unavailable.</div>;
 				}
 
 			}

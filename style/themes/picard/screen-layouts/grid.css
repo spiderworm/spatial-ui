@@ -1,4 +1,4 @@
 
-.screen[data-layout="grid"] .panel {
+.panel-group[data-layout="grid"] .panel {
 	min-width: 6cm;
 }

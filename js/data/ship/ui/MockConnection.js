@@ -25,15 +25,9 @@ define(
 								{
 									display: 'Torpedos',
 									controls: [
-										{
-											path: 'weapons/torpedos/stock'
-										},
-										{
-											path: 'systems/tubes'
-										},
-										{
-											path: 'engineering/energy/levels/tubes'
-										}
+										'weapons/torpedos/stock',
+										'systems/tubes',
+										'engineering/energy/levels/tubes'
 									],
 									x: 0,
 									y: 0,
@@ -42,15 +36,9 @@ define(
 								{
 									display: 'Phasers',
 									controls: [
-										{
-											path: 'weapons/phasers/switch'
-										},
-										{
-											path: 'weapons/phasers/frequency'
-										},
-										{
-											path: 'engineering/energy/levels/phasers'
-										}
+										'weapons/phasers/switch',
+										'weapons/phasers/frequency',
+										'engineering/energy/levels/phasers'
 									],
 									x: 0,
 									y: 8,
@@ -84,12 +72,8 @@ define(
 								{
 									display: 'Weapon Power Levels',
 									controls: [
-										{
-											path: 'engineering/energy/levels/phasers'
-										},
-										{
-											path: 'engineering/energy/levels/tubes'
-										}
+										'engineering/energy/levels/phasers',
+										'engineering/energy/levels/tubes'
 									],
 									x: 0,
 									y: 0,
@@ -98,9 +82,7 @@ define(
 								{
 									display: 'Helm Power Levels',
 									controls: [
-										{
-											path: 'engineering/energy/levels/impulse'
-										}
+										'engineering/energy/levels/impulse'
 									],
 									x: 9,
 									y: 0,
@@ -122,12 +104,8 @@ define(
 										{
 											display: 'stuff',
 											controls: [
-												{
-													path: 'helm/impulse'
-												},
-												{
-													path: 'engineering/energy/levels/impulse'
-												}
+												'helm/impulse',
+												'engineering/energy/levels/impulse'
 											],
 											x: 0,
 											y: 0,

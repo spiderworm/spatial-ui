@@ -18,7 +18,7 @@ define(
 				};
 			},
 			render: function() {
-
+console.info(this.props.definition);
 				return (
 					<Control className="text-control" definition={this.props.definition} appModel={this.props.appModel} inline={this.props.inline}>
 						<span>

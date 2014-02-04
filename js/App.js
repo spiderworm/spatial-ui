@@ -20,22 +20,38 @@ define(
 		
 		function App() {
 			this.model = new Model();
+			this.__viewModel = null;
 		}
 		App.prototype.start = function() {
 
 			var user = userManager.getCurrentUser();
-			this._registerModel('user',user);
+			this.model.user = user;
 
-			var shipUIModel = shipUIConnectionFactory.getConnection(user).getModel();
-			this._registerModel('view',shipUIModel);
+			this.model.setUpdated();
 
-			var controlsModel = shipControlsConnectionFactory.getConnection().getModel();
-			this._registerModel('controls',controlsModel);
+			var app = this;
 
-			var valuesModel = shipValuesConnectionFactory.getConnection().getModel();
-			this._registerModel('values',valuesModel);
+			user.onConnectedToStory(function(storyConnection) {
 
-			this._render();
+				console.info(storyConnection);
+
+				var controlsModel = shipControlsConnectionFactory.getConnection().getModel();
+				app.model.controls = controlsModel;
+
+				var valuesModel = shipValuesConnectionFactory.getConnection().getModel();
+				app.model.values = valuesModel;
+
+				var shipUIModel = shipUIConnectionFactory.getConnection(user).getModel();
+				app._setViewModel(shipUIModel);
+
+				app.model.setUpdated();
+
+			});
+
+			this._setViewModel(
+				user.getStoryConnectionUIModel()
+			);
+
 		}
 		App.prototype.getModel = function(name) {
 			if(arguments.length === 0)
@@ -46,17 +62,15 @@ define(
 		App.prototype.subscribeTo = function(name) {
 			var val;
 		}
-		App.prototype._registerModel = function(name,model) {
-			if(this.model[name]) {
-				throw new Error('already a model named ' + name);
-			}
-			this.model[name] = model;
-			this.model.setUpdated();
+		App.prototype._setViewModel = function(model) {
+			this.__viewModel = model;
+			this._render();
 		}
 		App.prototype._render = function() {
 
 			React.renderComponent(
 				AppUI({
+					definition: this.__viewModel,
 					appModel: this.model
 				}),
 				document.body

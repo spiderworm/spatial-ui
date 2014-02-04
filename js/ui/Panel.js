@@ -72,7 +72,7 @@ define(
 					>
 						<h1>{this.props.definition.display}</h1>
 						{this.props.definition.controls.map(function(control) {
-							return <ControlLoader key={view.getKey([control])} appModel={appModel} path={control.path} />;
+							return <ControlLoader key={view.getKey([control])} appModel={appModel} definition={control} />;
 						})}
 						{this.props.children}
 					</section>

@@ -34,7 +34,7 @@ define(
 			if(arguments.length === 1) {
 				callback = a;
 				return this._subscribe('updated',function() {
-					callback(this);
+					callback.apply(this,[this]);
 				});
 			} else if (arguments.length === 2) {
 				prop = a;
@@ -44,7 +44,7 @@ define(
 					if(this[a] !== lastVal || firstRun) {
 						firstRun = false;
 						lastVal = this[a];
-						callback(this[a]);
+						callback.apply(this[a],[this[a]]);
 					}
 				});
 			}
