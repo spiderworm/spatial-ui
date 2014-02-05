@@ -3,18 +3,18 @@
 	"sky": {
 		"type": "box",
 		"textures": [
-			"/spatial-ui/demo-resources/skies/space1/right1.jpg",
-			"/spatial-ui/demo-resources/skies/space1/left2.jpg",
-			"/spatial-ui/demo-resources/skies/space1/top3.jpg",
-			"/spatial-ui/demo-resources/skies/space1/bottom4.jpg",
-			"/spatial-ui/demo-resources/skies/space1/front5.jpg",
-			"/spatial-ui/demo-resources/skies/space1/back6.jpg"
+			"demo-resources/skies/space1/right1.jpg",
+			"demo-resources/skies/space1/left2.jpg",
+			"demo-resources/skies/space1/top3.jpg",
+			"demo-resources/skies/space1/bottom4.jpg",
+			"demo-resources/skies/space1/front5.jpg",
+			"demo-resources/skies/space1/back6.jpg"
 		]
 	},
 	"objects": [
 		{
 			"id": "moon",
-			"geometry": "/spatial-ui/demo-resources/geometry/moon.json",
+			"geometry": "demo-resources/geometry/moon.json",
 			"position": {
 				"x": 38500000,
 				"y": 0,
@@ -30,7 +30,7 @@
 		},
 		{
 			"id": "Teaatis",
-			"geometry": "/spatial-ui/demo-resources/geometry/Teaatis.json",
+			"geometry": "demo-resources/geometry/Teaatis.json",
 			"position": {
 				"x": 0,
 				"y": 0,
@@ -42,7 +42,7 @@
 				"z": 0
 			},
 			"textures": [
-				"/spatial-ui/demo-resources/planet-maps/Teaatis/Colormap.png"
+				"demo-resources/planet-maps/Teaatis/Colormap.png"
 			]
 		},
 		{

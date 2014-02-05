@@ -5,13 +5,13 @@ if (window.require !== window.requirejs) {
 }
 
 var baseUrl = (function() {
-	var loc = document.location.pathname;
-	loc = loc.match(/^(.*\/)[^\/]*$/)[0] + "js/";
+	var loc = document.location.href;
+	loc = loc.match(/^([^\?#]*\/)[^\/\?#]*$/)[0];
 	return loc;
 })();
 
 require.config({
-	baseUrl: baseUrl,
+	baseUrl: baseUrl + "js/",
 	paths: {
 		"react": "external/react",
 		"jsx": "external/require-jsx",
@@ -37,6 +37,7 @@ require(
 	function(
 		registry
 	) {
+		registry.set('rootUrl',baseUrl);
 		registry.set('mock',true);
 		require(
 			[

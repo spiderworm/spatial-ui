@@ -4,7 +4,7 @@
 			"id": "weapons",
 			"display": "Weapons",
 			"visualizations": [
-				"/spatial-ui/demo-resources/services/camera1.json"
+				"demo-resources/services/camera1.json"
 			],
 			"panels": [
 				{

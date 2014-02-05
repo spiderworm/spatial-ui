@@ -13,16 +13,6 @@ define(
 	) {
 
 
-
-
-
-
-
-
-
-
-
-
 		var Viewport = React.createClass({
 			getDefaultProps: function() {
 				return {
