@@ -18,11 +18,12 @@ define(
 		DataConnection.prototype.getModel = function() {
 			return this._model;
 		}
+		DataConnection.prototype.onConnected = function(callback) {
+			return this._on('connected',callback);
+		}
 		DataConnection.prototype._setConnected = function() {
 			this._fire('connected',[this]);
 		}
-
-
 
 
 		var instances = new InstanceStore();

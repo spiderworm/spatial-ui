@@ -2,13 +2,11 @@ define(
 	[
 		'react',
 		'THREE',
-		'../../data/scene/connectionFactory',
 		'./THREEObject'
 	],
 	function(
 		React,
 		THREE,
-		sceneDataConnectionFactory,
 		THREEObject
 	) {
 
@@ -39,7 +37,11 @@ define(
 						if(model.objects[i].id === "myShip") {
 							obj.add(camera);
 						}
-						scene.add(obj);
+						scene.add(obj.getTHREE());
+						obj.onReplaceNeeded(function(oldTHREE,newTHREE) {
+							scene.remove(oldTHREE);
+							scene.add(newTHREE);
+						});
 					}
 				}
 
@@ -77,9 +79,8 @@ define(
 
 		var Viewport = React.createClass({
 			getDefaultProps: function() {
-				var dataConnection = sceneDataConnectionFactory.getConnection();
 				return {
-					model: dataConnection.getCameraConnection('12345').getModel()
+					model: this.props.definition
 				};
 			},
 			getInitialState: function() {
@@ -87,10 +88,7 @@ define(
 				return {};
 			},
 			render: function() {
-				return (
-					<canvas className="three-dee">
-					</canvas>
-				);
+				return <canvas className="three-dee"></canvas>;
 			},
 			componentDidMount: function() {
 				this.__startAnim();

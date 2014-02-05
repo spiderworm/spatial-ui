@@ -2,12 +2,14 @@ define(
 	[
 		'react',
 		'jsx!./PanelGroup',
-		'jsx!./visualization/CameraViewport'
+		'jsx!./visualization/CameraViewport',
+		'jsx!./visualization/Loader'
 	],
 	function(
 		React,
 		PanelGroup,
-		CameraViewport
+		CameraViewport,
+		VisualizationLoader
 	) {
 
 		var Screen = React.createClass({
@@ -27,7 +29,13 @@ define(
 							<a name={this.props.definition.id}>{this.props.definition.display}</a>
 						</h1>
 						<PanelGroup definition={this.props.definition.panels} appModel={appModel}></PanelGroup>
-						<CameraViewport></CameraViewport>
+						{
+							this.props.definition.visualizations && this.props.definition.visualizations[0] ?
+							<VisualizationLoader
+								definition={this.props.definition.visualizations[0]}
+							></VisualizationLoader> :
+							null
+						}
 						{this.props.children}
 					</article>
 				);
