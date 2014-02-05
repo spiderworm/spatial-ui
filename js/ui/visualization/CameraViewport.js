@@ -2,75 +2,21 @@ define(
 	[
 		'react',
 		'THREE',
-		'./THREEObject'
+		'./Scene3D',
+		'./Camera3D'
 	],
 	function(
 		React,
 		THREE,
-		THREEObject
+		Scene3D,
+		Camera3D
 	) {
 
 
-		function ThreeCamera() {
-			var camera = new THREE.PerspectiveCamera( 75, 1, 1, 10000000000 );
-			camera.position.y = -1000;
-			camera.rotation.x = Math.PI/2;
-			camera.rotation.z = -Math.PI/2;
-
-			return camera;
-		}
 
 
 
 
-		function ThreeScene(model,camera) {
-			var scene = new THREE.Scene();
-
-			model.subscribeTo(function() {
-				if(model.sky) {
-					var sky = new ThreeSky(model.sky);
-					scene.add(sky);
-				}
-				if(model.objects) {
-					for(var i=0; i<model.objects.length; i++) {
-						var obj = new THREEObject(model.objects[i]);
-						if(model.objects[i].id === "myShip") {
-							obj.add(camera);
-						}
-						scene.add(obj.getTHREE());
-						obj.onReplaceNeeded(function(oldTHREE,newTHREE) {
-							scene.remove(oldTHREE);
-							scene.add(newTHREE);
-						});
-					}
-				}
-
-			});
-
-			return scene;
-		}
-
-
-
-
-
-		function ThreeSky(model) {
-			var geometry = new THREE.CubeGeometry(1000000000,1000000000,1000000000);
-
-			var textures = [];
-			for(var i=0; i<6; i++) {
-				textures.push(
-					new THREE.MeshBasicMaterial({
-						map: THREE.ImageUtils.loadTexture(model.textures[i]),
-						side: THREE.BackSide
-					})
-				);
-			}
-
-			var material = new THREE.MeshFaceMaterial(textures);
-
-			return new THREE.Mesh(geometry,material);
-		}
 
 
 
@@ -94,8 +40,8 @@ define(
 				this.__startAnim();
 			},
 			__initGL: function() {
-				this.__camera = new ThreeCamera();
-				this.__scene = new ThreeScene(this.props.model,this.__camera);
+				this.__camera = new Camera3D();
+				this.__scene = new Scene3D(this.props.model,this.__camera);
 			},
 			__startAnim: function() {
 
