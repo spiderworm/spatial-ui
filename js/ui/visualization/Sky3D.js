@@ -10,7 +10,11 @@ define(
 
 
 		function ThreeSky(model) {
-			var geometry = new THREE.CubeGeometry(1000000000,1000000000,1000000000);
+			var geometry = new THREE.CubeGeometry(
+				1000000000000,
+				1000000000000,
+				1000000000000
+			);
 
 			var textures = [];
 			for(var i=0; i<6; i++) {

@@ -19,41 +19,85 @@ define(
 			comm.ajax(
 				url,
 				function(response) {
+
 					var model = new Model(response);
 					callback.apply(connection,[model]);
 
-					var rads = 0;
-					var speed = .01;
-					var distance = 6371000 + 100000;
-
-					function animateShip() {
-
-						if(model.objects) {
-							var planetModel = model.objects[1];
-							var shipModel = model.objects[2];
-
-							rads += speed;
-
-							shipModel.position.x = planetModel.position.x + distance * Math.cos(rads);
-							shipModel.position.y = planetModel.position.y + distance * Math.sin(rads);
-							shipModel.position.z = planetModel.position.z;
-							shipModel.rotation.x = 0;
-							shipModel.rotation.y = 0;
-							shipModel.rotation.z = rads;
-
-							shipModel.position.setUpdated();
-							shipModel.rotation.setUpdated();
-
+					model.subscribeTo(function() {
+						if(this.objects) {
+							detectObjects(this.objects);
 						}
-
-						requestAnimationFrame( animateShip );
-
-					}
-
-					animateShip();
+					});
 
 				}
 			);
+		}
+
+
+
+
+		var moon, teaatis, ship;
+
+		function detectObjects(objs) {
+			for(var i=0; i<objs.length; i++) {
+				switch(objs[i].id) {
+					case "moon":
+						moon = objs[i];
+					break;
+					case "Teaatis":
+						teaatis = objs[i];
+					break;
+					case "myShip":
+						ship = objs[i];
+					break;
+				}
+			}
+		}
+
+
+
+
+
+		var teaatisSize = 6371000;
+		var teaatisDistance = 149600000000;
+
+		var shipRads = 0;
+		var shipSpeed = .0003;
+		var shipDistance = teaatisSize + 100000;
+
+		function doAnimation() {
+			animateShip();
+			animateTeaatis();
+			requestAnimationFrame(doAnimation);
+		}
+
+		doAnimation();
+
+
+		function animateShip() {
+
+			if(moon && teaatis && ship) {
+				shipRads += shipSpeed;
+
+				ship.position.x = teaatis.position.x + shipDistance * Math.cos(shipRads);
+				ship.position.y = teaatis.position.y + shipDistance * Math.sin(shipRads);
+				ship.position.z = teaatis.position.z;
+				ship.position.setUpdated();
+
+				ship.rotation.x = 0;
+				ship.rotation.y = 0;
+				ship.rotation.z = shipRads;
+				ship.rotation.setUpdated();
+			}
+
+		}
+
+
+		function animateTeaatis() {
+			if(teaatis) {
+				teaatis.rotation.y += .0002;
+				teaatis.rotation.setUpdated();
+			}
 		}
 
 

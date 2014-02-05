@@ -16,8 +16,8 @@
 			"id": "moon",
 			"geometry": "demo-resources/geometry/moon.json",
 			"position": {
-				"x": 38500000,
-				"y": 0,
+				"x": 149600000000,
+				"y": 38500000,
 				"z": 0
 			},
 			"rotation": {
@@ -29,10 +29,29 @@
 			]
 		},
 		{
+			"id": "sun",
+			"light": {
+				"color": "0xffffdd",
+				"intensity": 2,
+				"distance": 10000000000000
+			},
+			"geometry": "demo-resources/sun/geometry.json",
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			}
+		},
+		{
 			"id": "Teaatis",
 			"geometry": "demo-resources/geometry/Teaatis.json",
 			"position": {
-				"x": 0,
+				"x": 149600000000,
 				"y": 0,
 				"z": 0
 			},

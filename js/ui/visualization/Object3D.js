@@ -22,14 +22,14 @@ define(
 
 			threeObjects.add(this,arguments);
 
-			if(model.textures[0]) {
-				this.__material = new THREE.MeshBasicMaterial({
+			if(model.textures && model.textures[0]) {
+				this.__material = new THREE.MeshLambertMaterial({
 					map: THREE.ImageUtils.loadTexture(
 						model.textures[0]
 					)
 				});
 			} else {
-				this.__material = new THREE.MeshBasicMaterial({
+				this.__material = new THREE.MeshLambertMaterial({
 					color: 0x0000ff,
 					wireframe: true
 				});
@@ -55,6 +55,17 @@ define(
 						var geometry = threeLoader.parse(definition).geometry;
 						object3D.__setGeometry(geometry);
 					}
+				}
+			});
+
+			model.subscribeTo('light',function(definition) {
+				if(definition) {
+					var light = new THREE.PointLight(
+						eval(definition.color),
+						definition.intensity,
+						definition.distance
+					);
+					object3D.add(light);
 				}
 			});
 
