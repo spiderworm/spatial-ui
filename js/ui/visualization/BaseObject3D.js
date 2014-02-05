@@ -8,9 +8,10 @@ define(
 		THREE
 	) {
 
-		function BaseObject3D(threeObject) {
+		function BaseObject3D(threeObject,camera) {
 			EventObject.apply(this);
 			this.__threeObject = threeObject;
+			this.__povCamera = camera;
 		}
 		BaseObject3D.prototype = new EventObject();
 		BaseObject3D.prototype.add = function(obj) {

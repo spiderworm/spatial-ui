@@ -22,7 +22,7 @@ define(
 				}
 				if(model.objects) {
 					for(var i=0; i<model.objects.length; i++) {
-						var obj = new Object3D(model.objects[i]);
+						var obj = new Object3D(model.objects[i],camera);
 						if(model.objects[i].id === "myShip") {
 							obj.add(camera);
 						}

@@ -14,7 +14,7 @@ define(
 
 		var threeObjects = new InstanceStore();
 
-		function Object3D(model) {
+		function Object3D(model,camera) {
 			var instance = threeObjects.find(arguments);
 			if(instance) {
 				return instance;
@@ -37,7 +37,7 @@ define(
 
 			var mesh = new THREE.Mesh(new THREE.Geometry(),this.__material);
 
-			BaseObject3D.apply(this,[mesh]);
+			BaseObject3D.apply(this,[mesh,camera]);
 
 			var object3D = this;
 
