@@ -1,4 +1,9 @@
 
+if (window.require !== window.requirejs) {
+	window.require = window.requirejs;
+	window.require.nodeRequire = global.require;
+}
+
 var baseUrl = (function() {
 	var loc = document.location.pathname;
 	loc = loc.match(/^(.*\/)[^\/]*$/)[0] + "js/";
