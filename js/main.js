@@ -6,7 +6,7 @@ if (window.require !== window.requirejs) {
 
 var baseUrl = (function() {
 	var loc = document.location.href;
-	loc = loc.match(/^([^\?#]*\/)[^\/\?#]*$/)[0];
+	loc = loc.match(/^([^\?#]*\/)[^\/\?#]*$/)[1];
 	return loc;
 })();
 
