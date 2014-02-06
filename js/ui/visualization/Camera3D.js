@@ -2,12 +2,14 @@ define(
 	[
 		'THREE',
 		'./BaseObject3D',
-		'../../util/InstanceStore'
+		'../../util/InstanceStore',
+		'../../registry'
 	],
 	function(
 		THREE,
 		BaseObject3D,
-		InstanceStore
+		InstanceStore,
+		registry
 	) {
 
 

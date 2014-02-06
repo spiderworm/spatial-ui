@@ -39,6 +39,7 @@ require(
 	) {
 		registry.set('rootUrl',baseUrl);
 		registry.set('mock',true);
+		registry.set('3D-scale',.000000001);
 		require(
 			[
 				'./App'

@@ -2,12 +2,14 @@ define(
 	[
 		'./BaseObject3D',
 		'THREE',
-		'../../util/InstanceStore'
+		'../../util/InstanceStore',
+		'../../registry'
 	],
 	function(
 		BaseObject3D,
 		THREE,
-		InstanceStore
+		InstanceStore,
+		registry
 	) {
 
 		var threeLoader = new THREE.JSONLoader();
@@ -87,19 +89,23 @@ define(
 				}
 			});
 
-			model.position.subscribeTo(function(position) {
+			function updateStuff() {
 				var three = object3D.getTHREE();
-				three.position.x = position.x;
-				three.position.y = position.y;
-				three.position.z = position.z;
-			});
+				three.position.x = model.position.x;
+				three.position.y = model.position.y;
+				three.position.z = model.position.z;
+				three.rotation.x = model.rotation.x;
+				three.rotation.y = model.rotation.y;
+				three.rotation.z = model.rotation.z;
+				var scale = model.hasOwnProperty('scale') ? model.scale : 1;
+				three.scale.x = scale;
+				three.scale.y = scale;
+				three.scale.z = scale;
+			}
 
-			model.rotation.subscribeTo(function(rotation) {
-				var three = object3D.getTHREE();
-				three.rotation.x = rotation.x;
-				three.rotation.y = rotation.y;
-				three.rotation.z = rotation.z;
-			});
+			model.position.subscribeTo(updateStuff);
+			model.rotation.subscribeTo(updateStuff);
+			model.subscribeTo('scale',updateStuff);
 		}
 
 		Object3D.prototype = new BaseObject3D();

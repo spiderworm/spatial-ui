@@ -26,16 +26,15 @@ define(
 		BaseObject3D.prototype._replaceTHREE = function(newTHREE) {
 			var oldTHREE = this.__threeObject;
 			if(oldTHREE) {
-				if(oldTHREE.position) {
-					newTHREE.position.x = oldTHREE.position.x;
-					newTHREE.position.y = oldTHREE.position.y;
-					newTHREE.position.z = oldTHREE.position.z;
+				if(oldTHREE.position && newTHREE.position) {
+					newTHREE.position.copy(oldTHREE.position);
 				}
-				if(oldTHREE.rotation) {
-					newTHREE.rotation.x = oldTHREE.rotation.x;
-					newTHREE.rotation.y = oldTHREE.rotation.y;
-					newTHREE.rotation.z = oldTHREE.rotation.z;
+				if(oldTHREE.rotation && newTHREE.rotation) {
+					newTHREE.rotation.copy(oldTHREE.rotation);
 				}
+				if(oldTHREE.scale) {
+					newTHREE.scale.copy(oldTHREE.scale);
+				} 
 				if(oldTHREE.children) {
 					while(oldTHREE.children[0]) {
 						var child = oldTHREE.children[0];

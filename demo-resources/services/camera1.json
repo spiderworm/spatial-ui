@@ -16,8 +16,8 @@
 			"id": "moon",
 			"geometry": "demo-resources/geometry/moon.json",
 			"position": {
-				"x": 149600000000,
-				"y": 38500000,
+				"x": 0,
+				"y": 0,
 				"z": 0
 			},
 			"rotation": {
@@ -50,7 +50,7 @@
 			"id": "Teaatis",
 			"geometry": "demo-resources/geometry/Teaatis.json",
 			"position": {
-				"x": 149600000000,
+				"x": 0,
 				"y": 0,
 				"z": 0
 			},
