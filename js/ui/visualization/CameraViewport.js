@@ -45,10 +45,10 @@ define(
 
 					requestAnimationFrame( animate );
 					view.__renderer.setSize( canvas.offsetWidth, canvas.offsetHeight );
-					view.__camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
-					view.__camera.updateProjectionMatrix();
+					view.__camera.getTHREE().aspect = canvas.offsetWidth / canvas.offsetHeight;
+					view.__camera.getTHREE().updateProjectionMatrix();
 
-					view.__renderer.render( view.__scene, view.__camera );
+					view.__renderer.render( view.__scene, view.__camera.getTHREE() );
 
 				}
 
