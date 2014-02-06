@@ -1,11 +1,9 @@
 define(
 	[
-		'../../../base/Model',
 		'../../base/Connection',
 		'../../util/comm'
 	],
 	function(
-		Model,
 		Connection,
 		comm
 	) {

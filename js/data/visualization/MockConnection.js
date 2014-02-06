@@ -1,12 +1,12 @@
 define(
 	[
 		'../base/Connection',
-		'../../base/Model',
+		'../base/DataConnectionModel',
 		'../util/comm'
 	],
 	function(
 		Connection,
-		Model,
+		DataConnectionModel,
 		comm
 	) {
 
@@ -20,7 +20,7 @@ define(
 				url,
 				function(response) {
 
-					var model = new Model(response);
+					var model = new DataConnectionModel(response);
 					callback.apply(connection,[model]);
 
 					model.subscribeTo(function() {
@@ -62,7 +62,7 @@ define(
 		var teaatisDistance = 149600000000;
 
 		var shipRads = 0;
-		var shipSpeed = .0003;
+		var shipSpeed = .003;
 		var shipDistance = teaatisSize + 100000;
 
 		function doAnimation() {
@@ -79,15 +79,17 @@ define(
 			if(moon && teaatis && ship) {
 				shipRads += shipSpeed;
 
-				ship.position.x = teaatis.position.x + shipDistance * Math.cos(shipRads);
-				ship.position.y = teaatis.position.y + shipDistance * Math.sin(shipRads);
-				ship.position.z = teaatis.position.z;
-				ship.position.setUpdated();
+				ship.position.sourceUpdate({
+					x: teaatis.position.x + shipDistance * Math.cos(shipRads),
+					y: teaatis.position.y + shipDistance * Math.sin(shipRads),
+					z: teaatis.position.z
+				});
 
-				ship.rotation.x = 0;
-				ship.rotation.y = 0;
-				ship.rotation.z = shipRads;
-				ship.rotation.setUpdated();
+				ship.rotation.sourceUpdate({
+					x:0,
+					y:0,
+					z:shipRads
+				});
 			}
 
 		}
@@ -96,7 +98,7 @@ define(
 		function animateTeaatis() {
 			if(teaatis) {
 				teaatis.rotation.y += .0002;
-				teaatis.rotation.setUpdated();
+				teaatis.rotation.setSourceUpdated();
 			}
 		}
 

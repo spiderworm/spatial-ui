@@ -25,8 +25,7 @@
 				"y": 0,
 				"z": 0
 			},
-			"textures": [
-			]
+			"textures": {}
 		},
 		{
 			"id": "sun",
@@ -60,9 +59,10 @@
 				"y": 0,
 				"z": 0
 			},
-			"textures": [
-				"demo-resources/planet-maps/Teaatis/Colormap.png"
-			]
+			"textures": {
+				"color": "demo-resources/planet-maps/Teaatis/Colormap.png",
+				"normal": "demo-resources/planet-maps/Teaatis/Normalmap.png"
+			}
 		},
 		{
 			"id": "myShip",
@@ -77,7 +77,7 @@
 				"y": 0,
 				"z": 0
 			},
-			"textures": []
+			"textures": {}
 		}
 	]
 }

@@ -22,24 +22,42 @@ define(
 
 			threeObjects.add(this,arguments);
 
-			if(model.textures && model.textures[0]) {
-				this.__material = new THREE.MeshLambertMaterial({
-					map: THREE.ImageUtils.loadTexture(
-						model.textures[0]
-					)
-				});
-			} else {
-				this.__material = new THREE.MeshLambertMaterial({
-					color: 0x0000ff,
-					wireframe: true
-				});
-			}
 
-			var mesh = new THREE.Mesh(new THREE.Geometry(),this.__material);
-
-			BaseObject3D.apply(this,[mesh,camera]);
+			this.__material = new THREE.MeshLambertMaterial({
+				color: 0x0000ff,
+				wireframe: true
+			});
 
 			var object3D = this;
+
+			model.subscribeTo('textures',function(textures) {
+				var description = {};
+
+				for(var name in textures) {
+					switch(name) {
+						case "color":
+							description.map = THREE.ImageUtils.loadTexture(
+								textures[name]
+							);
+						break;
+						case "normal":
+							description.normalMap = THREE.ImageUtils.loadTexture(
+								textures[name]
+							);
+						break;
+					}
+				}
+
+				object3D.__setMaterial(new THREE.MeshLambertMaterial(description));
+
+			});
+
+			this.__geometry = new THREE.Geometry();
+
+
+			var mesh = new THREE.Mesh(this.__geometry,this.__material);
+
+			BaseObject3D.apply(this,[mesh,camera]);
 
 			model.subscribeTo('geometry',function(definition) {
 				if(definition) {
@@ -87,8 +105,15 @@ define(
 		Object3D.prototype = new BaseObject3D();
 
 		Object3D.prototype.__setGeometry = function(geometry) {
+			this.__geometry = geometry;
 			this._replaceTHREE(new THREE.Mesh(geometry,this.__material));
 		}
+
+		Object3D.prototype.__setMaterial = function(material) {
+			this.__material = material;
+			this._replaceTHREE(new THREE.Mesh(this.__geometry,material));
+		}
+
 		return Object3D;
 
 	}

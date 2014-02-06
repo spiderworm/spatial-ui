@@ -2,17 +2,17 @@ define(
 	[
 		'../../util/InstanceStore',
 		'../../base/EventObject',
-		'../../base/Model'
+		'../base/DataConnectionModel'
 	],
 	function(
 		InstanceStore,
 		EventObject,
-		Model
+		DataConnectionModel
 	) {
 
 		function DataConnection(model) {
 			EventObject.apply(this);
-			this._model = model || new Model();
+			this._model = model || new DataConnectionModel();
 		}
 		DataConnection.prototype = new EventObject();
 		DataConnection.prototype.getModel = function() {

@@ -1,12 +1,10 @@
 define(
 	[
 		'../base/Connection',
-		'../../base/Model',
 		'../util/comm'
 	],
 	function(
 		Connection,
-		Model,
 		comm
 	) {
 
@@ -17,22 +15,20 @@ define(
 			}
 			Connection.add(this,arguments);
 
-			var model = this._model = new Model();
-
-			Connection.apply(this,[model]);
+			Connection.apply(this,[]);
 
 			var connection = this;
 
 			comm.ajax(
 				url,
 				function(response) {
-					model.overwrite(response);
+					connection._model.overwrite(response);
 					connection._setConnected();
 					
 					window.setInterval(
 						function() {
-							model.weapons.ammo.torpedos++;
-							model.weapons.ammo.setUpdated();
+							connection._model.weapons.ammo.torpedos++;
+							connection._model.weapons.ammo.setUpdated();
 						},
 						1000
 					);

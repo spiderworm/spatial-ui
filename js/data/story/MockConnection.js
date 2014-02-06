@@ -1,13 +1,13 @@
 define(
 	[
-		'../../base/Model',
+		'../base/DataConnectionModel',
 		'../ship/connectionFactory',
 		'../ship/controls/connectionFactory',
 		'../ship/ui/connectionFactory',
 		'../util/comm'
 	],
 	function(
-		Model,
+		DataConnectionModel,
 		shipValuesConnectionFactory,
 		shipControlsConnectionFactory,
 		shipUIConnectionFactory,
@@ -16,7 +16,7 @@ define(
 
 		function MockStoryDataConection(user,url) {
 			this._user = user;
-			this._model = new Model();
+			this._model = new DataConnectionModel();
 
 			var connection = this;
 			comm.ajax(

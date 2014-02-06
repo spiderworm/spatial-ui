@@ -20,13 +20,8 @@ define(
 					this[name] = vals[name];
 				}
 			}
-			this.__modelizeRecursively();
-			/*
-			var model = this;
-			this.onUpdated(function() {
-				model.__modelizeRecursively();
-			});
-			*/
+			this._modelizeRecursively();
+
 		}
 		Model.prototype = new EventObject();
 		Model.prototype.subscribeTo = function(a,b) {
@@ -51,12 +46,15 @@ define(
 		}
 		Model.prototype.overwrite = function(vals) {
 			for(var name in this) {
-				if(this.hasOwnProperty(name) && name[0] !== "_") {
+				if(this.hasModelProperty(name)) {
 					delete this[name];
 				}
 			}
+			this.update(vals);
+		}
+		Model.prototype.update = function(vals) {
 			for(var name in vals) {
-				if(vals.hasOwnProperty(name) && name[0] !== "_") {
+				if(this.hasModelProperty.apply(vals,[name])) {
 					this[name] = vals[name];
 				}
 			}
@@ -66,24 +64,27 @@ define(
 			return this._on('updated',callback);
 		}
 		Model.prototype.setUpdated = function() {
-			this.__modelizeRecursively();
+			this._modelizeRecursively();
 			this._fire('updated');
 		}
 		Model.prototype.mapToArray = function(callback) {
 			var result = [];
 			for(var name in this) {
-				if(this.hasOwnProperty(name) && name[0] !== "_") {
+				if(this.hasModelProperty(name)) {
 					result.push(callback.apply(this,[name,this[name]]));
 				}
 			}
 			return result;
 		}
-		Model.prototype.__modelizeRecursively = function() {
+		Model.prototype.hasModelProperty = function(name) {
+			if(this.hasOwnProperty(name) && name[0] !== "_") {
+				return true;
+			}
+		}
+		Model.prototype._modelizeRecursively = function() {
 			for(var name in this) {
-				if(this.hasOwnProperty(name)) {
-					if(name[0] !== "_") {
-						this[name] = Model.modelize(this[name]);
-					}
+				if(this.hasModelProperty(name)) {
+					this[name] = Model.modelize(this[name]);
 				}
 			}
 		}
@@ -133,7 +134,7 @@ define(
 			Model.apply(result);
 
 			function modelizeRecursively() {
-				ArrayModel.prototype.__modelizeRecursively.apply(result);
+				ArrayModel.prototype._modelizeRecursively.apply(result);
 			}
 
 			result.onUpdated(modelizeRecursively);
@@ -142,7 +143,7 @@ define(
 			return result;
 		}
 
-		ArrayModel.prototype.__modelizeRecursively = function() {
+		ArrayModel.prototype._modelizeRecursively = function() {
 			for(var i=0; i<this.length; i++) {
 				this[i] = Model.modelize(this[i]);
 			}
