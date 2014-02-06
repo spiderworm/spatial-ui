@@ -24,6 +24,7 @@ define(
 
 			threeObjects.add(this,arguments);
 
+			this._model = model;
 
 			this.__material = new THREE.MeshLambertMaterial({
 				color: 0x0000ff,
@@ -89,26 +90,27 @@ define(
 				}
 			});
 
-			function updateStuff() {
+			model.subscribeTo('scale',function(scale) {
 				var three = object3D.getTHREE();
-				three.position.x = model.position.x;
-				three.position.y = model.position.y;
-				three.position.z = model.position.z;
-				three.rotation.x = model.rotation.x;
-				three.rotation.y = model.rotation.y;
-				three.rotation.z = model.rotation.z;
 				var scale = model.hasOwnProperty('scale') ? model.scale : 1;
 				three.scale.x = scale;
 				three.scale.y = scale;
 				three.scale.z = scale;
-			}
-
-			model.position.subscribeTo(updateStuff);
-			model.rotation.subscribeTo(updateStuff);
-			model.subscribeTo('scale',updateStuff);
+			});
 		}
 
 		Object3D.prototype = new BaseObject3D();
+
+		Object3D.prototype.prepareForRender = function() {
+			var three = this.getTHREE();
+			var cameraPos = this.getCamera().getPosition();
+			three.position.x = this._model.position.x - cameraPos.x;
+			three.position.y = this._model.position.y - cameraPos.y;
+			three.position.z = this._model.position.z - cameraPos.z;
+			three.rotation.x = this._model.rotation.x;
+			three.rotation.y = this._model.rotation.y;
+			three.rotation.z = this._model.rotation.z;
+		}
 
 		Object3D.prototype.__setGeometry = function(geometry) {
 			this.__geometry = geometry;

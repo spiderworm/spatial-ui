@@ -89,7 +89,7 @@ define(
 		var teaatisDistance = scale * 149600000000;
 		var teaatisRads = .5;
 
-		var moonDistance = scale * 384400000;
+		var moonDistance = scale * 38440000;
 		var moonRads = 1;
 
 		var shipRads = 0;

@@ -17,6 +17,13 @@ define(
 		BaseObject3D.prototype.add = function(obj) {
 			this.__threeObject.add(obj.getTHREE ? obj.getTHREE() : obj);
 		}
+		BaseObject3D.prototype.remove = function(obj) {
+			this.__threeObject.remove(obj.getTHREE ? obj.getTHREE : obj);
+		}
+
+		BaseObject3D.prototype.getCamera = function(){
+			return this.__povCamera;
+		}
 		BaseObject3D.prototype.getTHREE = function(){
 			return this.__threeObject;
 		}
