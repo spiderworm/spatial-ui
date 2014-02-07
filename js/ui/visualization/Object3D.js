@@ -116,6 +116,7 @@ define(
 			three.rotation.x = this._model.rotation.x;
 			three.rotation.y = this._model.rotation.y;
 			three.rotation.z = this._model.rotation.z;
+			three.rotation.order = this._model.rotation.order;
 		}
 
 		Object3D.prototype.__setGeometry = function(geometry) {

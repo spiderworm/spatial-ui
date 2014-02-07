@@ -3,13 +3,17 @@ define(
 		'../base/Connection',
 		'../base/DataConnectionModel',
 		'../util/comm',
-		'../../registry'
+		'../../registry',
+		'external/threex.keyboardstate',
+		'THREE'
 	],
 	function(
 		Connection,
 		DataConnectionModel,
 		comm,
-		registry
+		registry,
+		KeyboardState,
+		THREE
 	) {
 
 		var scale = registry.get('3D-scale');
@@ -83,7 +87,7 @@ define(
 
 
 
-
+		var keyboard = new KeyboardState(document.querySelector('canvas'));
 
 		var teaatisSize = scale * 6371000;
 		var teaatisDistance = scale * 149600000000;
@@ -95,8 +99,12 @@ define(
 		var shipRads = 0;
 		var shipSpeed = .003;
 		var shipDistance = teaatisSize + scale * 100000;
+		var shipOrbit = true;
 
 		function doAnimation() {
+			if(keyboard.pressed('space')) {
+				shipOrbit= false;
+			}
 			animateShip();
 			animateTeaatis();
 			animateMoon();
@@ -107,21 +115,59 @@ define(
 
 
 		function animateShip() {
+			if(ship) {
+				if(shipOrbit) {
+					if(teaatis) {
+						shipRads += shipSpeed;
 
-			if(moon && teaatis && ship) {
-				shipRads += shipSpeed;
+						ship.position.sourceUpdate({
+							x: teaatis.position.x + shipDistance * Math.cos(shipRads),
+							y: teaatis.position.y + shipDistance * Math.sin(shipRads),
+							z: teaatis.position.z
+						});
 
-				ship.position.sourceUpdate({
-					x: teaatis.position.x + shipDistance * Math.cos(shipRads),
-					y: teaatis.position.y + shipDistance * Math.sin(shipRads),
-					z: teaatis.position.z
-				});
+						ship.rotation.sourceUpdate({
+							x:shipRads-Math.PI/2,
+							y:-Math.PI/2,
+							z:0,
+							order: 'YXZ'
+						});
+					}
+				} else {
 
-				ship.rotation.sourceUpdate({
-					x:0,
-					y:0,
-					z:shipRads
-				});
+					var vector = new THREE.Vector3(100000,0,0);
+
+					var euler = new THREE.Euler(ship.rotation.x,ship.rotation.y,ship.rotation.z);
+
+					vector.applyEuler(euler);
+
+//					console.info(vector);
+
+
+/*
+					if(keyboard.pressed('W')) {
+						dx = 10000;
+					}
+					if(keyboard.pressed('S')) {
+						dx = -10000;
+					}
+					if(keyboard.pressed('D')) {
+						dy = 10000;
+					}
+					if(keyboard.pressed('A')) {
+						dy = -10000;
+					}
+*/
+
+					ship.position.sourceUpdate({
+						x: ship.position.x + vector.z,
+						y: ship.position.y + vector.x,
+						z: ship.position.z + vector.y
+					});
+
+
+
+				}
 			}
 
 		}

@@ -26,6 +26,9 @@ require.config({
 		'THREE.GeometryExporter': {
 			exports: 'THREE.GeometryExporter',
 			deps: ['THREE']
+		},
+		'external/threex.keyboardstate': {
+			exports: 'THREEx.KeyboardState'
 		}
 	}
 });

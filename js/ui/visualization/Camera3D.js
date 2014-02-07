@@ -3,45 +3,62 @@ define(
 		'THREE',
 		'./BaseObject3D',
 		'../../util/InstanceStore',
-		'../../registry'
+		'../../registry',
+		'../../base/Model'
 	],
 	function(
 		THREE,
 		BaseObject3D,
 		InstanceStore,
-		registry
+		registry,
+		Model
 	) {
 
 
 		function Camera3D() {
 
-			var camera = new THREE.PerspectiveCamera( 75, 1, 1, 10000000000000000 );
+			var threeCamera = new THREE.PerspectiveCamera( 75, 1, 1, 10000000000000000 );
 
-			BaseObject3D.apply(this,[camera,camera]);
+			window.camera = threeCamera;
 
-			this._x = 0;
-			this._y = -10000;
-			this._z = 0;
+			BaseObject3D.apply(this,[threeCamera,threeCamera]);
 
-			camera.position.x = this._x;
-			camera.position.y = this._y;
-			camera.position.z = this._z;
+			var model = this.__model = new Model({
+				position: {
+					x: 0,
+					y: 1500,
+					z: -8000
+				},
+				rotation: {
+					x: 0,//Math.PI/2,
+					y: Math.PI,
+					z: 0//-Math.PI/2
+				}
+			});
 
-			this._rotX = Math.PI/2;
-			this._rotY = 0;
-			this._rotZ = -Math.PI/2;
+			model.position.subscribeTo(function() {
+				threeCamera.position.set(
+					this.x,
+					this.y,
+					this.z
+				);
+			});
 
-			camera.rotation.x = this._rotX;
-			camera.rotation.y = this._rotY;
-			camera.rotation.z = this._rotZ;
+			model.rotation.subscribeTo(function() {
+				threeCamera.rotation.set(
+					this.x,
+					this.y,
+					this.z
+				);
+			});
 
 		}
 		Camera3D.prototype = new BaseObject3D();
 		Camera3D.prototype.getPosition = function() {
 			var result = {
-				x: this._x,
-				y: this._y,
-				z: this._z
+				x: this.__model.position.x,
+				y: this.__model.position.y,
+				z: this.__model.position.z
 			};
 			if(this.__ship) {
 				result.x += this.__ship._model.position.x;
