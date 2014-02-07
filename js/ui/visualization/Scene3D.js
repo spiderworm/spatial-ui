@@ -88,9 +88,6 @@ define(
 					}
 				}
 
-
-				//scene.getCamera().getTHREE().lookAt(scene.getCamera().__ship.getTHREE());
-
 				scene.__renderer.render(
 					scene.getTHREE(),
 					scene.getCamera().getTHREE()

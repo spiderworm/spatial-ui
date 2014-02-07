@@ -19,22 +19,20 @@ define(
 
 			var threeCamera = new THREE.PerspectiveCamera( 75, 1, 1, 10000000000000000 );
 
-			window.camera = threeCamera;
-
 			BaseObject3D.apply(this,[threeCamera,threeCamera]);
 
 			var model = this.__model = new Model({
 				position: {
 					x: 0,
-					y: 1500,
-					z: -8000
+					y: 0,
+					z: 0
 				},
-				rotation: {
-					x: 0,//Math.PI/2,
-					y: Math.PI,
-					z: 0//-Math.PI/2
-				}
+				distance: 9000,
+				angleY: 0,
+				angleX: 5
 			});
+
+			var camera = this;
 
 			model.position.subscribeTo(function() {
 				threeCamera.position.set(
@@ -44,13 +42,26 @@ define(
 				);
 			});
 
-			model.rotation.subscribeTo(function() {
-				threeCamera.rotation.set(
-					this.x,
-					this.y,
-					this.z
-				);
-			});
+			function rotateMouse() {
+				requestAnimationFrame(rotateMouse);
+				model.angleY += .01;
+				model.setUpdated();
+
+
+				var vector = new THREE.Vector3(model.distance,0,0);
+				var euler = new THREE.Euler(model.angleX,model.angleY,0,'YXZ');
+				vector.applyEuler(euler);
+
+				model.position.update({
+					x: vector.x,
+					y: vector.y,
+					z: vector.z
+				});
+				if(camera.__ship) {
+					camera.getTHREE().lookAt(camera.__ship.getTHREE().position);
+				}
+			}
+			requestAnimationFrame(rotateMouse);
 
 		}
 		Camera3D.prototype = new BaseObject3D();
