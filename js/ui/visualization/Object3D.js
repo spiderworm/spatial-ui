@@ -51,7 +51,13 @@ define(
 					}
 				}
 
-				object3D.__setMaterial(new THREE.MeshLambertMaterial(description));
+				var mat =
+					model.light ?
+					new THREE.MeshBasicMaterial(description) :
+					new THREE.MeshLambertMaterial(description)
+				;
+
+				object3D.__setMaterial(mat);
 
 			});
 

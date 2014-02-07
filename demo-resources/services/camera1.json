@@ -44,6 +44,9 @@
 				"x": 0,
 				"y": 0,
 				"z": 0
+			},
+			"textures": {
+				"color": "demo-resources/sun/img/colormap.png"
 			}
 		},
 		{
