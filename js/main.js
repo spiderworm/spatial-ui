@@ -6,7 +6,7 @@ if (window.require !== window.requirejs) {
 
 var baseUrl = (function() {
 	var loc = document.location.href;
-	loc = loc.match(/^([^\?#]*\/)[^\/\?#]*$/)[1];
+	loc = loc.match(/^([^\?#]*\/).*$/)[1];
 	return loc;
 })();
 
@@ -35,14 +35,22 @@ require.config({
 
 require(
 	[
-		'./registry'
+		'./registry',
+		'./util/urlUtil'
 	],
 	function(
-		registry
+		registry,
+		urlUtil
 	) {
 		registry.set('rootUrl',baseUrl);
 		registry.set('mock',true);
 		registry.set('3D-scale',1);
+
+		var vals = urlUtil.getQueryValues();
+		if(vals.mock !== undefined) {
+			registry.set('mock',vals.mock);
+		}
+
 		require(
 			[
 				'./App'

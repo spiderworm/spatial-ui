@@ -23,7 +23,10 @@ define(
 					var modelSubscription = vals.model.subscribeTo(
 						vals.modelPropertyName,
 						function(value) {
-							view.setState({value: value});
+							view.setState({
+								inactiveValue: value,
+								value: value
+							});
 						}
 					);
 				}
@@ -61,8 +64,10 @@ define(
 				this._setValue(this.props.definition.allowedValues[i]);
 			},
 			_setValue: function(value) {
-				this.props.model[this.props.modelPropertyName] = value;
-				this.props.model.setUpdated();
+				if(this.props.model) {
+					this.props.model[this.props.modelPropertyName] = value;
+					this.props.model.setUpdated();
+				}
 			},
 			_getControlNode: function(children) {
 				var clss = "control ";
@@ -112,7 +117,7 @@ define(
 			},
 			_getValueDisplay: function(value) {
 				if(!this.props.definition.dataPath) {
-					return "";
+					return value;
 				}
 				if(this.state) {
 					value = arguments.length !== 0 ? value : this.state.value;
@@ -158,11 +163,25 @@ define(
 				}
 				return this.__getPropertyForValue('subControls',value) || [];
 			},
+			_getSize: function(value) {
+				if(this.state) {
+					value = arguments.length !== 0 ? value : this.state.value;
+				}
+				return this.__getPropertyForValue('size',value) || null;
+			},
 			_isDisabled: function(value) {
 				if(this.state) {
 					value = arguments.length !== 0 ? value : this.state.value;
 				}
 				return this.__getPropertyForValue('disabled',value) || false;
+			},
+			_liveEditEnabled: function(value) {
+				if(this.state) {
+					value = arguments.length !== 0 ? value : this.state.value;
+				}
+				var canLiveEdit = this.__getPropertyForValue('liveEdit',value);
+				if(canLiveEdit === null) canLiveEdit = true;
+				return canLiveEdit;
 			},
 			__getPropertyForValue: function(property,value) {
 				var map = this.__getValueMap(value);

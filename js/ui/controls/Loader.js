@@ -12,32 +12,32 @@ define(
 				require(
 					[
 						'jsx!ui/controls/Slider',
-						'jsx!ui/controls/Output',
 						'jsx!ui/controls/Button',
 						'jsx!ui/controls/Checkbox',
 						'jsx!ui/controls/Select',
 						'jsx!ui/controls/Multi',
-						'jsx!ui/controls/Text'
+						'jsx!ui/controls/Text',
+						'jsx!ui/controls/Output'
 					],
 					function(
 						SliderControl,
-						OutputControl,
 						ButtonControl,
 						CheckboxControl,
 						SelectControl,
 						MultiControl,
-						TextControl
+						TextControl,
+						OutputControl
 					) {
 						setTimeout(function() {
 							view.setState({
 								Controls: [
 									SliderControl,
-									OutputControl,
 									ButtonControl,
 									CheckboxControl,
 									SelectControl,
 									MultiControl,
-									TextControl
+									TextControl,
+									OutputControl
 								]
 							});
 						},100);

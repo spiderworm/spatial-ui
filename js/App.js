@@ -3,13 +3,15 @@ define(
 		'react',
 		'jsx!./ui/AppUI',
 		'./base/Model',
-		'./user/userManager'
+		'./user/userManager',
+		'./ui/story/ConnectView'
 	],
 	function(
 		React,
 		AppUI,
 		Model,
-		userManager
+		userManager,
+		StoryConnectView
 	) {
 		
 		function App() {
@@ -19,13 +21,11 @@ define(
 		App.prototype.start = function() {
 
 			var user = userManager.getCurrentUser();
-			this.model.user = user;
-
-			this.model.setUpdated();
 
 			var app = this;
 
-			user.onConnectedToStory(function(storyConnection) {
+			var storyConnectView = new StoryConnectView(user);
+			storyConnectView.onConnected(function(storyConnection) {
 
 				var controlsModel = storyConnection.getControlsConnection().getModel();
 				app.model.controls = controlsModel;
@@ -40,9 +40,11 @@ define(
 
 			});
 
-			this._setViewModel(
-				user.getStoryConnectionUIModel()
-			);
+			this.model.user = user;
+			this.model.values = storyConnectView.getValuesModel();
+			this.model.setUpdated();
+
+			this._setViewModel(storyConnectView.getControlsModel());
 
 		}
 		App.prototype.getModel = function(name) {
@@ -65,6 +67,17 @@ define(
 				document.body
 			);
 		}
+
+
+
+
+
+
+
+
+
+
+
 
 		return App;
 

@@ -33,8 +33,7 @@ define(
 
 		OutputControl.supportsDefinition = function(definition) {
 			return (
-				Control.supportsDefinition(definition) &&
-				definition.outputOnly
+				Control.supportsDefinition(definition)
 			);
 		}
 

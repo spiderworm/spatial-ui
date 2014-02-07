@@ -27,11 +27,11 @@ define(
 		Comm.prototype.__guessResponseType = function(url) {
 			return Comm.JSON;
 		}
-		Comm.prototype.__translateResponse = function(type,text) {
+		Comm.prototype.__translateResponse = function(type,raw) {
 			if(type===Comm.JSON) {
-				return JSON.parse(text);
+				return JSON.parse(raw);
 			}
-			return text;
+			return raw;
 		}
 
 
