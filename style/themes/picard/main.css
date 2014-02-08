@@ -1,15 +1,5 @@
 @import url('./screen-layouts/grid.css');
 
-html {
-	background-color: black;
-	/*background-image: url('./images/Gliese_667.jpg');*/
-	color: white;
-}
-
-body {
-	margin: 0;
-}
-
 .spatial-master {
 	position: absolute;
 	top: 0;
@@ -17,6 +7,9 @@ body {
 	right: 0;
 	bottom: 0;
 	font-size: .35cm;
+
+	background-color: black;
+	color: white;
 }
 
 .spatial-master :link,
@@ -120,12 +113,12 @@ body {
 	min-height: 3.25cm;
 }
 
-.panel,
-.panel > h1 {
+.spatial-master .panel,
+.spatial-master .panel > h1 {
 	border-radius: 0 15px;
 }
 
-.panel > h1 {
+.spatial-master .panel > h1 {
 	margin: -11px -10px 0 -11px;
 	background-color: rgba(255,255,255,.1);
 	color: white;
@@ -133,13 +126,13 @@ body {
 	text-transform: uppercase;
 }
 
-.panel > .control {
+.spatial-master .panel > .control {
 	padding-left: 2.25cm;
 	margin: .5cm 0;
 }
 
-.panel > .control > .label-text,
-.panel > .control > label > .label-text {
+.spatial-master .panel > .control > .label-text,
+.spatial-master .panel > .control > label > .label-text {
 	display: inline-block;
 	margin-left: -2.25cm;
 	margin-right: .25cm;
@@ -147,8 +140,8 @@ body {
 	vertical-align: top;
 }
 
-.panel > .control > .control > .label-text,
-.panel > .control > .control > label > .label-text {
+.spatial-master .panel > .control > .control > .label-text,
+.spatial-master .panel > .control > .control > label > .label-text {
 	display: inline-block;
 	margin-left: -1.75cm;
 	margin-right: .25cm;
@@ -156,41 +149,41 @@ body {
 	vertical-align: top;
 }
 
-.control {
+.spatial-master .control {
 	margin: .1cm 0;
 	display: block;
 }
 
-.control .label-text {
+.spatial-master .control .label-text {
 	margin-right: .2cm;
 	font-weight: bold;
 	text-transform: lowercase;
 }
 
-.control.inline-control {
+.spatial-master .control.inline-control {
 	margin: 0 .25cm 0 0;
 	display: inline-block;
 }
 
-.control.inline-control .label-text {
+.spatial-master .control.inline-control .label-text {
 	text-transform: none;
 	font-weight: normal;
 	min-width: 0;
 	margin-right: 0;
 }
 
-.control input,
-.control button,
-.control select {
+.spatial-master .control input,
+.spatial-master .control button,
+.spatial-master .control select {
 	vertical-align: middle;
 }
 
-.slider-control.control > label > .value-display {
+.spatial-master .slider-control.control > label > .value-display {
 	border: 1px solid white;
 }
 
-.slider-control.control > label > .value-display,
-.slider-control.control > label > .value-editor {
+.spatial-master .slider-control.control > label > .value-display,
+.spatial-master .slider-control.control > label > .value-editor {
 	margin-right: .25cm;
 	width: 2cm;
 	text-align: right;

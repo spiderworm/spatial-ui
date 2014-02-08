@@ -1,17 +1,5 @@
 
-html {
-	height: 100%;
-}
-
-body {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-}
-
-.screen {
+.spatial-master .screen {
 	position: relative;
 }
 
@@ -29,7 +17,7 @@ body {
 	bottom: 0;
 }
 
-.screen > .three-dee {
+.spatial-master .screen > .three-dee {
 	position: absolute;
 	top: 0;
 	left: 0;

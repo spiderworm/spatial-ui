@@ -1,4 +1,4 @@
 
-.panel-group[data-layout="grid"] .panel {
+.spatial-master .panel-group[data-layout="grid"] .panel {
 	min-width: 6cm;
 }
