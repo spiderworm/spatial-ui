@@ -26,7 +26,7 @@ define(
 						}
 					>
 						<h1>
-							<a name={this.props.definition.id}>{this.props.definition.display}</a>
+							<a name={this.props.definition.id}>{this.props.definition.label}</a>
 						</h1>
 						<PanelGroup definition={this.props.definition.panels} appModel={appModel}></PanelGroup>
 						{

@@ -44,7 +44,7 @@ define(
 					<div className="screen-group">
 						<ol className="screens-nav" role="menu">
 							{this.props.definition.map(function(screen) {
-								var a = <a href={"#" + screen.id} onClick={function() { appUI.__focusOnScreen(screen); return false; }}>{screen.display}</a>;
+								var a = <a href={"#" + screen.id} onClick={function() { appUI.__focusOnScreen(screen); return false; }}>{screen.label}</a>;
 								if(screen === activeScreen) {
 									return <li key={appUI.getKey([screen])} role="menuitem" className="active">{a}</li>;
 								} else {

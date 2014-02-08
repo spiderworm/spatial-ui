@@ -17,7 +17,8 @@ define(
 			var model = new Model({
 				panels: [
 					{
-						display: 'Login',
+						label: 'Login',
+
 						controls: [
 							{
 								label: 'connect to ship',

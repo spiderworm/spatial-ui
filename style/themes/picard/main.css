@@ -179,7 +179,9 @@ body {
 	margin-right: 0;
 }
 
-.control input {
+.control input,
+.control button,
+.control select {
 	vertical-align: middle;
 }
 

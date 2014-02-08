@@ -70,7 +70,7 @@ define(
 						onDragEnd={this.__handleDragEnded}
 						onMouseDown={this.__handleMouseDown}
 					>
-						<h1>{this.props.definition.display}</h1>
+						<h1>{this.props.definition.label}</h1>
 						{this.props.definition.controls.map(function(control) {
 							return <ControlLoader key={view.getKey([control])} appModel={appModel} definition={control} />;
 						})}

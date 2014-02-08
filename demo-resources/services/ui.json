@@ -2,13 +2,13 @@
 	"screens": [
 		{
 			"id": "weapons",
-			"display": "Weapons",
+			"label": "Weapons",
 			"visualizations": [
 				"demo-resources/services/camera1.json"
 			],
 			"panels": [
 				{
-					"display": "Torpedos",
+					"label": "Torpedos",
 					"controls": [
 						"weapons/torpedos/stock",
 						"systems/tubes",
@@ -19,7 +19,7 @@
 					"z": 1
 				},
 				{
-					"display": "Phasers",
+					"label": "Phasers",
 					"controls": [
 						"weapons/phasers/switch",
 						"weapons/phasers/frequency",
@@ -30,7 +30,7 @@
 					"z": 2
 				},
 				{
-					"display": "a test",
+					"label": "a test",
 					"controls": [
 					],
 					"x": 0,
@@ -38,7 +38,7 @@
 					"z": 3
 				},
 				{
-					"display": "another test",
+					"label": "another test",
 					"controls": [
 					],
 					"x": 7,
@@ -49,10 +49,10 @@
 		},
 		{
 			"id": "engineering",
-			"display": "Engineering",
+			"label": "Engineering",
 			"panels": [
 				{
-					"display": "Weapon Power Levels",
+					"label": "Weapon Power Levels",
 					"controls": [
 						"engineering/energy/levels/phasers",
 						"engineering/energy/levels/tubes"
@@ -62,7 +62,7 @@
 					"z": 5
 				},
 				{
-					"display": "Helm Power Levels",
+					"label": "Helm Power Levels",
 					"controls": [
 						"engineering/energy/levels/impulse"
 					],
@@ -74,10 +74,10 @@
 		},
 		{
 			"id": "helm",
-			"display": "Helm",
+			"label": "Helm",
 			"panels": [
 				{
-					"display": "stuff",
+					"label": "stuff",
 					"controls": [
 						"helm/impulse",
 						"engineering/energy/levels/impulse"
