@@ -91,16 +91,14 @@ define(
 								</li> :
 								""
 							}
-							<li key="the-edit-button">
-								<button
-									className="toggle-edit-button"
-									type="button"
-									onClick={this.__toggleEditMode}
-								>
-									{editMode ? "done" : "edit"}
-								</button>
-							</li>
 						</ol>
+						<button
+							className="toggle-edit-button"
+							type="button"
+							onClick={this.__toggleEditMode}
+						>
+							{editMode ? "done" : "edit"}
+						</button>
 						<div className="screens">
 							{this.props.definition.map(function(screen) {
 								return (

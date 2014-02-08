@@ -38,24 +38,32 @@
 	text-transform: uppercase;
 	padding: .125cm;
 	text-align: center;
+	margin: 0 1.5cm 0 0;
 }
 
-.spatial-master .screen-group > .screens-nav[role="menu"] {
+.spatial-master ul.screens-nav {
 	list-style-type: none;
-	margin: 0;
 }
 
 .spatial-master .screen-group > .screens-nav > * {
 	display: inline-block;
 }
 
-.spatial-master .screen-group > .screens-nav .toggle-edit-button {
+.spatial-master .screen-group .toggle-edit-button {
 	background-color: #999;
 	color: black;
 	border-width: 0;
-	height: .51cm;
 	margin: .125cm;
 	vertical-align: middle;
+	position: absolute;
+	top: .125cm;
+	right: .125cm;
+	width: 1cm;
+	height: .7cm;
+}
+
+.spatial-master .screen-group.edit-mode .toggle-edit-button {
+	background-color: #c00;
 }
 
 .spatial-master .screen-group > .screens-nav :link {
