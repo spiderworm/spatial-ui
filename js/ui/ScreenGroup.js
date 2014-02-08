@@ -67,8 +67,10 @@ define(
 											href={"#" + screen.id}
 											onClick={
 												function() {
+													/*
 													appUI.__focusOnScreen(screen);
 													return false;
+													*/	
 												}
 											}
 										>
@@ -84,7 +86,7 @@ define(
 									<a
 										class="add-screen-button" 
 										href="#add-new"
-										onClick={this.__addNewScreen}
+										onClick={this.__handleNewScreenClick}
 									>+ add</a>
 								</li> :
 								""
@@ -155,6 +157,10 @@ define(
 					editMode: !this.state.editMode
 				});
 			},
+			__handleNewScreenClick: function() {
+				this.__addNewScreen();
+				return false;
+			},
 			__addNewScreen: function() {
 				var newScreen = {
 					label: 'new',
@@ -166,7 +172,7 @@ define(
 					newScreen
 				);
 				this.props.definition.setUpdated();
-				this.__focusOnScreenByID(newScreen.id);
+				document.location.hash = newScreen.id;
 			},
 			__getUniqueScreenID: function(label) {
 				var id = label;
