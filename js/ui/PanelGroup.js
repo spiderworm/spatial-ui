@@ -63,7 +63,7 @@ define(
 			__checkLayout: function() {
 				var node = this.getDOMNode();
 				var gridMode = false;
-				if(node.offsetWidth > 500) {
+				if(node.offsetWidth > 400) {
 					gridMode = true;
 				}
 				if(this.state.gridMode !== gridMode) {

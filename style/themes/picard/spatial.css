@@ -1,11 +1,7 @@
 @import url('./screen-layouts/grid.css');
 
 .spatial-master {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	position: relative;
 	font-size: .35cm;
 
 	background-color: black;
@@ -27,66 +23,61 @@
 	margin-top: 0;
 }
 
-.spatial-master > .screen-group > .screens-nav {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	height: 1cm;
-	display: block;
-	padding: .25cm .5cm;
+.spatial-master .screen-group {
+	text-transform: uppercase;
 }
 
-.spatial-master > .screen-group > .screens-nav[role="menu"] {
+.spatial-master .screen-group > .screens-nav {
+	padding: .125cm;
+	text-align: center;
+}
+
+.spatial-master .screen-group > .screens-nav[role="menu"] {
 	list-style-type: none;
 	margin: 0;
 }
 
-.spatial-master > .screen-group > .screens-nav > * {
+.spatial-master .screen-group > .screens-nav > * {
 	display: inline-block;
-	margin-right: .5cm;
-	font-size: .5cm;
-	font-weight: bold;
-	text-transform: uppercase;
+}
+
+.spatial-master .screen-group > .screens-nav :link {
+	display: inline-block;
+	text-decoration: none;
 	padding: .1cm .25cm;
 	border: .05cm solid white;
+	background-color: black;
+	color: white;
+	margin: .125cm;
+	font-size: .5cm;
+	line-height: .5cm;
+	font-weight: bold;
+	opacity: .5;
 }
 
-.spatial-master > .screen-group > .screens-nav > .active {
-	background-color: white;
+.spatial-master .screen-group > .screens-nav > .active :link,
+.spatial-master .screen-group > .screens-nav > .active :visited {
 	color: black;
+	background-color: white;
+	border-color: black;
+	opacity: 1;
 }
 
-.spatial-master > .screen-group > .screens-nav [role="menuitem"] :link,
-.spatial-master > .screen-group > .screens-nav [role="menuitem"] :visited {
-	text-decoration: none;
+.spatial-master .screen-group > .screens-nav :hover {
+	opacity: 1;
 }
 
 .spatial-master > .screen-group > .screens {
-	position: absolute;
-	top: 1.5cm;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	overflow-y: auto;
-	overflow-x: hidden;
-	white-space: nowrap;
-	height: auto;
-	padding: 0 .5cm;
-}
-
-.spatial-master > .screen-group > .screens > .screen {
-	margin: .5cm .5cm .5cm 0;
-	display: inline-block;
-	vertical-align: top;
-	white-space: normal;
+	margin-top: .1cm;
+	position: relative;
 }
 
 .spatial-master .screen {
-	width: 100%;
 	opacity: 1;
 	transition: all .2s ease-in-out;
 	z-index: 2;
+	margin: 0 0 .5cm 0;
+	overflow: hidden;
 }
 
 .spatial-master .screen > h1 {
@@ -95,27 +86,18 @@
 
 .spatial-master .screen.hidden {
 	opacity: 0;
-	margin: .5cm -50% -100%;
-	z-index: 1;	
 	height: 0;
-	overflow: hidden;
+	margin-bottom: 0;
 }
 
 
-.panel {
-	background-color: rgba(0,0,0,.7);
+.spatial-master .panel {
+	background-color: rgba(0,0,0,.8);
 	vertical-align: top;
-	border: 0 solid rgba(0,0,0,1);
-	border-width: 0 4px 8px;
+	border: 0 solid rgba(255,255,255,.5);
+	border-width: .05cm 0;
 	padding: 10px 10px 0 10px;
-	margin-bottom: 10px;
-	margin-right: 10px;
 	min-height: 3.25cm;
-}
-
-.spatial-master .panel,
-.spatial-master .panel > h1 {
-	border-radius: 0 15px;
 }
 
 .spatial-master .panel > h1 {
@@ -188,4 +170,8 @@
 	width: 2cm;
 	text-align: right;
 	display: inline-block;
+}
+
+.spatial-master .three-dee {
+	display: none;
 }

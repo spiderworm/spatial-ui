@@ -1,4 +1,5 @@
 
 .spatial-master .panel-group[data-layout="grid"] .panel {
 	min-width: 6cm;
+	margin: .25cm;
 }

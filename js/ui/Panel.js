@@ -79,6 +79,11 @@ define(
 				);
 			},
 			__handleDragStarted: function(event) {
+				event.nativeEvent.dataTransfer.setDragImage(
+					this.getDOMNode(),
+					-99999999999999,
+					-99999999999999
+				);
 				this.setState({dragging:true});
 				dragTracker.setDraggedItem(
 					{
