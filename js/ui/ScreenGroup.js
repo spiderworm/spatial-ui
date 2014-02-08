@@ -52,21 +52,41 @@ define(
 					}>
 						<ol className="screens-nav" role="menu">
 							{this.props.definition.map(function(screen) {
-								var a = <a href={"#" + screen.id} onClick={function() { appUI.__focusOnScreen(screen); return false; }}>{screen.label}</a>;
-								if(screen === activeScreen) {
-									return <li key={appUI.getKey([screen])} role="menuitem" className="active">{a}</li>;
-								} else {
-									return <li key={appUI.getKey([screen])} role="menuitem">{a}</li>;
-								}
+
+								return (
+									<li
+										key={appUI.getKey([screen])}
+										role="menuitem"
+										className={
+											screen === activeScreen ?
+											"active" :
+											"inactive"
+										}
+									>
+										<a
+											href={"#" + screen.id}
+											onClick={
+												function() {
+													appUI.__focusOnScreen(screen);
+													return false;
+												}
+											}
+										>
+											{screen.label}
+										</a>
+									</li>
+								);
+
 							})}
 							{
 								editMode ?
-								"" :
-								/*
 								<li key="the-new-screen-one">
-									<a href="#add-new">+ add</a>
+									<a
+										class="add-screen-button" 
+										href="#add-new"
+										onClick={this.__addNewScreen}
+									>+ add</a>
 								</li> :
-								*/
 								""
 							}
 							<li key="the-edit-button">
@@ -121,7 +141,7 @@ define(
 				if(
 					this.props.definition[0] &&
 					(
-						(this.state.activeScreen && this.props.definition.indexOf(this.state.activeScreen === -1)) ||
+						(this.state.activeScreen && this.props.definition.indexOf(this.state.activeScreen) === -1) ||
 						!this.state.activeScreen
 					)
 				) {
@@ -134,6 +154,26 @@ define(
 				this.setState({
 					editMode: !this.state.editMode
 				});
+			},
+			__addNewScreen: function() {
+				var newScreen = {
+					label: 'new',
+					id: '',
+					panels: []
+				};
+				newScreen.id = this.__getUniqueScreenID(newScreen.label);
+				this.props.definition.push(
+					newScreen
+				);
+				this.props.definition.setUpdated();
+				this.__focusOnScreenByID(newScreen.id);
+			},
+			__getUniqueScreenID: function(label) {
+				var id = label;
+				while(this.__getScreenByID(id)) {
+					id += "" + Math.floor(10*Math.random());
+				}
+				return id;
 			}
 		});
 
