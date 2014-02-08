@@ -30,6 +30,7 @@ define(
 
 			render: function() {
 				var appModel = this.props.appModel;
+				var editable = this.props.editable;
 				var gridMode = this.state.gridMode;
 
 				var view = this;
@@ -47,6 +48,7 @@ define(
 										appModel={appModel}
 										definition={panel}
 										gridMode={gridMode}
+										editable={editable}
 									></Panel>
 								);
 							}

@@ -67,3 +67,10 @@
 .spatial-master .panel > h1 {
 	border-radius: 0 15px;
 }
+
+.spatial-master .screen-group > .screens-nav .toggle-edit-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 1cm;
+}

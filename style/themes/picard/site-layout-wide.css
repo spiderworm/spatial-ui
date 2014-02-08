@@ -4,8 +4,10 @@ body {
 
 body .spatial-master {
 	position: absolute;
-	top: -.05cm;
-	left: -.05cm;
-	right: -.05cm;
-	bottom: -.05cm;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border-width: 0;
+	box-shadow: none;
 }

@@ -26,9 +26,18 @@ define(
 						}
 					>
 						<h1>
-							<a name={this.props.definition.id}>{this.props.definition.label}</a>
+							<a
+								className="label"
+								name={this.props.definition.id}
+							>
+								{this.props.definition.label}
+							</a>
 						</h1>
-						<PanelGroup definition={this.props.definition.panels} appModel={appModel}></PanelGroup>
+						<PanelGroup
+							definition={this.props.definition.panels}
+							appModel={appModel}
+							editable={this.props.editable}
+						></PanelGroup>
 						{
 							this.props.definition.visualizations && this.props.definition.visualizations[0] ?
 							<VisualizationLoader

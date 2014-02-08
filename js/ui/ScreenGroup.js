@@ -28,7 +28,8 @@ define(
 			getInitialState: function() {
 				var state = {
 					activeScreen: null,
-					hidingScreen: null
+					hidingScreen: null,
+					editMode: false
 				};
 				return state;
 			},
@@ -37,11 +38,18 @@ define(
 
 				var activeScreen = this.state.activeScreen;
 				var hidingScreen = this.state.hidingScreen;
+				var editMode = this.state.editMode;
 
 				var appUI = this;
 
 				return (
-					<div className="screen-group">
+					<div className={
+						"screen-group" + (
+							editMode ?
+							" edit-mode" :
+							""
+						)
+					}>
 						<ol className="screens-nav" role="menu">
 							{this.props.definition.map(function(screen) {
 								var a = <a href={"#" + screen.id} onClick={function() { appUI.__focusOnScreen(screen); return false; }}>{screen.label}</a>;
@@ -51,11 +59,36 @@ define(
 									return <li key={appUI.getKey([screen])} role="menuitem">{a}</li>;
 								}
 							})}
+							{
+								editMode ?
+								"" :
+								/*
+								<li key="the-new-screen-one">
+									<a href="#add-new">+ add</a>
+								</li> :
+								*/
+								""
+							}
+							<li key="the-edit-button">
+								<button
+									className="toggle-edit-button"
+									type="button"
+									onClick={this.__toggleEditMode}
+								>
+									{editMode ? "done" : "edit"}
+								</button>
+							</li>
 						</ol>
 						<div className="screens">
 							{this.props.definition.map(function(screen) {
 								return (
-									<Screen key={appUI.getKey([screen])} definition={screen} appModel={appModel} hidden={screen!==activeScreen}></Screen>
+									<Screen
+										key={appUI.getKey([screen])}
+										definition={screen}
+										appModel={appModel}
+										hidden={screen!==activeScreen}
+										editable={editMode}
+									></Screen>
 								);
 							})}
 						</div>
@@ -96,6 +129,11 @@ define(
 						activeScreen: this.props.definition[0]
 					});
 				}
+			},
+			__toggleEditMode: function() {
+				this.setState({
+					editMode: !this.state.editMode
+				});
 			}
 		});
 

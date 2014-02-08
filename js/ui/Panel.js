@@ -64,7 +64,9 @@ define(
 					<section
 						style={style}
 						className={"panel" + (this.state.dragging ? " dragging" : "")} 
-						draggable="true"
+						draggable={
+							this.props.editable ? "true" : false
+						}
 						onDragStart={this.__handleDragStarted}
 						onDrag={this.__handleDrag}
 						onDragEnd={this.__handleDragEnded}

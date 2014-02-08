@@ -6,6 +6,13 @@
 
 	background-color: black;
 	color: white;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .spatial-master :link,
@@ -23,11 +30,12 @@
 	margin-top: 0;
 }
 
-.spatial-master .screen-group {
-	text-transform: uppercase;
+.spatial-master .screen-group.edit-mode .panel {
+	border-color: rgba(255,0,0,.5);
 }
 
 .spatial-master .screen-group > .screens-nav {
+	text-transform: uppercase;
 	padding: .125cm;
 	text-align: center;
 }
@@ -39,6 +47,15 @@
 
 .spatial-master .screen-group > .screens-nav > * {
 	display: inline-block;
+}
+
+.spatial-master .screen-group > .screens-nav .toggle-edit-button {
+	background-color: #999;
+	color: black;
+	border-width: 0;
+	height: .51cm;
+	margin: .125cm;
+	vertical-align: middle;
 }
 
 .spatial-master .screen-group > .screens-nav :link {
@@ -81,6 +98,10 @@
 }
 
 .spatial-master .screen > h1 {
+	margin: 0;
+}
+
+.spatial-master .screen > h1 .label {
 	display: none;
 }
 
