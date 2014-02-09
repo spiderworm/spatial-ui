@@ -3,13 +3,15 @@ define(
 		'./DataConnection'
 	],
 	function(
-		DataConnection
+		StoryDataConnection
 	) {
 
 		function StoryServiceConection(user,url) {
-			DataConnection.apply(this,arguments);
+			StoryDataConnection.apply(this,arguments);
 		}
-		StoryServiceConection.prototype = new DataConnection();
+		StoryServiceConection.prototype = new StoryDataConnection();
+
+		StoryDataConnection.extend(StoryServiceConection);
 
 		return StoryServiceConection;
 

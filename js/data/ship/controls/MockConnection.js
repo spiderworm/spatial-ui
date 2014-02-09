@@ -1,35 +1,25 @@
 define(
 	[
-		'../../base/Connection',
-		'../../util/comm'
+		'./DataConnection'
 	],
 	function(
-		Connection,
-		comm
+		ShipControlsDataConnection
 	) {
 
-		function MockServiceConnection(user,url) {
-			var instance = Connection.find(arguments);
+		function MockShipControlsDataConnection(user,url) {
+			var instance = MockShipControlsDataConnection.findInstance(arguments);
 			if(instance) {
 				return instance;
 			}
-			Connection.add(this,arguments);
+			MockShipControlsDataConnection.addInstance(this,arguments);
 
-			Connection.apply(this);
-
-			var connection = this;
-			comm.ajax(
-				url,
-				function(response) {
-					connection._model.overwrite(response);
-					connection._setConnected();
-				}
-			);
-
+			ShipControlsDataConnection.apply(this,arguments);
 		}
-		MockServiceConnection.prototype = new Connection();
+		MockShipControlsDataConnection.prototype = new ShipControlsDataConnection();
 
-		return MockServiceConnection;
+		ShipControlsDataConnection.extend(MockShipControlsDataConnection);
+
+		return MockShipControlsDataConnection;
 
 	}
 );

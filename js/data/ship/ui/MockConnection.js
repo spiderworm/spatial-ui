@@ -1,28 +1,17 @@
 define(
 	[
-		'../../base/Connection',
-		'../../util/comm'
+		'./DataConnection'
 	],
 	function(
-		Connection,
-		comm
+		ShipUIDataConnection
 	) {
 
 		function MockShipUIDataConnection(user,url) {
-			Connection.apply(this);
-
-			connection = this;
-
-			comm.ajax(
-				url,
-				function(response) {
-					connection._model.overwrite(response);
-					connection._setConnected();
-				}
-			);
+			ShipUIDataConnection.apply(this,arguments);
 		}
-		MockShipUIDataConnection.prototype = new Connection();
+		MockShipUIDataConnection.prototype = new ShipUIDataConnection();
 
+		ShipUIDataConnection.extend(MockShipUIDataConnection);
 
 		return MockShipUIDataConnection;
 

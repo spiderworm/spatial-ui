@@ -12,6 +12,9 @@ define(
 		Comm.JSON = ['json'];
 		Comm.prototype = new EventObject();
 		Comm.prototype.ajax = function(url,callback) {
+			if(!url) {
+				debugger;
+			}
 			var responseType = this.__guessResponseType(url);
 			var r = new XMLHttpRequest();
 			r.open('GET',url);

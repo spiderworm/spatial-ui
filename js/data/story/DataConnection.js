@@ -7,15 +7,15 @@ define(
 		'../util/comm'
 	],
 	function(
-		Connection,
+		DataConnection,
 		shipValuesConnectionFactory,
 		shipControlsConnectionFactory,
 		shipUIConnectionFactory,
 		comm
 	) {
 
-		function DataConnection(user,url) {
-			Connection.apply(this);
+		function StoryDataConnection(user,url) {
+			DataConnection.apply(this);
 			if(user && url) {
 				this._user = user;
 
@@ -29,27 +29,29 @@ define(
 				);
 			}
 		}
-		DataConnection.prototype = new Connection();
-		DataConnection.prototype.getControlsConnection = function() {
+		StoryDataConnection.prototype = new DataConnection();
+		StoryDataConnection.prototype.getControlsConnection = function() {
 			return shipControlsConnectionFactory.getConnection(
 				this._user,
 				this._model.connectionDefinitions.controls.url
 			);
 		}
-		DataConnection.prototype.getShipValuesConnection = function() {
+		StoryDataConnection.prototype.getShipValuesConnection = function() {
 			return shipValuesConnectionFactory.getConnection(
 				this._user,
 				this._model.connectionDefinitions.values.url
 			);
 		}
-		DataConnection.prototype.getShipUIConnection = function() {
+		StoryDataConnection.prototype.getShipUIConnection = function() {
 			return shipUIConnectionFactory.getConnection(
 				this._user,
 				this._model.connectionDefinitions.ui.url
 			);
 		}
 
-		return DataConnection;
+		DataConnection.extend(StoryDataConnection);
+
+		return StoryDataConnection;
 
 	}
 );

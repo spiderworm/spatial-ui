@@ -26,15 +26,22 @@ define(
 		}
 
 
-		var instances = new InstanceStore();
 
-		DataConnection.find = function(signature) {
-			return instances.find(signature);
+
+		DataConnection.findInstance = function(signature) {
+			return this.__instances.find(signature);
 		}
-		DataConnection.add = function(instance,signature) {
-			instances.add(instance,signature);
+		DataConnection.addInstance = function(instance,signature) {
+			this.__instances.add(instance,signature);
+		}
+		DataConnection.extend = function(Constructor) {
+			Constructor.findInstance = DataConnection.findInstance;
+			Constructor.addInstance = DataConnection.addInstance;
+			Constructor.extend = DataConnection.extend;
+			Constructor.__instances = new InstanceStore();
 		}
 
+		DataConnection.extend(DataConnection);
 
 		return DataConnection;
 

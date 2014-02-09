@@ -1,70 +1,48 @@
 define(
 	[
-		'../base/Connection',
-		'../base/DataConnectionModel',
-		'../util/comm',
+		'./DataConnection',
 		'../../registry',
-		'external/threex.keyboardstate',
-		'THREE'
+		'../../external/threex.keyboardstate'
 	],
 	function(
-		Connection,
-		DataConnectionModel,
-		comm,
+		VisualizationDataConnection,
 		registry,
-		KeyboardState,
-		THREE
+		KeyboardState
 	) {
 
 		var scale = registry.get('3D-scale');
 
-		function MockSceneDataConnection(user) {
-			Connection.apply(this);
+		function MockVisualizationDataConnection(user) {
+			VisualizationDataConnection.apply(this);
 		}
-		MockSceneDataConnection.prototype = new Connection();
-		MockSceneDataConnection.prototype.loadModel = function(url,callback) {
+		MockVisualizationDataConnection.prototype = new VisualizationDataConnection();
+		MockVisualizationDataConnection.prototype.loadModel = function(url,callback) {
 			var connection = this;
-			comm.ajax(
-				url,
-				function(response) {
 
-					response = connection.__scaleResponse(response);
+			VisualizationDataConnection.prototype.loadModel.apply(
+				this,
+				[
+					url,
+					function(model) {
+						callback.apply(connection,[model]);
 
-					var model = new DataConnectionModel(response);
-					callback.apply(connection,[model]);
-
-					model.subscribeTo(function() {
-						if(this.objects) {
-							detectObjects(this.objects);
-						}
-					});
-
-				}
+						model.subscribeTo(function() {
+							if(this.objects) {
+								detectObjects(this.objects);
+							}
+						});
+					}
+				]
 			);
+
 		}
-		MockSceneDataConnection.prototype.__scaleResponse = function(response) {
-			if(response.position) {
-				response.position.x *= scale;
-				response.position.y *= scale;
-				response.position.z *= scale;
-			}
 
-			if(response.hasOwnProperty('scale')) {
-				response.scale *= scale;
-			}
 
-			if(response.hasOwnProperty('geometry') && !response.hasOwnProperty('scale')) {
-				response.scale = scale;
-			}
 
-			if(response.objects) {
-				for(var i=0; i<response.objects.length; i++) {
-					response.objects[i] = this.__scaleResponse(response.objects[i]);
-				}
-			}
+		VisualizationDataConnection.extend(MockVisualizationDataConnection);
 
-			return response;
-		}
+
+
 
 
 		var moon, teaatis, ship;
@@ -199,7 +177,7 @@ define(
 			}
 		}
 
-		return MockSceneDataConnection;
+		return MockVisualizationDataConnection;
 
 	}
 );

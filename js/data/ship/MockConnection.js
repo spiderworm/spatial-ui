@@ -1,21 +1,21 @@
 define(
 	[
-		'../base/Connection',
+		'./DataConnection',
 		'../util/comm'
 	],
 	function(
-		Connection,
+		ShipValuesDataConnection,
 		comm
 	) {
 
 		function MockShipValuesConnection(user,url) {
-			var instance = Connection.find(arguments);
+			var instance = MockShipValuesConnection.findInstance(arguments);
 			if(instance) {
 				return instance;
 			}
-			Connection.add(this,arguments);
+			MockShipValuesConnection.addInstance(this,arguments);
 
-			Connection.apply(this,[]);
+			ShipValuesDataConnection.apply(this,[]);
 
 			var connection = this;
 
@@ -37,7 +37,9 @@ define(
 			);
 
 		}
-		MockShipValuesConnection.prototype = new Connection();
+		MockShipValuesConnection.prototype = new ShipValuesDataConnection();
+
+		ShipValuesDataConnection.extend(MockShipValuesConnection);
 
 		return MockShipValuesConnection;
 

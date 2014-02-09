@@ -1,16 +1,14 @@
 define(
 	[
 		'../base/ConnectionFactory',
-		'./MockConnection'
+		'./MockConnection',
+		'./ServiceConnection'
 	],
 	function(
 		ConnectionFactory,
-		MockConnection
+		MockConnection,
+		ServiceConnection
 	) {
-
-
-		function ServiceConnection() {}
-
 
 
 

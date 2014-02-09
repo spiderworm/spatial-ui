@@ -1,22 +1,22 @@
 define(
 	[
 		'../base/ConnectionFactory',
-		'./MockConnection'
+		'./MockConnection',
+		'./ServiceConnection'
 	],
 	function(
 		ConnectionFactory,
-		MockShipServiceConnection
+		MockShipValuesServiceConnection,
+		ShipValuesServiceConnection
 	) {
 
-
-		function ServiceConnection() {}
 
 		function ShipValuesConnectionFactory() {
 			ConnectionFactory.apply(
 				this,
 				[
-					ServiceConnection,
-					MockShipServiceConnection
+					ShipValuesServiceConnection,
+					MockShipValuesServiceConnection
 				]
 			);
 		}
