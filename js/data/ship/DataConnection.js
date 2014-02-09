@@ -1,6 +1,6 @@
 define(
 	[
-		'../base/Connection'
+		'../base/DataConnection'
 	],
 	function(
 		DataConnection

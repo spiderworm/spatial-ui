@@ -1,11 +1,9 @@
 define(
 	[
-		'../../base/Connection',
-		'../../util/comm'
+		'../../base/DataConnection'
 	],
 	function(
-		DataConnection,
-		comm
+		DataConnection
 	) {
 
 		function ShipControlsDataConnection(user,url,connectionType,dataFormat) {

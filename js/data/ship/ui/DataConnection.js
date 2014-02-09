@@ -1,11 +1,9 @@
 define(
 	[
-		'../../base/Connection',
-		'../../util/comm'
+		'../../base/DataConnection'
 	],
 	function(
-		DataConnection,
-		comm
+		DataConnection
 	) {
 
 		function ShipUIDataConnection(user,url,type,format) {

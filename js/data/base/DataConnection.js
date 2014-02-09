@@ -3,7 +3,7 @@ define(
 		'../../util/InstanceStore',
 		'../../base/EventObject',
 		'../base/DataConnectionModel',
-		'./DataChannel'
+		'../util/DataChannel'
 	],
 	function(
 		InstanceStore,

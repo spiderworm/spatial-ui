@@ -1,6 +1,6 @@
 define(
 	[
-		'../base/Connection',
+		'../base/DataConnection',
 		'../ship/connectionFactory',
 		'../ship/controls/connectionFactory',
 		'../ship/ui/connectionFactory',
