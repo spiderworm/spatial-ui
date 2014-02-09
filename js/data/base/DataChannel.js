@@ -67,6 +67,73 @@ define(
 
 
 
+		function WebSocketDataChannel(url,interpreter) {
+			DataChannelBase.apply(this,[url,interpreter]);
+			this.__socket = null;
+		}
+		WebSocketDataChannel.prototype = new DataChannelBase();
+		WebSocketDataChannel.prototype.open = function(callback) {
+			if(!this.__socket) {
+				this.__socket = new MockSocket(
+					this._url,
+					"test"
+				);
+				var channel = this;
+				this.__socket.onopen = function() {
+					callback();
+					channel._setOpened();
+				}
+				this.__socket.onmessage = function (event) {
+					channel._handleRaw(event.data);
+				}
+			}
+		}
+
+
+
+
+
+
+
+		function MockSocket(url,nothing) {
+			this.__server = new MockServer(url);
+			var socket = this;
+			this.__server.onMessage(function(msg) {
+				if(!socket.__isOpen) {
+					socket.__isOpen = true;
+					socket.onopen();
+				}
+				socket.onmessage({data:msg});
+			});
+		}
+		MockSocket.prototype.onopen = function() {}
+		MockSocket.prototype.onmessage = function() {}
+
+
+
+
+
+
+
+		function MockServer(url) {
+			EventObject.apply(this);
+			var worker = this.__worker = new Worker(url);
+			var server = this;
+			this.__worker.addEventListener(
+				'message',
+				function(e) {
+					server._fire('message-ready',[e.data]);
+				}
+			);
+		}
+		MockServer.prototype = new EventObject();
+		MockServer.prototype.onMessage = function(callback) {
+			return this._on('message-ready',callback);
+		}
+
+
+
+
 
 
 
@@ -93,7 +160,6 @@ define(
 			for(var i=0; i<lines.length; i++) {
 				this.__interpretLine(result,lines[i]);
 			}
-			console.info(result);
 			return result;
 		}
 		OSCDataInterpreter.prototype.__interpretLine = function(target,line) {
@@ -144,6 +210,9 @@ define(
 			}
 			if(connectionType.toLowerCase() === "ajax") {
 				return new AJAXDataChannel(url,interpreter);
+			}
+			if(connectionType.toLowerCase() === "websocket") {
+				return new WebSocketDataChannel(url,interpreter);
 			}
 		}
 

@@ -6,8 +6,8 @@
 			"format": "json"
 		},
 		"values": {
-			"url": "demo-resources/services/values.osc",
-			"type": "ajax",
+			"url": "demo-resources/services/values/websocket.osc.js",
+			"type": "websocket",
 			"format": "osc"
 		},
 		"ui": {
