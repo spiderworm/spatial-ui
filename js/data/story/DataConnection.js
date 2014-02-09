@@ -33,19 +33,25 @@ define(
 		StoryDataConnection.prototype.getControlsConnection = function() {
 			return shipControlsConnectionFactory.getConnection(
 				this._user,
-				this._model.connectionDefinitions.controls.url
+				this._model.connectionDefinitions.controls.url,
+				this._model.connectionDefinitions.controls.type,
+				this._model.connectionDefinitions.controls.format
 			);
 		}
 		StoryDataConnection.prototype.getShipValuesConnection = function() {
 			return shipValuesConnectionFactory.getConnection(
 				this._user,
-				this._model.connectionDefinitions.values.url
+				this._model.connectionDefinitions.values.url,
+				this._model.connectionDefinitions.values.type,
+				this._model.connectionDefinitions.values.format
 			);
 		}
 		StoryDataConnection.prototype.getShipUIConnection = function() {
 			return shipUIConnectionFactory.getConnection(
 				this._user,
-				this._model.connectionDefinitions.ui.url
+				this._model.connectionDefinitions.ui.url,
+				this._model.connectionDefinitions.ui.type,
+				this._model.connectionDefinitions.ui.format
 			);
 		}
 

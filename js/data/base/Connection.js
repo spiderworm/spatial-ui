@@ -2,17 +2,30 @@ define(
 	[
 		'../../util/InstanceStore',
 		'../../base/EventObject',
-		'../base/DataConnectionModel'
+		'../base/DataConnectionModel',
+		'./DataChannel'
 	],
 	function(
 		InstanceStore,
 		EventObject,
-		DataConnectionModel
+		DataConnectionModel,
+		Channel
 	) {
 
-		function DataConnection(model) {
+
+		function DataConnection(user,url,connectionType,dataFormat) {
 			EventObject.apply(this);
-			this._model = model || new DataConnectionModel();
+			this._model = new DataConnectionModel();
+			if(url && connectionType && dataFormat) {
+				var connection = this;
+				this._channel = new Channel(url,connectionType,dataFormat);
+				this._channel.onData(function(data) {
+					connection._model.update(data);
+				});
+				this._channel.open(function() {
+					connection._setConnected();
+				});
+			}
 		}
 		DataConnection.prototype = new EventObject();
 		DataConnection.prototype.getModel = function() {

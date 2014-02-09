@@ -8,22 +8,8 @@ define(
 		comm
 	) {
 
-		function ShipControlsDataConnection(user,url) {
-			DataConnection.apply(this);
-
-			if(user && url) {
-
-				var connection = this;
-				comm.ajax(
-					url,
-					function(response) {
-						connection._model.overwrite(response);
-						connection._setConnected();
-					}
-				);
-			
-			}
-
+		function ShipControlsDataConnection(user,url,connectionType,dataFormat) {
+			DataConnection.apply(this,[user,url,connectionType,dataFormat]);
 		}
 		ShipControlsDataConnection.prototype = new DataConnection();
 

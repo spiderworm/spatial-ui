@@ -6,14 +6,14 @@ define(
 		ShipControlsDataConnection
 	) {
 
-		function MockShipControlsDataConnection(user,url) {
+		function MockShipControlsDataConnection(user,url,connectionType,dataFormat) {
 			var instance = MockShipControlsDataConnection.findInstance(arguments);
 			if(instance) {
 				return instance;
 			}
 			MockShipControlsDataConnection.addInstance(this,arguments);
 
-			ShipControlsDataConnection.apply(this,arguments);
+			ShipControlsDataConnection.apply(this,[user,url,connectionType,dataFormat]);
 		}
 		MockShipControlsDataConnection.prototype = new ShipControlsDataConnection();
 

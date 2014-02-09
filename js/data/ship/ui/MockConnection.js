@@ -6,7 +6,7 @@ define(
 		ShipUIDataConnection
 	) {
 
-		function MockShipUIDataConnection(user,url) {
+		function MockShipUIDataConnection(user,url,type,format) {
 			ShipUIDataConnection.apply(this,arguments);
 		}
 		MockShipUIDataConnection.prototype = new ShipUIDataConnection();

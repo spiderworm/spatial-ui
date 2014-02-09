@@ -6,14 +6,14 @@ define(
 		ShipControlsDataConnection
 	) {
 
-		function ShipControlsServiceConnection(user,url) {
+		function ShipControlsServiceConnection(user,url,connectionType,dataFormat) {
 			var instance = ShipControlsServiceConnection.findInstance(arguments);
 			if(instance) {
 				return instance;
 			}
 			ShipControlsServiceConnection.addInstance(this,arguments);
 
-			ShipControlsDataConnection.apply(this,arguments);
+			ShipControlsDataConnection.apply(this,[user,url,connectionType,dataFormat]);
 		}
 		ShipControlsServiceConnection.prototype = new ShipControlsDataConnection();
 

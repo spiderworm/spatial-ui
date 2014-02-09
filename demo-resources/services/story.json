@@ -1,13 +1,19 @@
 {
 	"connectionDefinitions": {
 		"controls": {
-			"url": "demo-resources/services/controls.json"
+			"url": "demo-resources/services/controls.json",
+			"type": "ajax",
+			"format": "json"
 		},
 		"values": {
-			"url": "demo-resources/services/values.json"
+			"url": "demo-resources/services/values.osc",
+			"type": "ajax",
+			"format": "osc"
 		},
 		"ui": {
-			"url": "demo-resources/services/ui.json"
+			"url": "demo-resources/services/ui/abcdefg.json",
+			"type": "ajax",
+			"format": "json"
 		}
 	}
 }

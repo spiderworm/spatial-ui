@@ -8,20 +8,8 @@ define(
 		comm
 	) {
 
-		function ShipUIDataConnection(user,url) {
-			DataConnection.apply(this);
-
-			if(url) {
-				connection = this;
-
-				comm.ajax(
-					url,
-					function(response) {
-						connection._model.overwrite(response);
-						connection._setConnected();
-					}
-				);
-			}
+		function ShipUIDataConnection(user,url,type,format) {
+			DataConnection.apply(this,[user,url,type,format]);
 		}
 		ShipUIDataConnection.prototype = new DataConnection();
 

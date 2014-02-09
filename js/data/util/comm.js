@@ -27,6 +27,20 @@ define(
 			}
 			r.send();
 		}
+		Comm.prototype.ajaxraw = function(url,callback) {
+			if(!url) {
+				debugger;
+			}
+			var r = new XMLHttpRequest();
+			r.open('GET',url);
+			var comm = this;
+			r.onreadystatechange = function() {
+				if(r.readyState === 4) {
+					callback.apply(r,[r.responseText]);
+				}
+			}
+			r.send();
+		}
 		Comm.prototype.__guessResponseType = function(url) {
 			return Comm.JSON;
 		}

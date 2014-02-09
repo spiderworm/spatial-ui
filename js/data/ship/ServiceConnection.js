@@ -8,25 +8,14 @@ define(
 		comm
 	) {
 
-		function ShipValuesServiceConnection(user,url) {
+		function ShipValuesServiceConnection(user,url,connectionType,dataFormat) {
 			var instance = ShipValuesServiceConnection.findInstance(arguments);
 			if(instance) {
 				return instance;
 			}
 			ShipValuesServiceConnection.addInstance(this,arguments);
 
-			ShipValuesDataConnection.apply(this,[]);
-
-			var connection = this;
-
-			comm.ajax(
-				url,
-				function(response) {
-					connection._model.overwrite(response);
-					connection._setConnected();
-				}
-			);
-
+			ShipValuesDataConnection.apply(this,[user,url,connectionType,dataFormat]);
 		}
 		ShipValuesServiceConnection.prototype = new ShipValuesDataConnection();
 

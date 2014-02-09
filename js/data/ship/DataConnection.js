@@ -6,8 +6,8 @@ define(
 		DataConnection
 	) {
 
-		function ShipValuesDataConnection(user,url) {
-			DataConnection.apply(this);
+		function ShipValuesDataConnection(user,url,connectionType,dataFormat) {
+			DataConnection.apply(this,[user,url,connectionType,dataFormat]);
 		}
 		ShipValuesDataConnection.prototype = new DataConnection();
 
