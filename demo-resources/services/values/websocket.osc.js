@@ -50,6 +50,7 @@ function parseOSC(osc) {
 		var pieces = lines[i].match(/^([^, ]*) ,([^ ]+) (.*)/);
 		if(pieces) {
 			values[pieces[1]] = {
+				name: pieces[1],
 				type: pieces[2][0],
 				value: pieces[3]
 			};
@@ -67,6 +68,22 @@ function parseOSC(osc) {
 }
 
 
+
+function handleMessageReceived(msg) {
+
+	reportReceived(msg.name,msg.value);
+
+	switch(msg.name) {
+		case "/systems/tubes/1/fire":
+		case "/systems/tubes/2/fire":
+			setValue(msg.name,0);
+		break;
+		default:
+			setValue(msg.name,msg.value);
+		break;
+	}
+
+}
 
 function reportReceived(name,value) {
 	console.info('services/values/websocket.osc.js: host set ' + name + ' to ' + value);
@@ -92,8 +109,7 @@ self.addEventListener(
 	function(event) {
 		var newVals = parseOSC(event.data);
 		for(var name in newVals) {
-			reportReceived(name,newVals[name].value);
-			setValue(name,newVals[name].value);
+			handleMessageReceived(newVals[name]);
 		}
 	},
 	false
@@ -114,13 +130,17 @@ setInterval(
 		);
 
 		var val = getValue('/systems/tubes/1/loadedPercent');
+		val+=.01;
+		if(val > 1) val = 1;
 		if(val < 1) {
-			setValue('/systems/tubes/1/loadedPercent',val+.01);
+			setValue('/systems/tubes/1/loadedPercent',val);
 		}
 
 		var val = getValue('/systems/tubes/2/loadedPercent');
+		val+=.01;
+		if(val > 1) val = 1;
 		if(val < 1) {
-			setValue('/systems/tubes/2/loadedPercent',val+.01);
+			setValue('/systems/tubes/2/loadedPercent',val);
 		}
 
 	},
