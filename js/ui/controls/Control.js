@@ -143,7 +143,7 @@ define(
 				var format = this._getDisplayFormat();
 				switch(format) {
 					case "%":
-						return (display * 100) + "%";
+						return (display * 100).toFixed(0) + "%";
 					break;
 					default:
 						return display;

@@ -19,6 +19,9 @@ define(
 		}
 		MockSocket.prototype.onopen = function() {}
 		MockSocket.prototype.onmessage = function() {}
+		MockSocket.prototype.send = function(text) {
+			this.__server.sendMessage(text);
+		}
 
 		return MockSocket;
 	}

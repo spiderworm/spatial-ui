@@ -12,18 +12,24 @@ define(
 		Channel
 	) {
 
+		var dataConnectionSource = {};
 
 		function DataConnection(user,url,connectionType,dataFormat) {
 			EventObject.apply(this);
-			this._model = new DataConnectionModel();
+			var model = this._model = new DataConnectionModel();
 			if(url && connectionType && dataFormat) {
 				var connection = this;
-				this._channel = new Channel(url,connectionType,dataFormat);
-				this._channel.onData(function(data) {
-					connection._model.$update(data);
+				var channel = this._channel = new Channel(url,connectionType,dataFormat);
+				channel.onData(function(data) {
+					model.$update(data,dataConnectionSource);
 				});
-				this._channel.open(function() {
+				channel.open(function() {
 					connection._setConnected();
+				});
+				model.$deepOnUpdated(function(updateObj,source) {
+					if(source !== dataConnectionSource) {
+						channel.send(updateObj);
+					}
 				});
 			}
 		}

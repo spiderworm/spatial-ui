@@ -37,14 +37,14 @@
 		"label": "phasers",
 		"description": "enable/disable phasers",
 		"button": true,
-		"allowedValues": [true,false],
+		"allowedValues": [1,0],
 		"valueMap": [
 			{
-				"value": true,
+				"value": 1,
 				"display": "enabled"
 			},
 			{
-				"value": false,
+				"value": 0,
 				"display": "disabled"
 			}
 		],
@@ -81,7 +81,7 @@
 				"description": "attack target with tube contents",
 				"dataPath": "systems/tubes/1/fire",
 				"button": true,
-				"allowedValues": [true,false],
+				"allowedValues": [1,0],
 				"display": "fire",
 				"disabled": true
 			},
@@ -90,7 +90,7 @@
 				"label": "auto fire",
 				"dataPath": "systems/tubes/1/autoFire",
 				"checkbox": true,
-				"allowedValues": [true,false]
+				"allowedValues": [1,0]
 			}
 		],
 		"subControls": [
@@ -108,19 +108,19 @@
 					},
 					{
 						"button": true,
-						"allowedValues": [true,false],
+						"allowedValues": [1,0],
 						"dataPath": "systems/tubes/1/load",
 						"display": "load"
 					},
 					{
 						"button": true,
-						"allowedValues": [true,false],
+						"allowedValues": [1,0],
 						"dataPath": "systems/tubes/1/unload",
 						"display": "unload"
 					},
 					{
 						"checkbox": true,
-						"allowedValues": [true,false],
+						"allowedValues": [1,0],
 						"dataPath": "systems/tubes/1/keepLoaded",
 						"label": "keep loaded"
 					}
@@ -144,14 +144,14 @@
 			{
 				"dataPath": "systems/tubes/2/fire",
 				"button": true,
-				"allowedValues": [true,false],
+				"allowedValues": [1,0],
 				"display": "fire"
 			},
 			{
 				"label": "auto fire",
 				"dataPath": "systems/tubes/2/autoFire",
 				"checkbox": true,
-				"allowedValues": [true,false]
+				"allowedValues": [1,0]
 			}
 		],
 		"subControls": [
@@ -169,19 +169,19 @@
 					},
 					{
 						"button": true,
-						"allowedValues": [true,false],
+						"allowedValues": [1,0],
 						"dataPath": "systems/tubes/2/load",
 						"display": "load"
 					},
 					{
 						"button": true,
-						"allowedValues": [true,false],
+						"allowedValues": [1,0],
 						"dataPath": "systems/tubes/2/unload",
 						"display": "unload"
 					},
 					{
 						"checkbox": true,
-						"allowedValues": [true,false],
+						"allowedValues": [1,0],
 						"dataPath": "systems/tubes/2/keepLoaded",
 						"label": "keep loaded"
 					}

@@ -1,10 +1,10 @@
 
-var response = "\
+var osc = "\
 /helm/impulse ,f 10\n\
 /engineering/energy/levels/impulse ,f 150\n\
 /engineering/energy/levels/tubes ,f 100\n\
 /engineering/energy/levels/phasers ,f 25\n\
-/weapons/ammo/torpedos ,f 15\n\
+/weapons/ammo/torpedos ,i 0\n\
 /weapons/phasers/enabled ,i 1\n\
 /weapons/phasers/frequency ,s C\n\
 /systems/tubes/1/currentAmmo ,s torpedos\n\
@@ -19,5 +19,111 @@ var response = "\
 /systems/tubes/2/autoFire ,i 1\n\
 ";
 
-self.postMessage(response);
+
+
+
+
+function getValue(path) {
+	return values[path] ? values[path].value : null;
+}
+
+
+
+function setValue(path,value) {
+	if(!values[path]) {
+		values[path] = {
+			type: 's',
+			value: ''
+		};
+	}
+	values[path].value = value;
+	var msg = path + ' ,' + values[path].type + ' ' + value;
+	self.postMessage(msg);
+}
+
+
+
+function parseOSC(osc) {
+	var values = {};
+	var lines = osc.split("\n");
+	for(var i=0; i<lines.length; i++) {
+		var pieces = lines[i].match(/^([^, ]*) ,([^ ]+) (.*)/);
+		if(pieces) {
+			values[pieces[1]] = {
+				type: pieces[2][0],
+				value: pieces[3]
+			};
+			switch(values[pieces[1]].type) {
+				case "i":
+					values[pieces[1]].value = parseInt(values[pieces[1]].value);
+				break;
+				case "f":
+					values[pieces[1]].value = parseFloat(values[pieces[1]].value);
+				break;
+			}
+		}
+	}
+	return values;
+}
+
+
+
+function reportReceived(name,value) {
+	console.info('services/values/websocket.osc.js: host set ' + name + ' to ' + value);
+}
+
+
+
+
+
+
+
+
+
+var values = parseOSC(osc);
+
+
+
+
+
+
+self.addEventListener(
+	'message',
+	function(event) {
+		var newVals = parseOSC(event.data);
+		for(var name in newVals) {
+			reportReceived(name,newVals[name].value);
+			setValue(name,newVals[name].value);
+		}
+	},
+	false
+);
+
+self.postMessage(osc);
+
+
+
+
+
+setInterval(
+	function() {
+
+		setValue(
+			'/weapons/ammo/torpedos',
+			getValue('/weapons/ammo/torpedos')+1
+		);
+
+		var val = getValue('/systems/tubes/1/loadedPercent');
+		if(val < 1) {
+			setValue('/systems/tubes/1/loadedPercent',val+.01);
+		}
+
+		var val = getValue('/systems/tubes/2/loadedPercent');
+		if(val < 1) {
+			setValue('/systems/tubes/2/loadedPercent',val+.01);
+		}
+
+	},
+	1000
+);
 

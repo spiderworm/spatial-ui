@@ -98,13 +98,13 @@ define(
 					if(teaatis) {
 						shipRads += shipSpeed;
 
-						ship.position.$sourceUpdate({
+						ship.position.$update({
 							x: teaatis.position.x + shipDistance * Math.cos(shipRads),
 							y: teaatis.position.y + shipDistance * Math.sin(shipRads),
 							z: teaatis.position.z
 						});
 
-						ship.rotation.$sourceUpdate({
+						ship.rotation.$update({
 							x:shipRads-Math.PI/2,
 							y:-Math.PI/2,
 							z:0,
@@ -137,7 +137,7 @@ define(
 					}
 */
 
-					ship.position.$sourceUpdate({
+					ship.position.$update({
 						x: ship.position.x + vector.z,
 						y: ship.position.y + vector.x,
 						z: ship.position.z + vector.y
@@ -156,12 +156,12 @@ define(
 				teaatis.rotation.x = 0;
 				teaatis.rotation.y += .0002;
 				teaatis.rotation.z = 0;
-				teaatis.rotation.$setSourceUpdated();
+				teaatis.rotation.$setUpdated();
 
 				teaatis.position.x = teaatisDistance * Math.cos(teaatisRads);
 				teaatis.position.y = teaatisDistance * Math.sin(teaatisRads);
 				teaatis.position.z = 0;
-				teaatis.position.$setSourceUpdated();
+				teaatis.position.$setUpdated();
 			}
 		}
 
@@ -173,7 +173,7 @@ define(
 				moon.position.x = teaatis.position.x + moonDistance * Math.cos(moonRads);
 				moon.position.y = teaatis.position.y + moonDistance * Math.sin(moonRads);
 				moon.position.z = teaatis.position.z;
-				moon.position.$setSourceUpdated();
+				moon.position.$setUpdated();
 			}
 		}
 

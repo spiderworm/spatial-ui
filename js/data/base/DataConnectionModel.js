@@ -6,8 +6,12 @@ define(
 		Model
 	) {
 
+/*
 		Model.prototype.$onClientUpdated = function(callback) {
 			return this._on('client-updated',callback);
+		}
+		Model.prototype.$deepOnClientUpdated = function(callback) {
+			console.info('test');
 		}
 		var baseSetUpdated = Model.prototype.$setUpdated;
 		Model.prototype.$setUpdated = function() {
@@ -27,7 +31,7 @@ define(
 			}
 			this.$setSourceUpdated();
 		}
-
+*/
 
 		return Model;
 

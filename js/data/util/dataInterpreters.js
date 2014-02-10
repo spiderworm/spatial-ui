@@ -3,12 +3,12 @@ define(
 
 
 
-		function JSONDataInterpreter() {
-
-		}
-
+		function JSONDataInterpreter() {}
 		JSONDataInterpreter.prototype.interpret = function(text) {
 			return JSON.parse(text);
+		}
+		JSONDataInterpreter.prototype.stringify = function(obj) {
+			return JSON.stringify(obj);
 		}
 
 
@@ -25,6 +25,31 @@ define(
 				this.__interpretLine(result,lines[i]);
 			}
 			return result;
+		}
+		OSCDataInterpreter.prototype.stringify = function(obj) {
+			var osc = "";
+
+			function delve(obj,path) {
+				for(var name in obj) {
+					if(typeof obj[name] === "object") {
+						delve(obj[name],path + '/' + name);
+					} else {
+						var val = obj[name];
+						var type = 's';
+						if(parseInt(val)===val) {
+							type = 'i';
+						}
+						if(parseFloat(val)===val) {
+							type = 'f'
+						}
+						osc += path + "/" + name + " ," + type + " " + obj[name] + "\n";
+					}
+				}
+			}
+
+			delve(obj,"");
+
+			return osc;
 		}
 		OSCDataInterpreter.prototype.__interpretLine = function(target,line) {
 			var pieces = line.match(/^([^, ]*) ,([^ ]+) (.*)/);

@@ -21,6 +21,9 @@ define(
 		MockServer.prototype.onMessage = function(callback) {
 			return this._on('message-ready',callback);
 		}
+		MockServer.prototype.sendMessage = function(msg) {
+			this.__worker.postMessage(msg);
+		}
 
 		return MockServer;
 

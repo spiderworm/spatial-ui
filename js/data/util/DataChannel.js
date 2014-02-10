@@ -26,6 +26,11 @@ define(
 		DataChannelBase.prototype.open = function(callback) {
 			throw new Error('not implemented');
 		}
+		DataChannelBase.prototype.send = function(obj) {
+			this._send(
+				this._interpreter.stringify(obj)
+			);
+		}
 		DataChannelBase.prototype.onData = function(callback) {
 			return this._on('data-received',callback);
 		}
@@ -39,7 +44,9 @@ define(
 			var data = this._interpreter.interpret(raw);
 			this._fire('data-received',[data]);
 		}
-	
+		DataChannelBase.prototype._send = function(raw) {
+			throw new Error('not implemented');
+		}
 
 
 
@@ -71,6 +78,7 @@ define(
 
 
 
+
 		function WebSocketDataChannel(url,interpreter) {
 			DataChannelBase.apply(this,[url,interpreter]);
 			this.__socket = null;
@@ -92,7 +100,9 @@ define(
 				}
 			}
 		}
-
+		WebSocketDataChannel.prototype._send = function(raw) {
+			this.__socket.send(raw);
+		}
 
 
 

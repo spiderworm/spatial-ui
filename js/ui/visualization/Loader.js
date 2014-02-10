@@ -7,7 +7,7 @@ define(
 	function(
 		React,
 		CameraViewport,
-		sceneDataConnectionFactory
+		visualizationConnectionFactory
 	) {
 
 		var VisualizationLoader = React.createClass({
@@ -16,10 +16,10 @@ define(
 				if(typeof this.props.definition === "object") {
 					definition = this.props.definition;
 				} else if(typeof this.props.definition === "string") {
-					var sceneConnection = sceneDataConnectionFactory.getConnection();
+					var visualizationConnection = visualizationConnectionFactory.getConnection();
 					var url = this.props.definition;
 					var view = this;
-					sceneConnection.loadModel(
+					visualizationConnection.loadModel(
 						url,
 						function(model) {
 							view.setState({
