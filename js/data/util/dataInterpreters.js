@@ -35,14 +35,18 @@ define(
 						delve(obj[name],path + '/' + name);
 					} else {
 						var val = obj[name];
-						var type = 's';
+						var type = '';
+						if(typeof val === "string") {
+							type = 's';
+							val = "\"" + val + "\"";
+						}
 						if(parseInt(val)===val) {
 							type = 'i';
 						}
 						if(parseFloat(val)===val) {
 							type = 'f'
 						}
-						osc += path + "/" + name + " ," + type + " " + obj[name] + "\n";
+						osc += path + "/" + name + " ," + type + " " + val + "\n";
 					}
 				}
 			}
@@ -63,6 +67,9 @@ define(
 				}
 				if(format === "f") {
 					value = parseFloat(value);
+				}
+				if(format === "s") {
+					value = value.substring(1,value.length - 1);
 				}
 
 				this.__setValue(target,name,value);
