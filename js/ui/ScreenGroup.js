@@ -10,13 +10,13 @@ define(
 		reactKeyGenerator
 	) {
 
-		var ScrenGroup = React.createClass({
+		var ScreenGroup = React.createClass({
 			mixins: [reactKeyGenerator.mixin],
 			getDefaultProps: function() {
 				var view = this;
 
 				window.addEventListener('hashchange',function(e) {
-					view.__focusOnScreenByID(document.location.hash.match(/^#(.*)$/)[1]);
+					view.__showScreenFromHash();
 				});
 
 				this.props.definition.subscribeTo(function(screens) {
@@ -130,25 +130,33 @@ define(
 				}
 			},
 			__getScreenByID: function(id) {
-				for(var i=0; i<this.props.definition.length; i++) {
-					if(this.props.definition[i].id === id) {
-						return this.props.definition[i];
+				var keys = this.props.definition.getKeys();
+				for(var i in keys) {
+					if(this.props.definition[keys[i]].id === id) {
+						return this.props.definition[keys[i]];
 					}
 				}
 				return null;
 			},
 			__showAScreen: function() {
+				var currentScreen = this.state.activeScreen;
 				if(
-					this.props.definition[0] &&
-					(
-						(this.state.activeScreen && this.props.definition.indexOf(this.state.activeScreen) === -1) ||
-						!this.state.activeScreen
-					)
+					currentScreen &&
+					this.props.definition.hasValue(currentScreen)
 				) {
-					this.setState({
-						activeScreen: this.props.definition[0]
-					});
+					return;
 				}
+				if(document.location.hash !== "") {
+					this.__showScreenFromHash();
+					if(this.state.activeScreen !== currentScreen) {
+						return;
+					}
+				}
+
+				var keys = this.props.definition.getKeys();
+				this.setState({
+					activeScreen: this.props.definition[keys[0]]
+				});
 			},
 			__toggleEditMode: function() {
 				this.setState({
@@ -166,9 +174,7 @@ define(
 					panels: []
 				};
 				newScreen.id = this.__getUniqueScreenID(newScreen.label);
-				this.props.definition.push(
-					newScreen
-				);
+				this.props.definition.add(newScreen);
 				this.props.definition.setUpdated();
 				document.location.hash = newScreen.id;
 			},
@@ -178,10 +184,15 @@ define(
 					id += "" + Math.floor(10*Math.random());
 				}
 				return id;
+			},
+			__showScreenFromHash: function() {
+				this.__focusOnScreenByID(
+					document.location.hash.match(/^#(.*)$/)[1]
+				);
 			}
 		});
 
-		return ScrenGroup;
+		return ScreenGroup;
 
 	}
 );

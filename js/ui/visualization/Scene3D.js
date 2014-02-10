@@ -29,20 +29,18 @@ define(
 					scene.add(sky);
 				}
 				if(model.objects) {
-					for(var i=0; i<model.objects.length; i++) {
-						(function() {
-							var obj = new Object3D(model.objects[i],camera);
-							if(model.objects[i].id === "myShip") {
-								obj.add(camera);
-								camera.__ship = obj;
-							}
-							scene.add(obj);
-							obj.onReplaceNeeded(function(oldTHREE,newTHREE) {
-								scene.getTHREE().remove(oldTHREE);
-								scene.getTHREE().add(newTHREE);
-							});
-						})();
-					}
+					model.objects.each(function(objectDefinition) {
+						var obj = new Object3D(objectDefinition,camera);
+						if(objectDefinition.id === "myShip") {
+							obj.add(camera);
+							camera.__ship = obj;
+						}
+						scene.add(obj);
+						obj.onReplaceNeeded(function(oldTHREE,newTHREE) {
+							scene.getTHREE().remove(oldTHREE);
+							scene.getTHREE().add(newTHREE);
+						});
+					});
 				}
 
 			});

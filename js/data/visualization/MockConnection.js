@@ -48,19 +48,19 @@ define(
 		var moon, teaatis, ship;
 
 		function detectObjects(objs) {
-			for(var i=0; i<objs.length; i++) {
-				switch(objs[i].id) {
+			objs.each(function(objDefinition) {
+				switch(objDefinition.id) {
 					case "moon":
-						moon = objs[i];
+						moon = objDefinition;
 					break;
 					case "Teaatis":
-						teaatis = objs[i];
+						teaatis = objDefinition;
 					break;
 					case "myShip":
-						ship = objs[i];
+						ship = objDefinition;
 					break;
 				}
-			}
+			});
 		}
 
 

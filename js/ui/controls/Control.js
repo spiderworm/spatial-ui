@@ -44,24 +44,32 @@ define(
 				}
 			},
 			_nextValue: function() {
-				if(!this.props.definition.allowedValues) {
+				var allowedValues = this.__getPropertyForValue('allowedValues',this.state.value);
+
+				if(!allowedValues) {
 					return;
 				}
 
-				var i=0;
-				while(i < this.props.definition.allowedValues.length) {
-					if(this.props.definition.allowedValues[i] === this.state.value) {
+				var first, next, foundCurrent=false;
+				for(var i in allowedValues.getKeys()) {
+					if(first===undefined) {
+						first = allowedValues[i];
+					}
+					if(foundCurrent) {
+						next = allowedValues[i];
 						break;
 					}
-					i++;
+					if(allowedValues[i] === this.state.value) {
+						foundCurrent = true;
+						continue;
+					}
 				}
 
-				i++;
-				if(i > this.props.definition.allowedValues.length - 1) {
-					i = 0;
+				if(next===undefined) {
+					next = first;
 				}
 
-				this._setValue(this.props.definition.allowedValues[i]);
+				this._setValue(next);
 			},
 			_setValue: function(value) {
 				if(this.props.model) {
@@ -123,6 +131,7 @@ define(
 					value = arguments.length !== 0 ? value : this.state.value;
 				}
 				var display = this.__getPropertyForValue('display',value) || value;
+
 				var format = this._getDisplayFormat();
 				switch(format) {
 					case "%":
@@ -196,7 +205,7 @@ define(
 			__getValueMap: function(value) {
 
 				if(this.props.definition.valueMap) {
-					for(var i=0; i<this.props.definition.valueMap.length; i++) {
+					for(var i in this.props.definition.valueMap) {
 						if(this.props.definition.valueMap[i].value === value) {
 							return this.props.definition.valueMap[i];
 						}

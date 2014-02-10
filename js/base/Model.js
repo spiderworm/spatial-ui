@@ -8,9 +8,6 @@ define(
 			if(arguments.length === 0) {
 				vals = {};
 			}
-			if(vals instanceof Array) {
-				return new ArrayModel(vals);
-			}
 			if(!vals || typeof vals !== "object") {
 				throw new Error('Model must be passed an object')
 			}
@@ -44,6 +41,33 @@ define(
 				});
 			}
 		}
+		Model.prototype.add = function(value) {
+			var i=0;
+			while(this[i]) {
+				i++;
+			}
+			var obj = {};
+			obj[i] = value;
+			this.update(obj);
+		}
+		Model.prototype.hasValue = function(value) {
+			var keys = this.getKeys();
+			for(var i=0; i<keys.length; i++) {
+				if(this[keys[i]]) {
+					return true;
+				}
+			}
+			return false;
+		}
+		Model.prototype.getKeys = function() {
+			var keys = [];
+			for(var name in this) {
+				if(this.hasModelProperty(name)) {
+					keys.push(name);
+				}
+			}
+			return keys;
+		}
 		Model.prototype.overwrite = function(vals) {
 			for(var name in this) {
 				if(this.hasModelProperty(name)) {
@@ -67,14 +91,20 @@ define(
 			this._modelizeRecursively();
 			this._fire('updated');
 		}
-		Model.prototype.mapToArray = function(callback) {
+		Model.prototype.map = function(callback) {
 			var result = [];
 			for(var name in this) {
 				if(this.hasModelProperty(name)) {
-					result.push(callback.apply(this,[name,this[name]]));
+					result.push(callback.apply(this,[this[name]]));
 				}
 			}
 			return result;
+		}
+		Model.prototype.each = function(callback) {
+			var keys = this.getKeys();
+			for(var i=0; i<keys.length; i++) {
+				callback.apply(this,[this[keys[i]]]);
+			}
 		}
 		Model.prototype.hasModelProperty = function(name) {
 			if(this.hasOwnProperty(name) && name[0] !== "_") {
@@ -98,9 +128,6 @@ define(
 			if(val instanceof Model) {
 				return val;
 			}
-			if(val instanceof Array) {
-				return new ArrayModel(val);
-			}
 			if(val === null) {
 				return null;
 			}
@@ -115,41 +142,6 @@ define(
 			}
 			return new Model(val);
 		}
-
-
-
-
-
-
-
-
-
-		function ArrayModel(arr) {
-			if(arr.setUpdated)
-				return arr;
-			var result = [].concat(arr);
-			for(var name in Model.prototype) {
-				result[name] = Model.prototype[name];
-			}
-			Model.apply(result);
-
-			function modelizeRecursively() {
-				ArrayModel.prototype._modelizeRecursively.apply(result);
-			}
-
-			result.onUpdated(modelizeRecursively);
-			modelizeRecursively();
-
-			return result;
-		}
-
-		ArrayModel.prototype._modelizeRecursively = function() {
-			for(var i=0; i<this.length; i++) {
-				this[i] = Model.modelize(this[i]);
-			}
-		}
-
-
 
 
 

@@ -1,5 +1,5 @@
-var response = 
-"\
+
+var response = "\
 /helm/impulse ,f 10\n\
 /engineering/energy/levels/impulse ,f 150\n\
 /engineering/energy/levels/tubes ,f 100\n\

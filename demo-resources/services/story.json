@@ -11,9 +11,9 @@
 			"format": "osc"
 		},
 		"ui": {
-			"url": "demo-resources/services/ui/abcdefg.json",
-			"type": "ajax",
-			"format": "json"
+			"url": "demo-resources/services/ui/websocket.osc.js",
+			"type": "websocket",
+			"format": "osc"
 		}
 	}
 }

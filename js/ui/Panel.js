@@ -59,7 +59,6 @@ define(
 				}
 
 				var view = this;
-
 				return (
 					<section
 						style={style}
@@ -73,7 +72,7 @@ define(
 						onMouseDown={this.__handleMouseDown}
 					>
 						<h1>{this.props.definition.label}</h1>
-						{this.props.definition.controls.map(function(control) {
+						{this.props.definition.controls && this.props.definition.controls.map(function(control) {
 							return <ControlLoader key={view.getKey([control])} appModel={appModel} definition={control} />;
 						})}
 						{this.props.children}
