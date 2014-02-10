@@ -23,7 +23,7 @@ define(
 				window.setInterval(
 					function() {
 						connection._model.weapons.ammo.torpedos++;
-						connection._model.weapons.ammo.setUpdated();
+						connection._model.weapons.ammo.$setUpdated();
 					},
 					1000
 				);

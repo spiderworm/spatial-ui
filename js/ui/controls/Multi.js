@@ -22,7 +22,7 @@ define(
 			render: function() {
 				var appModel = this.props.appModel;
 				var view = this;
-				var inlineControls = this.props.definition.inlineControls.map(function(definition) {
+				var inlineControls = this.props.definition.inlineControls.$map(function(definition) {
 					return (
 						<ControlLoader
 							key={view.getKey([view,definition])}

@@ -23,7 +23,7 @@ define(
 				comm.ajax(
 					url,
 					function(response) {
-						connection._model.overwrite(response);
+						connection._model.$overwrite(response);
 						connection._setConnected();
 					}
 				);

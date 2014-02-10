@@ -34,7 +34,7 @@ define(
 
 			var camera = this;
 
-			model.position.subscribeTo(function() {
+			model.position.$subscribeTo(function() {
 				threeCamera.position.set(
 					this.x,
 					this.y,
@@ -45,14 +45,14 @@ define(
 			function rotateMouse() {
 				requestAnimationFrame(rotateMouse);
 				model.angleY += .01;
-				model.setUpdated();
+				model.$setUpdated();
 
 
 				var vector = new THREE.Vector3(model.distance,0,0);
 				var euler = new THREE.Euler(model.angleX,model.angleY,0,'YXZ');
 				vector.applyEuler(euler);
 
-				model.position.update({
+				model.position.$update({
 					x: vector.x,
 					y: vector.y,
 					z: vector.z

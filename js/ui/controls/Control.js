@@ -20,7 +20,7 @@ define(
 
 				if(vals.model) {
 					var view = this;
-					var modelSubscription = vals.model.subscribeTo(
+					var modelSubscription = vals.model.$subscribeTo(
 						vals.modelPropertyName,
 						function(value) {
 							view.setState({
@@ -51,7 +51,7 @@ define(
 				}
 
 				var first, next, foundCurrent=false;
-				for(var i in allowedValues.getKeys()) {
+				for(var i in allowedValues.$getKeys()) {
 					if(first===undefined) {
 						first = allowedValues[i];
 					}
@@ -74,7 +74,7 @@ define(
 			_setValue: function(value) {
 				if(this.props.model) {
 					this.props.model[this.props.modelPropertyName] = value;
-					this.props.model.setUpdated();
+					this.props.model.$setUpdated();
 				}
 			},
 			_getControlNode: function(children) {
@@ -108,19 +108,27 @@ define(
 
 				var view = this;
 
-				return this._getSubControls().map(function(val) {
-					var path=undefined, definition=undefined;
+				var subControls = this._getSubControls();
 
-					if(typeof val === "string") {
-						path = val;
-					} else if(val && typeof val === "object") {
-						definition = val;
-					}
+				if(subControls) {
 
-					return (
-						<ControlLoader key={view.getKey([view,definition,path])} appModel={appModel} definition={definition} path={path}></ControlLoader>
-					);
-				});
+					return this._getSubControls().$map(function(val) {
+						var path=undefined, definition=undefined;
+
+						if(typeof val === "string") {
+							path = val;
+						} else if(val && typeof val === "object") {
+							definition = val;
+						}
+
+						return (
+							<ControlLoader key={view.getKey([view,definition,path])} appModel={appModel} definition={definition} path={path}></ControlLoader>
+						);
+					});
+
+				}
+
+				return null;
 
 			},
 			_getValueDisplay: function(value) {
@@ -170,7 +178,7 @@ define(
 				if(this.state) {
 					value = arguments.length !== 0 ? value : this.state.value;
 				}
-				return this.__getPropertyForValue('subControls',value) || [];
+				return this.__getPropertyForValue('subControls',value) || null;
 			},
 			_getSize: function(value) {
 				if(this.state) {

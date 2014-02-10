@@ -17,22 +17,22 @@ define(
 					this[name] = vals[name];
 				}
 			}
-			this._modelizeRecursively();
+			this._$modelizeRecursively();
 
 		}
 		Model.prototype = new EventObject();
-		Model.prototype.subscribeTo = function(a,b) {
+		Model.prototype.$subscribeTo = function(a,b) {
 			var callback, prop, lastVal, firstRun;
 			if(arguments.length === 1) {
 				callback = a;
-				return this._subscribe('updated',function() {
+				return this._subscribe('$updated',function() {
 					callback.apply(this,[this]);
 				});
 			} else if (arguments.length === 2) {
 				prop = a;
 				callback = b;
 				firstRun = true;
-				return this._subscribe('updated',function() {
+				return this._subscribe('$updated',function() {
 					if(this[a] !== lastVal || firstRun) {
 						firstRun = false;
 						lastVal = this[a];
@@ -41,17 +41,17 @@ define(
 				});
 			}
 		}
-		Model.prototype.add = function(value) {
+		Model.prototype.$add = function(value) {
 			var i=0;
 			while(this[i]) {
 				i++;
 			}
 			var obj = {};
 			obj[i] = value;
-			this.update(obj);
+			this.$update(obj);
 		}
-		Model.prototype.hasValue = function(value) {
-			var keys = this.getKeys();
+		Model.prototype.$hasValue = function(value) {
+			var keys = this.$getKeys();
 			for(var i=0; i<keys.length; i++) {
 				if(this[keys[i]]) {
 					return true;
@@ -59,61 +59,61 @@ define(
 			}
 			return false;
 		}
-		Model.prototype.getKeys = function() {
+		Model.prototype.$getKeys = function() {
 			var keys = [];
 			for(var name in this) {
-				if(this.hasModelProperty(name)) {
+				if(this.$hasModelProperty(name)) {
 					keys.push(name);
 				}
 			}
 			return keys;
 		}
-		Model.prototype.overwrite = function(vals) {
+		Model.prototype.$overwrite = function(vals) {
 			for(var name in this) {
-				if(this.hasModelProperty(name)) {
+				if(this.$hasModelProperty(name)) {
 					delete this[name];
 				}
 			}
-			this.update(vals);
+			this.$update(vals);
 		}
-		Model.prototype.update = function(vals) {
+		Model.prototype.$update = function(vals) {
 			for(var name in vals) {
-				if(this.hasModelProperty.apply(vals,[name])) {
+				if(this.$hasModelProperty.apply(vals,[name])) {
 					this[name] = vals[name];
 				}
 			}
-			this.setUpdated();
+			this.$setUpdated();
 		}
-		Model.prototype.onUpdated = function(callback) {
-			return this._on('updated',callback);
+		Model.prototype.$onUpdated = function(callback) {
+			return this._on('$updated',callback);
 		}
-		Model.prototype.setUpdated = function() {
-			this._modelizeRecursively();
-			this._fire('updated');
+		Model.prototype.$setUpdated = function() {
+			this._$modelizeRecursively();
+			this._fire('$updated');
 		}
-		Model.prototype.map = function(callback) {
+		Model.prototype.$map = function(callback) {
 			var result = [];
 			for(var name in this) {
-				if(this.hasModelProperty(name)) {
+				if(this.$hasModelProperty(name)) {
 					result.push(callback.apply(this,[this[name]]));
 				}
 			}
 			return result;
 		}
-		Model.prototype.each = function(callback) {
-			var keys = this.getKeys();
+		Model.prototype.$each = function(callback) {
+			var keys = this.$getKeys();
 			for(var i=0; i<keys.length; i++) {
 				callback.apply(this,[this[keys[i]]]);
 			}
 		}
-		Model.prototype.hasModelProperty = function(name) {
+		Model.prototype.$hasModelProperty = function(name) {
 			if(this.hasOwnProperty(name) && name[0] !== "_") {
 				return true;
 			}
 		}
-		Model.prototype._modelizeRecursively = function() {
+		Model.prototype._$modelizeRecursively = function() {
 			for(var name in this) {
-				if(this.hasModelProperty(name)) {
+				if(this.$hasModelProperty(name)) {
 					this[name] = Model.modelize(this[name]);
 				}
 			}

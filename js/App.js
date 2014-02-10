@@ -33,7 +33,7 @@ define(
 				var valuesModel = storyConnection.getShipValuesConnection().getModel();
 				app.model.values = valuesModel;
 
-				app.model.setUpdated();
+				app.model.$setUpdated();
 
 				var shipUIModel = storyConnection.getShipUIConnection().getModel();
 				app._setViewModel(shipUIModel);
@@ -42,7 +42,7 @@ define(
 
 			this.model.user = user;
 			this.model.values = storyConnectView.getValuesModel();
-			this.model.setUpdated();
+			this.model.$setUpdated();
 
 			this._setViewModel(storyConnectView.getControlsModel());
 

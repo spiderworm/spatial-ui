@@ -19,7 +19,7 @@ define(
 					view.__showScreenFromHash();
 				});
 
-				this.props.definition.subscribeTo(function(screens) {
+				this.props.definition.$subscribeTo(function(screens) {
 					view.__showAScreen();
 				});
 
@@ -51,7 +51,7 @@ define(
 						)
 					}>
 						<ol className="screens-nav" role="menu">
-							{this.props.definition.map(function(screen) {
+							{this.props.definition.$map(function(screen) {
 
 								return (
 									<li
@@ -100,7 +100,7 @@ define(
 							{editMode ? "done" : "edit"}
 						</button>
 						<div className="screens">
-							{this.props.definition.map(function(screen) {
+							{this.props.definition.$map(function(screen) {
 								return (
 									<Screen
 										key={appUI.getKey([screen])}
@@ -130,7 +130,7 @@ define(
 				}
 			},
 			__getScreenByID: function(id) {
-				var keys = this.props.definition.getKeys();
+				var keys = this.props.definition.$getKeys();
 				for(var i in keys) {
 					if(this.props.definition[keys[i]].id === id) {
 						return this.props.definition[keys[i]];
@@ -142,7 +142,7 @@ define(
 				var currentScreen = this.state.activeScreen;
 				if(
 					currentScreen &&
-					this.props.definition.hasValue(currentScreen)
+					this.props.definition.$hasValue(currentScreen)
 				) {
 					return;
 				}
@@ -153,7 +153,7 @@ define(
 					}
 				}
 
-				var keys = this.props.definition.getKeys();
+				var keys = this.props.definition.$getKeys();
 				this.setState({
 					activeScreen: this.props.definition[keys[0]]
 				});
@@ -174,8 +174,8 @@ define(
 					panels: []
 				};
 				newScreen.id = this.__getUniqueScreenID(newScreen.label);
-				this.props.definition.add(newScreen);
-				this.props.definition.setUpdated();
+				this.props.definition.$add(newScreen);
+				this.props.definition.$setUpdated();
 				document.location.hash = newScreen.id;
 			},
 			__getUniqueScreenID: function(label) {

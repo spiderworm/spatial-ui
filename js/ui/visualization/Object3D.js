@@ -33,7 +33,7 @@ define(
 
 			var object3D = this;
 
-			model.subscribeTo('textures',function(textures) {
+			model.$subscribeTo('textures',function(textures) {
 				var description = {};
 
 				for(var name in textures) {
@@ -68,7 +68,7 @@ define(
 
 			BaseObject3D.apply(this,[mesh,camera]);
 
-			model.subscribeTo('geometry',function(definition) {
+			model.$subscribeTo('geometry',function(definition) {
 				if(definition) {
 					if(typeof definition === "string") {
 						var url = definition;
@@ -85,7 +85,7 @@ define(
 				}
 			});
 
-			model.subscribeTo('light',function(definition) {
+			model.$subscribeTo('light',function(definition) {
 				if(definition) {
 					var light = new THREE.PointLight(
 						eval(definition.color),
@@ -96,7 +96,7 @@ define(
 				}
 			});
 
-			model.subscribeTo('scale',function(scale) {
+			model.$subscribeTo('scale',function(scale) {
 				var three = object3D.getTHREE();
 				var scale = model.hasOwnProperty('scale') ? model.scale : 1;
 				three.scale.x = scale;

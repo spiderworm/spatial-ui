@@ -27,7 +27,7 @@ define(
 				this.props.definition.z = this.props.definition.z || 1;
 
 				var view = this;
-				this.props.definition.subscribeTo(function() {
+				this.props.definition.$subscribeTo(function() {
 					view.forceUpdate();
 				});
 
@@ -72,7 +72,7 @@ define(
 						onMouseDown={this.__handleMouseDown}
 					>
 						<h1>{this.props.definition.label}</h1>
-						{this.props.definition.controls && this.props.definition.controls.map(function(control) {
+						{this.props.definition.controls && this.props.definition.controls.$map(function(control) {
 							return <ControlLoader key={view.getKey([control])} appModel={appModel} definition={control} />;
 						})}
 						{this.props.children}
@@ -112,7 +112,7 @@ define(
 					if(newX !== this.props.definition.x || newY !== this.props.definition.y) {
 						this.props.definition.x = newX;
 						this.props.definition.y = newY;
-						this.props.definition.setUpdated();
+						this.props.definition.$setUpdated();
 					}
 				}
 			},
@@ -122,7 +122,7 @@ define(
 			},
 			__handleMouseDown: function() {
 				this.props.definition.z = Panel.getHighZ() + 1;
-				this.props.definition.setUpdated();
+				this.props.definition.$setUpdated();
 			}
 		});
 
@@ -176,7 +176,7 @@ define(
 			});
 			for(var i=0; i<instances.length; i++) {
 				instances[i].props.definition.z = i+1;
-				instances[i].props.definition.setUpdated();
+				instances[i].props.definition.$setUpdated();
 			}
 		}
 

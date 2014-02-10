@@ -14,7 +14,7 @@ define(
 			getDefaultProps: function() {
 				var view = this;
 
-				this.props.definition.subscribeTo(function() {
+				this.props.definition.$subscribeTo(function() {
 					view.forceUpdate();
 				});
 

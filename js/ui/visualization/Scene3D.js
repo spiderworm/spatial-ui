@@ -23,13 +23,13 @@ define(
 
 			var scene = this;
 
-			model.subscribeTo(function() {
+			model.$subscribeTo(function() {
 				if(model.sky) {
 					var sky = new Sky3D(model.sky);
 					scene.add(sky);
 				}
 				if(model.objects) {
-					model.objects.each(function(objectDefinition) {
+					model.objects.$each(function(objectDefinition) {
 						var obj = new Object3D(objectDefinition,camera);
 						if(objectDefinition.id === "myShip") {
 							obj.add(camera);

@@ -20,7 +20,7 @@ define(
 				var connection = this;
 				this._channel = new Channel(url,connectionType,dataFormat);
 				this._channel.onData(function(data) {
-					connection._model.update(data);
+					connection._model.$update(data);
 				});
 				this._channel.open(function() {
 					connection._setConnected();

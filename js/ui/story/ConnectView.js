@@ -21,7 +21,7 @@ define(
 
 			var view = this;
 
-			var handler = this.__valuesModel.onUpdated(function() {
+			var handler = this.__valuesModel.$onUpdated(function() {
 				if(this.url && this.url.length > 0) {
 					view.__storyConnection = storyConnectionFactory.getConnection(user,this.url);
 					view.__storyConnection.onConnected(function() {

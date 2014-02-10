@@ -40,7 +40,7 @@ define(
 						className="panel-group"
 						data-layout={gridMode ? "grid" : "default"}
 					>
-						{this.props.definition.map(
+						{this.props.definition.$map(
 							function(panel) {
 								return (
 									<Panel

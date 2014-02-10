@@ -26,7 +26,7 @@ define(
 					function(model) {
 						callback.apply(connection,[model]);
 
-						model.subscribeTo(function() {
+						model.$subscribeTo(function() {
 							if(this.objects) {
 								detectObjects(this.objects);
 							}
@@ -48,7 +48,7 @@ define(
 		var moon, teaatis, ship;
 
 		function detectObjects(objs) {
-			objs.each(function(objDefinition) {
+			objs.$each(function(objDefinition) {
 				switch(objDefinition.id) {
 					case "moon":
 						moon = objDefinition;
@@ -98,13 +98,13 @@ define(
 					if(teaatis) {
 						shipRads += shipSpeed;
 
-						ship.position.sourceUpdate({
+						ship.position.$sourceUpdate({
 							x: teaatis.position.x + shipDistance * Math.cos(shipRads),
 							y: teaatis.position.y + shipDistance * Math.sin(shipRads),
 							z: teaatis.position.z
 						});
 
-						ship.rotation.sourceUpdate({
+						ship.rotation.$sourceUpdate({
 							x:shipRads-Math.PI/2,
 							y:-Math.PI/2,
 							z:0,
@@ -137,7 +137,7 @@ define(
 					}
 */
 
-					ship.position.sourceUpdate({
+					ship.position.$sourceUpdate({
 						x: ship.position.x + vector.z,
 						y: ship.position.y + vector.x,
 						z: ship.position.z + vector.y
@@ -156,12 +156,12 @@ define(
 				teaatis.rotation.x = 0;
 				teaatis.rotation.y += .0002;
 				teaatis.rotation.z = 0;
-				teaatis.rotation.setSourceUpdated();
+				teaatis.rotation.$setSourceUpdated();
 
 				teaatis.position.x = teaatisDistance * Math.cos(teaatisRads);
 				teaatis.position.y = teaatisDistance * Math.sin(teaatisRads);
 				teaatis.position.z = 0;
-				teaatis.position.setSourceUpdated();
+				teaatis.position.$setSourceUpdated();
 			}
 		}
 
@@ -173,7 +173,7 @@ define(
 				moon.position.x = teaatis.position.x + moonDistance * Math.cos(moonRads);
 				moon.position.y = teaatis.position.y + moonDistance * Math.sin(moonRads);
 				moon.position.z = teaatis.position.z;
-				moon.position.setSourceUpdated();
+				moon.position.$setSourceUpdated();
 			}
 		}
 
