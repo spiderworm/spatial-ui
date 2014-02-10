@@ -51,4 +51,3 @@ screens/2/panels/0/z ,i 7\n\
 
 self.postMessage(response);
 
-

@@ -33,11 +33,15 @@ define(
 								{this.props.definition.label}
 							</a>
 						</h1>
-						<PanelGroup
-							definition={this.props.definition.panels}
-							appModel={appModel}
-							editable={this.props.editable}
-						></PanelGroup>
+						{
+							this.props.definition.panels ?
+							<PanelGroup
+								definition={this.props.definition.panels}
+								appModel={appModel}
+								editable={this.props.editable}
+							></PanelGroup> :
+							null
+						}
 						{
 							this.props.definition.visualizations && this.props.definition.visualizations[0] ?
 							<VisualizationLoader

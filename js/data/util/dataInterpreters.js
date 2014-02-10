@@ -27,7 +27,7 @@ define(
 			return result;
 		}
 		OSCDataInterpreter.prototype.__interpretLine = function(target,line) {
-			var pieces = line.match(/^([^, ]*) ,([^]+) (.*)/);
+			var pieces = line.match(/^([^, ]*) ,([^ ]+) (.*)/);
 			if(pieces) {
 				var name = pieces[1];
 				var format = pieces[2][0];

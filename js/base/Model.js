@@ -79,7 +79,11 @@ define(
 		Model.prototype.$update = function(vals) {
 			for(var name in vals) {
 				if(this.$hasModelProperty.apply(vals,[name])) {
-					this[name] = vals[name];
+					if(this[name] && this[name] instanceof Model) {
+						this[name].$update(vals[name])
+					} else {
+						this[name] = vals[name];
+					}
 				}
 			}
 			this.$setUpdated();
