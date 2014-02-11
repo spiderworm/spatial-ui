@@ -36,13 +36,9 @@ define(
 				});
 			}
 		}
-		Model.prototype.$add = function(value,source) {
-			var i=0;
-			while(this[i]) {
-				i++;
-			}
+		Model.prototype.$add = function(id,value,source) {
 			var obj = {};
-			obj[i] = value;
+			obj[id] = value;
 			this.$update(obj,source);
 		}
 		Model.prototype.$hasValue = function(value) {
@@ -57,7 +53,7 @@ define(
 		Model.prototype.$getKeys = function() {
 			var keys = [];
 			for(var name in this) {
-				if(this.$hasModelProperty(name)) {
+				if(this.$hasKey(name)) {
 					keys.push(name);
 				}
 			}
@@ -65,7 +61,7 @@ define(
 		}
 		Model.prototype.$overwrite = function(vals,source) {
 			for(var name in this) {
-				if(this.$hasModelProperty(name)) {
+				if(this.$hasKey(name)) {
 					delete this[name];
 				}
 			}
@@ -74,7 +70,7 @@ define(
 		Model.prototype.$update = function(vals,source) {
 			var updates = {};
 			for(var name in vals) {
-				if(this.$hasModelProperty.apply(vals,[name])) {
+				if(this.$hasKey.apply(vals,[name])) {
 					if(this[name] && this[name] instanceof Model) {
 						this[name].$update(vals[name],source)
 					} else {
@@ -113,8 +109,8 @@ define(
 		Model.prototype.$map = function(callback) {
 			var result = [];
 			for(var name in this) {
-				if(this.$hasModelProperty(name)) {
-					result.push(callback.apply(this,[this[name]]));
+				if(this.$hasKey(name)) {
+					result.push(callback.apply(this,[this[name],name]));
 				}
 			}
 			return result;
@@ -125,15 +121,18 @@ define(
 				callback.apply(this,[this[keys[i]]]);
 			}
 		}
-		Model.prototype.$hasModelProperty = function(name) {
+		Model.prototype.$hasKey = function(name) {
 			if(this.hasOwnProperty(name) && name[0] !== "_") {
 				return true;
 			}
 		}
+		Model.prototype.$hasModelProperty = function(name) {
+			return this.$hasKey(name);
+		}
 		Model.prototype._$modelizeRecursively = function() {
 			var model = this;
 			for(var name in this) {
-				if(this.$hasModelProperty(name)) {
+				if(this.$hasKey(name)) {
 					(function() {
 						var theName = name;
 						var val = Model.modelize(model[name]);

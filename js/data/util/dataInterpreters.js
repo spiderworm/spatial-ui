@@ -62,17 +62,23 @@ define(
 				var format = pieces[2][0];
 				var value = pieces[3];
 
-				if(format === "i") {
-					value = parseInt(value);
-				}
-				if(format === "f") {
-					value = parseFloat(value);
-				}
-				if(format === "s") {
-					value = value.substring(1,value.length - 1);
-				}
+				if(name === "create") {
 
-				this.__setValue(target,name,value);
+				} else {
+
+					if(format === "i") {
+						value = parseInt(value);
+					}
+					if(format === "f") {
+						value = parseFloat(value);
+					}
+					if(format === "s") {
+						value = value.substring(1,value.length - 1);
+					}
+
+					this.__setValue(target,name,value);
+
+				}
 			}
 		}
 		OSCDataInterpreter.prototype.__setValue = function(target,name,value) {

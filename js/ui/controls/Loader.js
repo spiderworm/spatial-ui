@@ -1,97 +1,167 @@
 define(
 	[
-		'react'
+		'react',
+		'jsx!../modelMixin'
 	],
 	function(
-		React
+		React,
+		modelMixin
 	) {
 
+
+		var ready = false;
+		var readyHandlers = [];
+		var SliderControl, ButtonControl, CheckboxControl, SelectControl, MultiControl, TextControl, OutputControl;
+
+		function setReady() {
+			ready = true;
+			for(var i=0; i<readyHandlers.length; i++) {
+				readyHandlers[i]();
+			}
+		}
+
+		function onReady(callback) {
+			readyHandlers.push(callback);
+		}
+
+
+		require(
+			[
+				'jsx!ui/controls/Slider',
+				'jsx!ui/controls/Button',
+				'jsx!ui/controls/Checkbox',
+				'jsx!ui/controls/Select',
+				'jsx!ui/controls/Multi',
+				'jsx!ui/controls/Text',
+				'jsx!ui/controls/Output'
+			],
+			function(
+				A,
+				B,
+				C,
+				D,
+				E,
+				F,
+				G
+			) {
+
+				SliderControl = A;
+				ButtonControl = B;
+				CheckboxControl = C;
+				SelectControl = D;
+				MultiControl = E;
+				TextControl = F;
+				OutputControl = G;
+
+				setReady();
+			}
+		);
+
+
 		var ControlLoader = React.createClass({
+			mixins: [modelMixin],
 			getDefaultProps: function() {
-				var view = this;
-				require(
-					[
-						'jsx!ui/controls/Slider',
-						'jsx!ui/controls/Button',
-						'jsx!ui/controls/Checkbox',
-						'jsx!ui/controls/Select',
-						'jsx!ui/controls/Multi',
-						'jsx!ui/controls/Text',
-						'jsx!ui/controls/Output'
-					],
-					function(
-						SliderControl,
-						ButtonControl,
-						CheckboxControl,
-						SelectControl,
-						MultiControl,
-						TextControl,
-						OutputControl
-					) {
-						setTimeout(function() {
-							view.setState({
-								Controls: [
-									SliderControl,
-									ButtonControl,
-									CheckboxControl,
-									SelectControl,
-									MultiControl,
-									TextControl,
-									OutputControl
-								]
-							});
-						},100);
-					}
-				);
+
+				if(!ready) {
+					var loader = this;
+					onReady(function() {
+						loader.forceUpdate();
+					});
+				}
 
 				return {
 					path: '',
 					definition: null,
 					inline: false
 				};
+				
 			},
 			getInitialState: function() {
 
-				var path = this.props.path || '';
-				var definition = this.props.definition;
+				var view = this;
 
-				if(typeof this.props.definition === "string") {
-					path = this.props.definition;
-					definition = this.props.appModel.controls[path];
+				if(this.props.definition) {
+
+					this._deepSubscribeTo(
+						this.props.definition,
+						'url',
+						function(url) {
+							if(url) {
+								view.setState({
+									path: url
+								});
+
+
+								view._deepSubscribeTo(
+									view.props.appModel,
+									url,
+									function(definition) {
+										view.setState({
+											definition: definition
+										});
+									}
+								);
+
+
+							}
+						}
+					);
+
 				}
 
 				return {
-					path: path,
-					definition: definition
+					path: this.props.path || '',
+					definition: this.props.definition
 				};
 
 			},
 			render: function() {
 
 				var appModel = this.props.appModel;
-
+				var inline = this.props.inline;
 				var definition = this.state.definition;
-				if(!definition && this.state.path) {
-					definition = appModel.controls[this.state.path];
-				}
 
 				if(definition) {
 
-					if(this.state && this.state.Controls) {
+					if(ready) {
 
-						for(var i=0; i<this.state.Controls.length; i++) {
-							if(this.state.Controls[i].supportsDefinition(definition)) {
-								return new this.state.Controls[i]({
-									definition: definition,
-									appModel: appModel,
-									inline: this.props.inline
-								});
-							}
+						var Constructor;
+						switch(definition.subtype) {
+							case "text":
+								Constructor = TextControl;
+							break;
+							case "range":
+								Constructor = SliderControl;
+							break;
+							case "button":
+								Constructor = ButtonControl;
+							break;
+							case "multi":
+								Constructor = MultiControl;
+							break;
+							case "drop-list":
+								Constructor = SelectControl;
+							break;
+							case "checkbox":
+								Constructor = CheckboxControl;
+							break;
+							case "output":
+							default:
+								Constructor = OutputControl;
+							break;
+						}
+
+						if(Constructor) {
+							return Constructor({
+								definition: definition,
+								appModel: appModel,
+								inline: inline
+							});
 						}
 
 					} else {
 
-						if(this.props.inline) {
+						if(inline) {
 							return <span>Loading...</span>;
 						} else {
 							return <div>Loading...</div>;
@@ -101,7 +171,7 @@ define(
 
 				}
 
-				if(this.props.inline) {
+				if(inline) {
 					return <span>Control "{this.state.path}" unavailable.</span>;
 				} else {
 					return <div>Control "{this.state.path}" unavailable.</div>;

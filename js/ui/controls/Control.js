@@ -2,46 +2,47 @@ define(
 	[
 		'react',
 		'jsx!./Loader',
-		'../util/reactKeyGenerator'
+		'jsx!../Piece',
+		'../util/reactKeyGenerator',
+		'../modelMixin'
 	],
 	function(
 		React,
 		ControlLoader,
-		keyGenerator
+		Piece,
+		keyGenerator,
+		modelMixin
 	) {
 
 		var controlMixin = {
+			mixins: [modelMixin],
 			getKey: function(signature) {
 				return keyGenerator.mixin.getKey(signature);
 			},
 			getDefaultProps: function() {
 
-				var vals = this.__findModelAndProperty();
+				var view = this;
 
-				if(vals.model) {
-					var view = this;
-					var modelSubscription = vals.model.$subscribeTo(
-						vals.modelPropertyName,
-						function(value) {
-							view.setState({
-								inactiveValue: value,
-								value: value
-							});
+				if(this.props.appModel && this.props.definition) {
+					this.props.definition.$subscribeTo('dataPath',function(dataPath) {
+						if(dataPath && view.props.appModel) {
+
+							view._deepSubscribeTo(
+								view.props.appModel,
+								dataPath,
+								function(value) {
+									view.setState({
+										value: value
+									});
+								}
+							);
+
 						}
-					);
+					});
 				}
 
-				return {
-					model: vals.model,
-					modelPropertyName: vals.modelPropertyName,
-					modelSubscription: modelSubscription
-				};
+				return {};
 
-			},
-			componentWillUnmount: function() {
-				if(this.props.modelSubscription) {
-					this.props.modelSubscription.off();
-				}
 			},
 			_nextValue: function() {
 				var allowedValues = this.__getPropertyForValue('allowedValues',this.state.value);
@@ -72,9 +73,16 @@ define(
 				this._setValue(next);
 			},
 			_setValue: function(value) {
-				if(this.props.model) {
-					this.props.model[this.props.modelPropertyName] = value;
-					this.props.model.$setUpdated();
+				if(
+					this.props.appModel &&
+					this.props.definition &&
+					this.props.definition.dataPath
+				) {
+					this._deepSetValue(
+						this.props.appModel,
+						this.props.definition.dataPath,
+						value
+					);
 				}
 			},
 			_getControlNode: function(children) {
@@ -111,25 +119,12 @@ define(
 				var subControls = this._getSubControls();
 
 				if(subControls) {
-
-					return this._getSubControls().$map(function(val) {
-						var path=undefined, definition=undefined;
-
-						if(typeof val === "string") {
-							path = val;
-						} else if(val && typeof val === "object") {
-							definition = val;
-						}
-
-						return (
-							<ControlLoader key={view.getKey([view,definition,path])} appModel={appModel} definition={definition} path={path}></ControlLoader>
-						);
-					});
-
+					return (
+						<Piece appModel={appModel} definition={subControls}></Piece>
+					);
 				}
 
 				return null;
-
 			},
 			_getValueDisplay: function(value) {
 				if(!this.props.definition.dataPath) {
@@ -233,11 +228,11 @@ define(
 				if(this.props.definition.dataPath) {
 
 					var propertyName = this.props.definition.dataPath;
-					var model = this.props.appModel.values;
+					var model = this.props.appModel;
 					var matches;
 
 					do {
-						matches = propertyName.match(/^([^\/]*)\/(.*)$/);
+						matches = propertyName.match(/^\/?([^\/]*)\/(.*)$/);
 						if(matches) {
 							model = model[matches[1]];
 							propertyName = matches[2];

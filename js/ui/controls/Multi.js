@@ -22,16 +22,20 @@ define(
 			render: function() {
 				var appModel = this.props.appModel;
 				var view = this;
-				var inlineControls = this.props.definition.inlineControls.$map(function(definition) {
-					return (
-						<ControlLoader
-							key={view.getKey([view,definition])}
-							appModel={appModel}
-							definition={definition}
-							inline={true}
-						></ControlLoader>
-					);
-				});
+				var inlineControls;
+				if(this.props.definition.inlineControls) {
+					inlineControls = this.props.definition.inlineControls.$map(function(definition,id) {
+						return (
+							<ControlLoader
+								key={view.getKey([view,definition])}
+								appModel={appModel}
+								definition={definition}
+								inline={true}
+							></ControlLoader>
+						);
+					});
+				}
+				
 				var subControls = this._getSubControlNodes();
 
 				return this._getControlNode([

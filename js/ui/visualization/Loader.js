@@ -1,7 +1,7 @@
 define(
 	[
 		'react',
-		'./CameraViewport',
+		'jsx!./CameraViewport',
 		'../../data/visualization/connectionFactory'
 	],
 	function(
@@ -13,11 +13,11 @@ define(
 		var VisualizationLoader = React.createClass({
 			getInitialState: function() {
 				var definition;
-				if(typeof this.props.definition === "object") {
+				if(!this.props.definition.url) {
 					definition = this.props.definition;
-				} else if(typeof this.props.definition === "string") {
+				} else {
 					var visualizationConnection = visualizationConnectionFactory.getConnection();
-					var url = this.props.definition;
+					var url = this.props.definition.url;
 					var view = this;
 					visualizationConnection.loadModel(
 						url,

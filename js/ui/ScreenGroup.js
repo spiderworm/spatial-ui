@@ -2,16 +2,16 @@ define(
 	[
 		'react',
 		'jsx!./Screen',
-		'./util/reactKeyGenerator'
+		'jsx!./Piece'
 	],
 	function(
 		React,
 		Screen,
-		reactKeyGenerator
+		Piece
 	) {
 
 		var ScreenGroup = React.createClass({
-			mixins: [reactKeyGenerator.mixin],
+			mixins: [Piece.mixin],
 			getDefaultProps: function() {
 				var view = this;
 
@@ -51,35 +51,33 @@ define(
 						)
 					}>
 						<ol className="screens-nav" role="menu">
-							{this.props.definition.$map(function(screen) {
+							{this._mapSubPieces(
+								this.props.definition,
+								function(definition,id) {
 
-								return (
-									<li
-										key={appUI.getKey([screen])}
-										role="menuitem"
-										className={
-											screen === activeScreen ?
-											"active" :
-											"inactive"
-										}
-									>
-										<a
-											href={"#" + screen.id}
-											onClick={
-												function() {
-													/*
-													appUI.__focusOnScreen(screen);
-													return false;
-													*/	
+									if(definition.type === "screen") {
+										return (
+											<li
+												key={id}
+												role="menuitem"
+												className={
+													definition === activeScreen ?
+													"active" :
+													"inactive"
 												}
-											}
-										>
-											{screen.label}
-										</a>
-									</li>
-								);
+											>
+												<a
+													href={"#" + id}
+												>
+													{definition.label}
+												</a>
+											</li>
+										);
 
-							})}
+									}
+
+								}
+							)}
 							{
 								editMode ?
 								<li key="the-new-screen-one">
@@ -100,17 +98,14 @@ define(
 							{editMode ? "done" : "edit"}
 						</button>
 						<div className="screens">
-							{this.props.definition.$map(function(screen) {
-								return (
-									<Screen
-										key={appUI.getKey([screen])}
-										definition={screen}
-										appModel={appModel}
-										hidden={screen!==activeScreen}
-										editable={editMode}
-									></Screen>
-								);
-							})}
+							{this._getSubPieceNodes(
+								this.props.definition,
+								this.props.appModel,
+								{
+									activeScreen: activeScreen,
+									editable: editMode
+								}
+							)}
 						</div>
 					</div>
 				);
@@ -130,11 +125,9 @@ define(
 				}
 			},
 			__getScreenByID: function(id) {
-				var keys = this.props.definition.$getKeys();
-				for(var i in keys) {
-					if(this.props.definition[keys[i]].id === id) {
-						return this.props.definition[keys[i]];
-					}
+				var screen = this.props.definition[id];
+				if(screen && screen.type === "screen") {
+					return screen;
 				}
 				return null;
 			},
@@ -169,19 +162,20 @@ define(
 			},
 			__addNewScreen: function() {
 				var newScreen = {
+					type: 'screen',
 					label: 'new',
-					id: '',
-					panels: []
+					index: 0,
+					panels: {}
 				};
-				newScreen.id = this.__getUniqueScreenID(newScreen.label);
-				this.props.definition.$add(newScreen);
-				this.props.definition.$setUpdated();
-				document.location.hash = newScreen.id;
+				var id = this.__getUniqueScreenID();
+				newScreen.index = this.__getLargestIndex()+1;
+				this.props.definition.$add(id,newScreen);
+				document.location.hash = id;
 			},
-			__getUniqueScreenID: function(label) {
-				var id = label;
+			__getUniqueScreenID: function() {
+				var id = 0;
 				while(this.__getScreenByID(id)) {
-					id += "" + Math.floor(10*Math.random());
+					id++;
 				}
 				return id;
 			},
@@ -189,6 +183,15 @@ define(
 				this.__focusOnScreenByID(
 					document.location.hash.match(/^#(.*)$/)[1]
 				);
+			},
+			__getLargestIndex: function() {
+				var highest = 0;
+				this._mapSubPieces(this.props.definition,function(definition,id) {
+					if(definition && definition.index > highest) {
+						highest = definition.index;
+					}
+				});
+				return highest;
 			}
 		});
 

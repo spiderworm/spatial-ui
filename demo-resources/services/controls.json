@@ -1,192 +1,263 @@
 {
-	"helm/impulse": {
-		"label": "impulse engines",
-		"description": "impulse engines provide traditional Newtonian movement around space",
-		"min": 0,
-		"max": 100,
-		"dataPath": "helm/impulse"
-	},
-	"engineering/energy/levels/impulse": {
-		"label": "impulse energy levels",
-		"description": "power provided to the impulse engines (manufacturer recommended level: 100)",
-		"min": 0,
-		"max": 200,
-		"dataPath": "engineering/energy/levels/impulse"
-	},
-	"engineering/energy/levels/tubes": {
-		"label": "tube energy levels",
-		"description": "power provided to the tubes (manufacturer recommended level: 100)",
-		"min": 0,
-		"max": 200,
-		"dataPath": "engineering/energy/levels/tubes"
-	},
-	"engineering/energy/levels/phasers": {
-		"label": "phasers energy levels",
-		"description": "power provided to the phasers (manufacturer recommended level: 100)",
-		"min": 0,
-		"max": 200,
-		"dataPath": "engineering/energy/levels/phasers"
-	},
-	"weapons/torpedos/stock": {
-		"label": "torpedos",
-		"description": "current stock of torpedos",
-		"outputOnly": true,
-		"dataPath": "weapons/ammo/torpedos"
-	},
-	"weapons/phasers/switch": {
-		"label": "phasers",
-		"description": "enable/disable phasers",
-		"button": true,
-		"allowedValues": [1,0],
-		"valueMap": [
-			{
-				"value": 1,
-				"display": "enabled"
-			},
-			{
-				"value": 0,
-				"display": "disabled"
+	"controls": {
+		"helm": {
+			"impulse": {
+				"type": "control",
+				"subtype": "range",
+				"label": "impulse engines",
+				"description": "impulse engines provide traditional Newtonian movement around space",
+				"min": 0,
+				"max": 100,
+				"dataPath": "/values/helm/impulse"
 			}
-		],
-		"dataPath": "weapons/phasers/enabled"
-	},
-	"weapons/phasers/frequency": {
-		"label": "phasers frequency",
-		"description": "set phasers frequency",
-		"allowedValues": ["A","B","C","D"],
-		"dataPath": "weapons/phasers/frequency"
-	},
-	"systems/tubes": {
-		"label": "tubes",
-		"subControls": [
-			"systems/tubes/1",
-			"systems/tubes/2"
-		]
-	},
-	"systems/tubes/1": {
-		"label": "tube 1",
-		"inlineControls": [
-			{
-				"description": "current ammo in tube",
-				"dataPath": "systems/tubes/1/currentAmmo",
-				"outputOnly": true
-			},
-			{
-				"description": "percentage that current ammo is loaded",
-				"dataPath": "systems/tubes/1/loadedPercent",
-				"format": "%",
-				"outputOnly": true
-			},
-			{
-				"description": "attack target with tube contents",
-				"dataPath": "systems/tubes/1/fire",
-				"button": true,
-				"allowedValues": [1,0],
-				"display": "fire",
-				"disabled": true
-			},
-			{
-				"description": "automatically fire when ammo is loaded",
-				"label": "auto fire",
-				"dataPath": "systems/tubes/1/autoFire",
-				"checkbox": true,
-				"allowedValues": [1,0]
-			}
-		],
-		"subControls": [
-			{
-				"inlineControls": [
-					{
-						"allowedValues": [null,"torpedos"],
-						"valueMap": [
-							{
-								"value": null,
-								"display": "none"
-							}
-						],
-						"dataPath": "systems/tubes/1/selectedAmmo"
+		},
+		"engineering": {
+			"energy": {
+				"levels": {
+					"impulse": {
+						"type": "control",
+						"subtype": "range",
+						"label": "impulse energy levels",
+						"description": "power provided to the impulse engines (manufacturer recommended level: 100)",
+						"min": 0,
+						"max": 200,
+						"dataPath": "/values/engineering/energy/levels/impulse"
 					},
-					{
-						"button": true,
-						"allowedValues": [1,0],
-						"dataPath": "systems/tubes/1/load",
-						"display": "load"
+					"tubes": {
+						"type": "control",
+						"subtype": "range",
+						"label": "tube energy levels",
+						"description": "power provided to the tubes (manufacturer recommended level: 100)",
+						"min": 0,
+						"max": 200,
+						"dataPath": "/values/engineering/energy/levels/tubes"
 					},
-					{
-						"button": true,
-						"allowedValues": [1,0],
-						"dataPath": "systems/tubes/1/unload",
-						"display": "unload"
-					},
-					{
-						"checkbox": true,
-						"allowedValues": [1,0],
-						"dataPath": "systems/tubes/1/keepLoaded",
-						"label": "keep loaded"
+					"phasers": {
+						"type": "control",
+						"subtype": "range",
+						"label": "phasers energy levels",
+						"description": "power provided to the phasers (manufacturer recommended level: 100)",
+						"min": 0,
+						"max": 200,
+						"dataPath": "/values/engineering/energy/levels/phasers"	
 					}
-				]
+				}
 			}
-		]
-	},
-	"systems/tubes/2": {
-		"label": "tube 2",
-		"inlineControls": [
-			{
-				"dataPath": "systems/tubes/2/currentAmmo",
-				"outputOnly": true
+		},
+		"weapons": {
+			"torpedos": {
+				"stock": {
+					"type": "control",
+					"subtype": "output",
+					"label": "torpedos",
+					"description": "current stock of torpedos",
+					"dataPath": "/values/weapons/ammo/torpedos"
+				}
 			},
-			{
-				"description": "percentage that current ammo is loaded",
-				"dataPath": "systems/tubes/2/loadedPercent",
-				"format": "%",
-				"outputOnly": true
-			},
-			{
-				"dataPath": "systems/tubes/2/fire",
-				"button": true,
-				"allowedValues": [1,0],
-				"display": "fire"
-			},
-			{
-				"label": "auto fire",
-				"dataPath": "systems/tubes/2/autoFire",
-				"checkbox": true,
-				"allowedValues": [1,0]
+			"phasers": {
+				"switch": {
+					"type": "control",
+					"subtype": "button",
+					"label": "phasers",
+					"description": "enable/disable phasers",
+					"allowedValues": [1,0],
+					"valueMap": [
+						{
+							"value": 1,
+							"display": "enabled"
+						},
+						{
+							"value": 0,
+							"display": "disabled"
+						}
+					],
+					"dataPath": "/values/weapons/phasers/enabled"
+				},
+				"frequency": {
+					"type": "control",
+					"subtype": "drop-list",
+					"label": "phasers frequency",
+					"description": "set phasers frequency",
+					"allowedValues": ["A","B","C","D"],
+					"dataPath": "/values/weapons/phasers/frequency"
+				}
 			}
-		],
-		"subControls": [
-			{
-				"inlineControls": [
-					{
-						"allowedValues": [null,"torpedos"],
-						"valueMap": [
-							{
-								"value": null,
-								"display": "none"
-							}
-						],
-						"dataPath": "systems/tubes/2/selectedAmmo"
+		},
+		"systems": {
+			"tubes": {
+				"type": "control",
+				"subtype": "multi",
+				"label": "tubes",
+				"subControls": {
+					"type":"control-group",
+					"0": {
+						"type": "control",
+						"index": 0,
+						"url": "/controls/systems/tubes/1"
 					},
-					{
-						"button": true,
-						"allowedValues": [1,0],
-						"dataPath": "systems/tubes/2/load",
-						"display": "load"
-					},
-					{
-						"button": true,
-						"allowedValues": [1,0],
-						"dataPath": "systems/tubes/2/unload",
-						"display": "unload"
-					},
-					{
-						"checkbox": true,
-						"allowedValues": [1,0],
-						"dataPath": "systems/tubes/2/keepLoaded",
-						"label": "keep loaded"
+					"1": {
+						"type": "control",
+						"index": 1,
+						"url": "/controls/systems/tubes/2"
 					}
-				]
+				},
+				"1": {
+					"type": "control",
+					"subtype": "multi",
+					"label": "tube 1",
+					"inlineControls": [
+						{
+							"type": "control",
+							"subtype": "output",
+							"description": "current ammo in tube",
+							"dataPath": "/values/systems/tubes/1/currentAmmo"
+						},
+						{
+							"type": "control",
+							"subtype": "output",
+							"description": "percentage that current ammo is loaded",
+							"dataPath": "/values/systems/tubes/1/loadedPercent",
+							"format": "%"
+						},
+						{
+							"type": "control",
+							"subtype": "button",
+							"description": "attack target with tube contents",
+							"dataPath": "/values/systems/tubes/1/fire",
+							"button": true,
+							"allowedValues": [1,0],
+							"display": "fire",
+							"disabled": true
+						},
+						{
+							"type": "control",
+							"subtype": "checkbox",
+							"description": "automatically fire when ammo is loaded",
+							"label": "auto fire",
+							"dataPath": "/values/systems/tubes/1/autoFire",
+							"checkbox": true,
+							"allowedValues": [1,0]
+						}
+					],
+					"subControls": {
+						"type": "control-group",
+						"0": {
+							"type": "control",
+							"subtype": "multi",
+							"inlineControls": [
+								{
+									"type": "control",
+									"subtype": "drop-list",
+									"allowedValues": [null,"torpedos"],
+									"valueMap": [
+										{
+											"value": null,
+											"display": "none"
+										}
+									],
+									"dataPath": "/values/systems/tubes/1/selectedAmmo"
+								},
+								{
+									"type": "control",
+									"subtype": "button",
+									"allowedValues": [1,0],
+									"dataPath": "/values/systems/tubes/1/load",
+									"display": "load"
+								},
+								{
+									"type": "control",
+									"subtype": "button",
+									"allowedValues": [1,0],
+									"dataPath": "/values/systems/tubes/1/unload",
+									"display": "unload"
+								},
+								{
+									"type": "control",
+									"subtype": "checkbox",
+									"allowedValues": [1,0],
+									"dataPath": "/values/systems/tubes/1/keepLoaded",
+									"label": "keep loaded"
+								}
+							]
+						}
+					}
+				},
+				"2": {
+					"type": "control",
+					"subtype": "multi",
+					"label": "tube 2",
+					"inlineControls": [
+						{
+							"type": "control",
+							"subtype": "output",
+							"dataPath": "/values/systems/tubes/2/currentAmmo"
+						},
+						{
+							"type": "control",
+							"subtype": "output",
+							"description": "percentage that current ammo is loaded",
+							"dataPath": "/values/systems/tubes/2/loadedPercent",
+							"format": "%"
+						},
+						{
+							"type": "control",
+							"subtype": "button",
+							"dataPath": "/values/systems/tubes/2/fire",
+							"allowedValues": [1,0],
+							"display": "fire"
+						},
+						{
+							"type": "control",
+							"subtype": "checkbox",
+							"label": "auto fire",
+							"dataPath": "/values/systems/tubes/2/autoFire",
+							"allowedValues": [1,0]
+						}
+					],
+					"subControls": {
+						"type": "control-group",
+						"0": {
+							"type": "control",
+							"subtype": "multi",
+							"inlineControls": [
+								{
+									"type": "control",
+									"subtype": "drop-list",
+									"allowedValues": [null,"torpedos"],
+									"valueMap": [
+										{
+											"value": null,
+											"display": "none"
+										}
+									],
+									"dataPath": "/values/systems/tubes/2/selectedAmmo"
+								},
+								{
+									"type": "control",
+									"subtype": "button",
+									"allowedValues": [1,0],
+									"dataPath": "/values/systems/tubes/2/load",
+									"display": "load"
+								},
+								{
+									"type": "control",
+									"subtype": "button",
+									"allowedValues": [1,0],
+									"dataPath": "/values/systems/tubes/2/unload",
+									"display": "unload"
+								},
+								{
+									"type": "control",
+									"subtype": "checkbox",
+									"allowedValues": [1,0],
+									"dataPath": "/values/systems/tubes/2/keepLoaded",
+									"label": "keep loaded"
+								}
+							]
+						}
+					}
+				}
 			}
-		]
+		}
 	}
 }

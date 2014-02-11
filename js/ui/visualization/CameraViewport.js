@@ -14,13 +14,8 @@ define(
 
 
 		var Viewport = React.createClass({
-			getDefaultProps: function() {
-				return {
-					model: this.props.definition
-				};
-			},
 			getInitialState: function() {
-				this.__scene = new Scene3D(this.props.model,new Camera3D());
+				this.__scene = new Scene3D(this.props.definition,new Camera3D());
 				return {};
 			},
 			render: function() {

@@ -1,47 +1,35 @@
 define(
 	[
 		'react',
-		'jsx!./ScreenGroup',
-		'jsx!./PanelGroup'
+		'jsx!./Piece'
 	],
 	function(
 		React,
-		ScreenGroup,
-		PanelGroup
+		Piece
 	) {
 
 		var AppUI = React.createClass({
+			mixins: [Piece.mixin],
 			getDefaultProps: function() {
 				var view = this;
 
-				this.props.definition.$subscribeTo(function() {
-					view.forceUpdate();
+				this.props.model.$subscribeTo('ui',function() {
+					this.$subscribeTo(function() {
+						view.forceUpdate();
+					});
 				});
 
 				return {};
 			},
 			render: function() {
-				var dom = (
+				return (
 					<main className="spatial-master">
 						{
-							this.props.definition.screens ?
-							<ScreenGroup
-								definition={this.props.definition.screens}
-								appModel={this.props.appModel}
-							></ScreenGroup> :
-							null
-						}
-						{
-							this.props.definition.panels ?
-							<PanelGroup
-								definition={this.props.definition.panels}
-								appModel={this.props.appModel}
-							></PanelGroup> :
-							null
+							this.props.model.ui &&
+							this._getSubPieceNodes(this.props.model.ui,this.props.model)
 						}
 					</main>
 				);
-				return dom;
 			}
 		});
 

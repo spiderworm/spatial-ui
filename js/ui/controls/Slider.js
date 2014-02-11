@@ -64,6 +64,7 @@ define(
 				this._setValue(value);
 			},
 			__validateValue: function(value) {
+				value = parseFloat(value);
 				if(value < this.props.definition.min) {
 					value = this.props.definition.min;
 				}

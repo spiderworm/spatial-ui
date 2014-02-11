@@ -1,23 +1,19 @@
 define(
 	[
 		'react',
-		'jsx!./PanelGroup',
-		'jsx!./visualization/CameraViewport',
-		'jsx!./visualization/Loader'
+		'jsx!./Piece'
 	],
 	function(
 		React,
-		PanelGroup,
-		CameraViewport,
-		VisualizationLoader
+		Piece
 	) {
 
 		var Screen = React.createClass({
+			mixins: [Piece.mixin],
 			getDefaultProps: function() {
 				return {};
 			},
 			render: function() {
-				var appModel = this.props.appModel;
 				return (
 					<article 
 						className={
@@ -33,35 +29,18 @@ define(
 								{this.props.definition.label}
 							</a>
 						</h1>
-						{
-							this.props.definition.panels ?
-							<PanelGroup
-								definition={this.props.definition.panels}
-								appModel={appModel}
-								editable={this.props.editable}
-							></PanelGroup> :
-							null
-						}
-						{
-							this.props.definition.visualizations && this.props.definition.visualizations[0] ?
-							<VisualizationLoader
-								definition={this.props.definition.visualizations[0]}
-							></VisualizationLoader> :
-							null
-						}
+						{this._getSubPieceNodes(
+							this.props.definition,
+							this.props.appModel,
+							{
+								editable: this.props.editable
+							}
+						)}
 						{this.props.children}
 					</article>
 				);
 			}
 		});
-
-
-
-		Screen.getUniqueID = function() {
-			Screen.getUniqueID.__last++;
-			return Screen.getUniqueID.__last;
-		}
-		Screen.getUniqueID.__last = 0;
 
 
 

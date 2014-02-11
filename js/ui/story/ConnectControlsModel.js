@@ -15,27 +15,34 @@ define(
 		function StoryConnectControlsModel() {
 
 			var model = new Model({
-				panels: [
-					{
-						label: 'Login',
-
-						controls: [
-							{
-								label: 'connect to ship',
-								type: 'text',
-								placeholder: 'enter the url to connect to your story',
-								size: 80,
-								liveEdit: false,
-								submitButton: {
-									display: 'go'
-								},
-								dataPath: 'url'
+				ui: {
+					panels: {
+						type: 'panel-group',
+						index: 0,
+						panel0: {
+							type: 'panel',
+							index: 0,
+							label: 'Login',
+							controls: {
+								type: 'control-group',
+								index: 0,
+								control0: {
+									type: 'control',
+									index: 0,
+									subtype: 'text',
+									label: 'connect to ship',
+									placeholder: 'enter the url to connect to your story',
+									size: 80,
+									liveEdit: false,
+									submitButton: {
+										display: 'go'
+									},
+									dataPath: '/values/url'
+								}
 							}
-						]
+						}
 					}
-				],
-				url: "",
-				autoConnect: false
+				}
 			});
 
 			return model;

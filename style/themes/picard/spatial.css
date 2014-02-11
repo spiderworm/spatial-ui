@@ -137,31 +137,9 @@
 	text-transform: uppercase;
 }
 
-.spatial-master .panel > .control {
-	padding-left: 2.25cm;
-	margin: .5cm 0;
-}
-
-.spatial-master .panel > .control > .label-text,
-.spatial-master .panel > .control > label > .label-text {
-	display: inline-block;
-	margin-left: -2.25cm;
-	margin-right: .25cm;
-	width: 2cm;
-	vertical-align: top;
-}
-
-.spatial-master .panel > .control > .control > .label-text,
-.spatial-master .panel > .control > .control > label > .label-text {
-	display: inline-block;
-	margin-left: -1.75cm;
-	margin-right: .25cm;
-	width: 1.5cm;
-	vertical-align: top;
-}
-
 .spatial-master .control {
-	margin: .1cm 0;
+	padding-left: 2.25cm;
+	margin: .25cm 0;
 	display: block;
 }
 
@@ -169,6 +147,28 @@
 	margin-right: .2cm;
 	font-weight: bold;
 	text-transform: lowercase;
+}
+
+.spatial-master .control > .label-text,
+.spatial-master .control > label > .label-text {
+	display: inline-block;
+	margin-left: -2.25cm;
+	margin-right: .25cm;
+	width: 2cm;
+	vertical-align: top;
+}
+
+.spatial-master .control .control {
+	padding-left: 0;
+}
+
+.spatial-master .control .control > .label-text,
+.spatial-master .control .control > label > .label-text {
+	display: inline-block;
+	margin-left: -1.75cm;
+	margin-right: .25cm;
+	width: 1.5cm;
+	vertical-align: top;
 }
 
 .spatial-master .control.inline-control {
@@ -181,6 +181,12 @@
 	font-weight: normal;
 	min-width: 0;
 	margin-right: 0;
+	white-space: nowrap;
+}
+
+.spatial-master .control .inline-control.control > .label-text,
+.spatial-master .control .inline-control.control > label > .label-text {
+	margin-left: 0;
 }
 
 .spatial-master .control input,

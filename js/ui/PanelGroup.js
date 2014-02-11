@@ -1,18 +1,16 @@
 define(
 	[
 		'react',
-		'jsx!./Panel',
-		'./util/reactKeyGenerator'
+		'jsx!./Piece'
 	],
 	function(
 		React,
-		Panel,
-		keyGenerator
+		Piece
 	) {
 
 		var PanelGroup = React.createClass({
 
-			mixins: [keyGenerator.mixin],
+			mixins: [Piece.mixin],
 
 			getInitialState: function() {
 
@@ -33,24 +31,17 @@ define(
 				var editable = this.props.editable;
 				var gridMode = this.state.gridMode;
 
-				var view = this;
-
 				return (
 					<div
 						className="panel-group"
 						data-layout={gridMode ? "grid" : "default"}
 					>
-						{this.props.definition.$map(
-							function(panel) {
-								return (
-									<Panel
-										key={view.getKey([panel])}
-										appModel={appModel}
-										definition={panel}
-										gridMode={gridMode}
-										editable={editable}
-									></Panel>
-								);
+						{this._getSubPieceNodes(
+							this.props.definition,
+							this.props.appModel,
+							{
+								gridMode: gridMode,
+								editable: editable
 							}
 						)}
 					</div>

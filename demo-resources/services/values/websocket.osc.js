@@ -1,22 +1,22 @@
 
 var osc = "\
-/helm/impulse ,f 10\n\
-/engineering/energy/levels/impulse ,f 150\n\
-/engineering/energy/levels/tubes ,f 100\n\
-/engineering/energy/levels/phasers ,f 25\n\
-/weapons/ammo/torpedos ,i 0\n\
-/weapons/phasers/enabled ,i 1\n\
-/weapons/phasers/frequency ,s \"C\"\n\
-/systems/tubes/1/currentAmmo ,s \"torpedos\"\n\
-/systems/tubes/1/loadedPercent ,f 0.5\n\
-/systems/tubes/1/fire ,i 0\n\
-/systems/tubes/1/keepLoaded ,i 0\n\
-/systems/tubes/1/autoFire ,i 0\n\
-/systems/tubes/2/currentAmmo ,s \"nuke\"\n\
-/systems/tubes/2/loadedPercent ,f 1\n\
-/systems/tubes/2/fire ,i 0\n\
-/systems/tubes/2/keepLoaded ,i 1\n\
-/systems/tubes/2/autoFire ,i 1\n\
+/values/helm/impulse ,f 10\n\
+/values/engineering/energy/levels/impulse ,f 150\n\
+/values/engineering/energy/levels/tubes ,f 100\n\
+/values/engineering/energy/levels/phasers ,f 25\n\
+/values/weapons/ammo/torpedos ,i 0\n\
+/values/weapons/phasers/enabled ,i 1\n\
+/values/weapons/phasers/frequency ,s \"C\"\n\
+/values/systems/tubes/1/currentAmmo ,s \"torpedos\"\n\
+/values/systems/tubes/1/loadedPercent ,f 0.5\n\
+/values/systems/tubes/1/fire ,i 0\n\
+/values/systems/tubes/1/keepLoaded ,i 0\n\
+/values/systems/tubes/1/autoFire ,i 0\n\
+/values/systems/tubes/2/currentAmmo ,s \"nuke\"\n\
+/values/systems/tubes/2/loadedPercent ,f 1\n\
+/values/systems/tubes/2/fire ,i 0\n\
+/values/systems/tubes/2/keepLoaded ,i 1\n\
+/values/systems/tubes/2/autoFire ,i 1\n\
 ";
 
 
@@ -74,8 +74,8 @@ function handleMessageReceived(msg) {
 	reportReceived(msg.name,msg.value);
 
 	switch(msg.name) {
-		case "/systems/tubes/1/fire":
-		case "/systems/tubes/2/fire":
+		case "/values/systems/tubes/1/fire":
+		case "/values/systems/tubes/2/fire":
 			setValue(msg.name,0);
 		break;
 		default:
@@ -125,22 +125,22 @@ setInterval(
 	function() {
 
 		setValue(
-			'/weapons/ammo/torpedos',
-			getValue('/weapons/ammo/torpedos')+1
+			'/values/weapons/ammo/torpedos',
+			getValue('/values/weapons/ammo/torpedos')+1
 		);
 
-		var val = getValue('/systems/tubes/1/loadedPercent');
+		var val = getValue('/values/systems/tubes/1/loadedPercent');
 		val+=.01;
 		if(val > 1) val = 1;
 		if(val < 1) {
-			setValue('/systems/tubes/1/loadedPercent',val);
+			setValue('/values/systems/tubes/1/loadedPercent',val);
 		}
 
-		var val = getValue('/systems/tubes/2/loadedPercent');
+		var val = getValue('/values/systems/tubes/2/loadedPercent');
 		val+=.01;
 		if(val > 1) val = 1;
 		if(val < 1) {
-			setValue('/systems/tubes/2/loadedPercent',val);
+			setValue('/values/systems/tubes/2/loadedPercent',val);
 		}
 
 	},

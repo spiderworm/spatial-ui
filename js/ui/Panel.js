@@ -1,14 +1,14 @@
 define(
 	[
 		'react',
-		'jsx!./controls/Loader',
+		'jsx!./Piece',
 		'./util/dragTracker',
 		'../util/InstanceStore',
 		'./util/reactKeyGenerator'
 	],
 	function(
 		React,
-		ControlLoader,
+		Piece,
 		dragTracker,
 		InstanceStore,
 		keyGenerator
@@ -72,8 +72,10 @@ define(
 						onMouseDown={this.__handleMouseDown}
 					>
 						<h1>{this.props.definition.label}</h1>
-						{this.props.definition.controls && this.props.definition.controls.$map(function(control) {
-							return <ControlLoader key={view.getKey([control])} appModel={appModel} definition={control} />;
+						{this.props.definition.$map(function(definition) {
+							if(typeof(definition) === "object") {
+								return <Piece appModel={appModel} definition={definition} />;
+							}
 						})}
 						{this.props.children}
 					</section>
