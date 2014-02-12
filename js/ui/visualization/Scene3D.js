@@ -69,6 +69,7 @@ define(
 		}
 
 		Scene3D.prototype.start = function(canvas) {
+
 			this.__renderer = new THREE.WebGLRenderer({canvas:canvas, alpha: true});
 
 			var scene = this;

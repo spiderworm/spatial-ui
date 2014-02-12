@@ -4,14 +4,16 @@ define(
 		'jsx!./ui/AppUI',
 		'./base/Model',
 		'./user/userManager',
-		'./ui/story/ConnectView'
+		'./ui/story/ConnectView',
+		'./util/modelUtil'
 	],
 	function(
 		React,
 		AppUI,
 		Model,
 		userManager,
-		StoryConnectView
+		StoryConnectView,
+		modelUtil
 	) {
 		
 		function App() {
@@ -39,6 +41,7 @@ define(
 		}
 		App.prototype.setModel = function(model) {
 			this._model = model;
+			modelUtil.setRootModel(model);
 			this._render();
 		}
 		App.prototype._render = function() {

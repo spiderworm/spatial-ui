@@ -71,10 +71,10 @@ define(
 				y: this.__model.position.y,
 				z: this.__model.position.z
 			};
-			if(this.__ship) {
-				result.x += this.__ship._model.position.x;
-				result.y += this.__ship._model.position.y;
-				result.z += this.__ship._model.position.z;
+			if(this.__ship && this.__ship._position) {
+				result.x += this.__ship._position.x;
+				result.y += this.__ship._position.y;
+				result.z += this.__ship._position.z;
 			}
 			return result;
 		}

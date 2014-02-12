@@ -3,13 +3,15 @@ define(
 		'./BaseObject3D',
 		'THREE',
 		'../../util/InstanceStore',
-		'../../registry'
+		'../../registry',
+		'../../util/modelUtil'
 	],
 	function(
 		BaseObject3D,
 		THREE,
 		InstanceStore,
-		registry
+		registry,
+		modelUtil
 	) {
 
 		var threeLoader = new THREE.JSONLoader();
@@ -103,20 +105,42 @@ define(
 				three.scale.y = scale;
 				three.scale.z = scale;
 			});
+
+			this._position = null;
+
+			modelUtil.subscribeTo(
+				model,
+				'position',
+				function(position) {
+					object3D._position = position;
+				}
+			);
+
+			this._rotation = null;
+
+			modelUtil.subscribeTo(
+				model,
+				'rotation',
+				function(rotation) {
+					object3D._rotation = rotation;
+				}
+			);
 		}
 
 		Object3D.prototype = new BaseObject3D();
 
 		Object3D.prototype.prepareForRender = function() {
-			var three = this.getTHREE();
-			var cameraPos = this.getCamera().getPosition();
-			three.position.x = this._model.position.x - cameraPos.x;
-			three.position.y = this._model.position.y - cameraPos.y;
-			three.position.z = this._model.position.z - cameraPos.z;
-			three.rotation.x = this._model.rotation.x;
-			three.rotation.y = this._model.rotation.y;
-			three.rotation.z = this._model.rotation.z;
-			three.rotation.order = this._model.rotation.order;
+			if(this._position && this._rotation) {
+				var three = this.getTHREE();
+				var cameraPos = this.getCamera().getPosition();
+				three.position.x = this._position.x - cameraPos.x;
+				three.position.y = this._position.y - cameraPos.y;
+				three.position.z = this._position.z - cameraPos.z;
+				three.rotation.x = this._rotation.x;
+				three.rotation.y = this._rotation.y;
+				three.rotation.z = this._rotation.z;
+				three.rotation.order = this._rotation.order;
+			}
 		}
 
 		Object3D.prototype.__setGeometry = function(geometry) {
