@@ -15,11 +15,11 @@ define(
 	) {
 		
 		function App() {
-			this.model = new Model();
+			this._model = new Model();
 
 			var app = this;
 
-			this.model.$subscribeTo(function() {
+			this._model.$subscribeTo(function() {
 				app._render();
 			});
 		}
@@ -31,42 +31,21 @@ define(
 
 			var storyConnectView = new StoryConnectView(user);
 			storyConnectView.onConnected(function(storyConnection) {
-
-				var controlsModel = storyConnection.getControlsConnection().getModel();
-				controlsModel.$subscribeTo('controls',function(controls) {
-					app.model.$update({controls:controls});
-				});
-
-				var valuesModel = storyConnection.getShipValuesConnection().getModel();
-				valuesModel.$subscribeTo('values',function(values) {
-					app.model.$update({values: values});
-				});
-
-				var shipUIModel = storyConnection.getShipUIConnection().getModel();
-				shipUIModel.$subscribeTo('ui',function(ui) {
-					app.model.$update({ui:ui});
-				});
-
+				app.setModel(storyConnection.getModel());
 			});
 
-			this.model.$update({
-				user: user,
-				values: storyConnectView.getValuesModel(),
-				ui: storyConnectView.getControlsModel()
-			});
+			this.setModel(storyConnectView.getModel());
 
 		}
-		App.prototype.getModel = function(name) {
-			if(arguments.length === 0)
-				return this.model;
-			else
-				return this.model[name];
+		App.prototype.setModel = function(model) {
+			this._model = model;
+			this._render();
 		}
 		App.prototype._render = function() {
 			React.unmountComponentAtNode(document.body);
 
 			var appUI = React.renderComponent(
-				AppUI({model: this.model}),
+				AppUI({model: this._model}),
 				document.body
 			);
 		}

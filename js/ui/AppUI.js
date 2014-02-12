@@ -1,11 +1,13 @@
 define(
 	[
 		'react',
-		'jsx!./Piece'
+		'jsx!./Piece',
+		'../base/Model'
 	],
 	function(
 		React,
-		Piece
+		Piece,
+		Model
 	) {
 
 		var AppUI = React.createClass({
@@ -13,10 +15,12 @@ define(
 			getDefaultProps: function() {
 				var view = this;
 
-				this.props.model.$subscribeTo('ui',function() {
-					this.$subscribeTo(function() {
-						view.forceUpdate();
-					});
+				this.props.model.$subscribeTo('ui',function(model) {
+					if(model instanceof Model) {
+						this.$subscribeTo(function() {
+							view.forceUpdate();
+						});
+					}
 				});
 
 				return {};

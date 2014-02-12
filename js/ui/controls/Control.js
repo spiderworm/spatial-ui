@@ -34,6 +34,11 @@ define(
 									view.setState({
 										value: value
 									});
+									if(view.state.inactiveValue === undefined) {
+										view.setState({
+											inactiveValue: value
+										});
+									}
 								}
 							);
 

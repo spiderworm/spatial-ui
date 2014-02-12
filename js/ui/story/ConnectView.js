@@ -1,36 +1,33 @@
 define(
 	[
 		'../../base/EventObject',
-		'./ConnectControlsModel',
-		'./ConnectValuesModel',
-		'../../data/story/connectionFactory'
+		'./ConnectViewModel',
+		'../../data/story/DataConnection'
 	],
 	function(
 		EventObject,
 		ControlsModel,
-		ValuesModel,
-		storyConnectionFactory
+		DataConnection
 	) {
 
 		function StoryConnectView(user){
 			EventObject.apply(this);
 
 			this.__storyConnection = null;
-			this.__controlsModel = new ControlsModel();
-			this.__valuesModel = new ValuesModel();
+			this.__model = new ControlsModel();
 
 			var view = this;
 
-			var handler = this.__valuesModel.$onUpdated(function() {
+			var handler = this.__model.values.$onUpdated(function() {
 				if(this.url && this.url.length > 0) {
-					view.__storyConnection = storyConnectionFactory.getConnection(user,this.url);
+					view.__storyConnection = new DataConnection(user,this.url);
 					view.__storyConnection.onConnected(function() {
 						view._fire('story-connected',[view.__storyConnection]);
 					});
 				}
 			});
 
-			if(this.__valuesModel.autoConnect) {
+			if(this.__model.values.autoConnect) {
 				handler.fire();
 			}
 
@@ -42,11 +39,8 @@ define(
 				handler.fire([this.__storyConnection]);
 			}
 		}
-		StoryConnectView.prototype.getControlsModel = function() {
-			return 	this.__controlsModel;
-		}
-		StoryConnectView.prototype.getValuesModel = function() {
-			return 	this.__valuesModel;
+		StoryConnectView.prototype.getModel = function() {
+			return 	this.__model;
 		}
 
 

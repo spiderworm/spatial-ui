@@ -1,16 +1,12 @@
 define(
 	[
 		'../base/DataConnection',
-		'../ship/connectionFactory',
-		'../ship/controls/connectionFactory',
-		'../ship/ui/connectionFactory',
+		'../../base/Model',
 		'../util/comm'
 	],
 	function(
 		DataConnection,
-		shipValuesConnectionFactory,
-		shipControlsConnectionFactory,
-		shipUIConnectionFactory,
+		Model,
 		comm
 	) {
 
@@ -18,44 +14,45 @@ define(
 			DataConnection.apply(this);
 			if(user && url) {
 				this._user = user;
+				var story = this;
 
-				var connection = this;
+				var connections = this.__connections = {};
+
 				comm.ajax(
 					url,
 					function(response) {
-						connection._model.$overwrite(response);
-						connection._setConnected();
+						if(response.connectionDefinitions) {
+							for(var key in connections) {
+								delete connections[key];
+							}
+							for(var key in response.connectionDefinitions) {
+								story.__addConnection(
+									key,
+									response.connectionDefinitions[key].url,
+									response.connectionDefinitions[key].type,
+									response.connectionDefinitions[key].format
+								);
+							}
+							story._setConnected();
+						} else {
+							console.error('could not connect');
+						}
 					}
 				);
 			}
 		}
 		StoryDataConnection.prototype = new DataConnection();
-		StoryDataConnection.prototype.getControlsConnection = function() {
-			return shipControlsConnectionFactory.getConnection(
-				this._user,
-				this._model.connectionDefinitions.controls.url,
-				this._model.connectionDefinitions.controls.type,
-				this._model.connectionDefinitions.controls.format
+		StoryDataConnection.prototype.__addConnection = function(key,url,type,format) {
+			this.__connections[key] = new DataConnection(this._user,url,type,format);
+			var story = this;
+			this.__connections[key].getModel().$subscribeTo(
+				key,
+				function(subModel) {
+					story._model[key] = subModel;
+					story._model.$setUpdated();
+				}
 			);
 		}
-		StoryDataConnection.prototype.getShipValuesConnection = function() {
-			return shipValuesConnectionFactory.getConnection(
-				this._user,
-				this._model.connectionDefinitions.values.url,
-				this._model.connectionDefinitions.values.type,
-				this._model.connectionDefinitions.values.format
-			);
-		}
-		StoryDataConnection.prototype.getShipUIConnection = function() {
-			return shipUIConnectionFactory.getConnection(
-				this._user,
-				this._model.connectionDefinitions.ui.url,
-				this._model.connectionDefinitions.ui.type,
-				this._model.connectionDefinitions.ui.format
-			);
-		}
-
-		DataConnection.extend(StoryDataConnection);
 
 		return StoryDataConnection;
 

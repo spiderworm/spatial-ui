@@ -42,8 +42,24 @@ define(
 							}
 						}
 					}
+				},
+				values: {
+					url: "",
+					autoConnect: true
 				}
 			});
+
+			if(registry.get('mock')) {
+				model.values.$update({url:'demo-resources/services/story.json'});
+			}
+			var vals = urlUtil.getQueryValues();
+
+			if(vals.story !== undefined) {
+				model.values.$update({url:vals.story});
+			}
+			if(vals.autoConnect !== undefined) {
+				model.values.$update({autoConnect:vals.autoConnect});
+			}
 
 			return model;
 		}
