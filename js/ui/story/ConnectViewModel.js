@@ -50,7 +50,7 @@ define(
 			});
 
 			if(registry.get('mock')) {
-				model.values.$update({url:'demo-resources/services/story/websocket.osc.js'});
+				model.values.$update({url:'demo-resources/services/story/websocket.json.js'});
 			}
 			var vals = urlUtil.getQueryValues();
 

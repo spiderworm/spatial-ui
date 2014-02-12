@@ -15,7 +15,7 @@ define(
 				if(matches) {
 					var nextPath = matches[1];
 					var nextNextPath = matches[2];
-					model.$subscribeTo(
+					return model.$subscribeTo(
 						nextPath,
 						function(subModel) {
 							if(nextNextPath) {
@@ -26,7 +26,7 @@ define(
 								callback(subModel);
 							}
 						}
-					)
+					);
 				}
 
 			},

@@ -2,35 +2,29 @@ define(
 	[
 		'react',
 		'jsx!./CameraViewport',
-		'../../data/visualization/connectionFactory'
+		'../modelMixin'
 	],
 	function(
 		React,
 		CameraViewport,
-		visualizationConnectionFactory
+		modelMixin
 	) {
 
 		var VisualizationLoader = React.createClass({
+			mixins: [modelMixin],
 			getInitialState: function() {
-				var definition;
-				if(!this.props.definition.url) {
-					definition = this.props.definition;
-				} else {
-					var visualizationConnection = visualizationConnectionFactory.getConnection();
-					var url = this.props.definition.url;
-					var view = this;
-					visualizationConnection.loadModel(
-						url,
-						function(model) {
-							view.setState({
-								definition: model
-							});
-						}
-					);
-				}
+				var loader = this;
+
+				this._deepSubscribeTo(
+					this.props.appModel,
+					this.props.definition.url,
+					function(definition) {
+						loader.setState({definition: definition});
+					}
+				);
 
 				return {
-					definition: definition
+					definition: null
 				};
 			},
 			render: function() {

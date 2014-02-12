@@ -16,6 +16,11 @@ var response = "\
 			\"url\": \"demo-resources/services/ui/websocket.osc.js\",\
 			\"type\": \"websocket\",\
 			\"format\": \"osc\"\
+		},\
+		\"camera1\": {\
+			\"url\": \"demo-resources/services/visualization/camera1/websocket.json.js\",\
+			\"type\": \"websocket\",\
+			\"format\": \"json\"\
 		}\
 	}\
 }\

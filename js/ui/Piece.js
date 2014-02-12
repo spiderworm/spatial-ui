@@ -136,6 +136,7 @@ define(
 							return (
 								<VisualizationLoader
 									definition={this.props.definition}
+									appModel={this.props.appModel}
 								></VisualizationLoader>
 							);
 						break;

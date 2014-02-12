@@ -71,7 +71,7 @@ var response = "\
 /ui/screens/0/create ,s \"visualization\"\n\
 /ui/screens/0/visualization/index ,i 1\n\
 /ui/screens/0/visualization/type ,s \"visualization\"\n\
-/ui/screens/0/visualization/url ,s \"demo-resources/services/camera1.json\"\n\
+/ui/screens/0/visualization/url ,s \"/camera1\"\n\
 /ui/screens/create ,s \"1\"\n\
 /ui/screens/1/index ,i 1\n\
 /ui/screens/1/label ,s \"engineering\"\n\
