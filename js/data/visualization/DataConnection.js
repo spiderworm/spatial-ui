@@ -1,13 +1,13 @@
 define(
 	[
 		'../base/DataConnection',
-		'../base/DataConnectionModel',
+		'../../base/Model',
 		'../util/comm',
 		'../../registry'
 	],
 	function(
 		DataConnection,
-		DataConnectionModel,
+		Model,
 		comm,
 		registry
 	) {
@@ -26,7 +26,7 @@ define(
 
 					response = connection.__scaleResponse(response);
 
-					var model = new DataConnectionModel(response);
+					var model = new Model(response);
 					callback.apply(connection,[model]);
 
 				}

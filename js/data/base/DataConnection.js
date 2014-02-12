@@ -2,13 +2,13 @@ define(
 	[
 		'../../util/InstanceStore',
 		'../../base/EventObject',
-		'../base/DataConnectionModel',
+		'../../base/Model',
 		'../util/DataChannel'
 	],
 	function(
 		InstanceStore,
 		EventObject,
-		DataConnectionModel,
+		Model,
 		Channel
 	) {
 
@@ -16,7 +16,7 @@ define(
 
 		function DataConnection(user,url,connectionType,dataFormat) {
 			EventObject.apply(this);
-			var model = this._model = new DataConnectionModel();
+			var model = this._model = new Model();
 			if(url && connectionType && dataFormat) {
 				var connection = this;
 				var channel = this._channel = new Channel(url,connectionType,dataFormat);
