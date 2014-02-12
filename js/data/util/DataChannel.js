@@ -60,7 +60,7 @@ define(
 		AJAXDataChannel.prototype = new DataChannelBase();
 		AJAXDataChannel.prototype.open = function(callback) {
 			var channel = this;
-			comm.ajaxraw(
+			comm.ajax(
 				this._url,
 				function(raw) {
 					channel._setOpened();

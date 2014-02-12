@@ -1,55 +1,51 @@
 define(
 	[
 		'../base/DataConnection',
-		'../../base/Model',
-		'../util/comm'
+		'../../base/Model'
 	],
 	function(
 		DataConnection,
-		Model,
-		comm
+		Model
 	) {
 
 		function StoryDataConnection(user,url) {
-			DataConnection.apply(this);
-			if(user && url) {
-				this._user = user;
-				var story = this;
+			DataConnection.apply(this,[user,url,'ajax','json']);
 
-				var connections = this.__connections = {};
+			this.__connections = {};
+			this._resultModel = new Model();
 
-				comm.ajax(
-					url,
-					function(response) {
-						if(response.connectionDefinitions) {
-							for(var key in connections) {
-								delete connections[key];
-							}
-							for(var key in response.connectionDefinitions) {
-								story.__addConnection(
-									key,
-									response.connectionDefinitions[key].url,
-									response.connectionDefinitions[key].type,
-									response.connectionDefinitions[key].format
-								);
-							}
-							story._setConnected();
-						} else {
-							console.error('could not connect');
-						}
+			this._user = user;
+			var story = this;
+
+			this._model.$subscribeTo('connectionDefinitions',function(definitions) {
+				if(definitions) {
+
+					var keys = definitions.$getKeys();
+					for(var i in keys) {
+						story.__addConnection(
+							keys[i],
+							definitions[keys[i]].url,
+							definitions[keys[i]].type,
+							definitions[keys[i]].format
+						);
 					}
-				);
-			}
+
+				}
+			});
+
 		}
 		StoryDataConnection.prototype = new DataConnection();
+		StoryDataConnection.prototype.getModel = function() {
+			return this._resultModel;
+		}
 		StoryDataConnection.prototype.__addConnection = function(key,url,type,format) {
 			this.__connections[key] = new DataConnection(this._user,url,type,format);
 			var story = this;
 			this.__connections[key].getModel().$subscribeTo(
 				key,
 				function(subModel) {
-					story._model[key] = subModel;
-					story._model.$setUpdated();
+					story._resultModel[key] = subModel;
+					story._resultModel.$setUpdated();
 				}
 			);
 		}

@@ -23,7 +23,7 @@ define(
 			comm.ajax(
 				url,
 				function(response) {
-
+					response = JSON.parse(response);
 					response = connection.__scaleResponse(response);
 
 					var model = new Model(response);
