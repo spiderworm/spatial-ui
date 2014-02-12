@@ -9,7 +9,7 @@ define(
 	) {
 
 		function StoryDataConnection(user,url) {
-			DataConnection.apply(this,[user,url,'ajax','json']);
+			DataConnection.apply(this,[user,url,'websocket','json']);
 
 			this.__connections = {};
 			this._resultModel = new Model();
