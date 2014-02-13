@@ -28,10 +28,10 @@ define(
 				callback = b;
 				firstRun = true;
 				return this._subscribe('updated',function() {
-					if(this[a] !== lastVal || firstRun) {
+					if(this[prop] !== lastVal || firstRun) {
 						firstRun = false;
-						lastVal = this[a];
-						callback.apply(this[a],[this[a]]);
+						lastVal = this[prop];
+						callback.apply(this[prop],[this[prop]]);
 					}
 				});
 			}

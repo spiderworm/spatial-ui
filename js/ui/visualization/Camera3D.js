@@ -44,7 +44,7 @@ define(
 
 			function rotateMouse() {
 				requestAnimationFrame(rotateMouse);
-				model.angleY += .01;
+				model.angleY += .002;
 				model.$setUpdated();
 
 
