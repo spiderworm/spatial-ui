@@ -6,6 +6,25 @@ function MockWebsocketServer(interpreter){
 	this._interpreter = interpreter;
 }
 
+MockWebsocketServer.prototype.getData = function() {
+
+	function clone(data) {
+		var result = {};
+		for(var i in data) {
+			if(data.hasOwnProperty(i)) {
+				if(typeof data[i] === "object") {
+					result[i] = clone(data[i]);
+				} else {
+					result[i] = data[i];
+				}
+			}
+		}
+		return result;
+	}
+
+	return clone(this._data);
+}
+
 MockWebsocketServer.prototype.setData = function(data) {
 	this._data = data;
 }

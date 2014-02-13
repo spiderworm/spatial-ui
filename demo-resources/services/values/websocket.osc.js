@@ -1,48 +1,60 @@
+var utilRoot = '../util/';
 
-var osc = "\
-/values/helm/impulse ,f 10\n\
-/values/engineering/energy/levels/impulse ,f 150\n\
-/values/engineering/energy/levels/tubes ,f 100\n\
-/values/engineering/energy/levels/phasers ,f 25\n\
-/values/weapons/ammo/torpedos ,i 0\n\
-/values/weapons/phasers/enabled ,i 1\n\
-/values/weapons/phasers/frequency ,s \"C\"\n\
-/values/systems/tubes/1/currentAmmo ,s \"torpedos\"\n\
-/values/systems/tubes/1/loadedPercent ,f 0.5\n\
-/values/systems/tubes/1/fire ,i 0\n\
-/values/systems/tubes/1/keepLoaded ,i 0\n\
-/values/systems/tubes/1/autoFire ,i 0\n\
-/values/systems/tubes/2/currentAmmo ,s \"nuke\"\n\
-/values/systems/tubes/2/loadedPercent ,f 1\n\
-/values/systems/tubes/2/fire ,i 0\n\
-/values/systems/tubes/2/keepLoaded ,i 1\n\
-/values/systems/tubes/2/autoFire ,i 1\n\
-";
+importScripts(utilRoot + 'OSCInterpreter.js',utilRoot + '/MockWebsocketServer.js');
 
+var interpreter = new OSCInterpreter();
 
+var server = new MockWebsocketServer(interpreter);
 
-
-
-function getValue(path) {
-	return values[path] ? values[path].value : null;
-}
-
-
-
-function setValue(path,value) {
-	if(!values[path]) {
-		values[path] = {
-			type: 's',
-			value: ''
-		};
+server.setData({
+	values: {
+		helm: {
+			impulse: 10
+		},
+		engineering: {
+			energy: {
+				levels: {
+					impulse: 150,
+					tubes: 100,
+					phasers: 25
+				}
+			}
+		},
+		weapons: {
+			ammo: {
+				torpedos: 0
+			},
+			phasers: {
+				enabled: 1,
+				frequency: "C"
+			}
+		},
+		systems: {
+			tubes: {
+				1: {
+					currentAmmo: "torpedos",
+					loadedPercent: 0.5,
+					fire: 0,
+					keepLoaded: 0,
+					autoFire: 0
+				},
+				2: {
+					currentAmmo: 'big fat nuke',
+					loadedPercent: 1,
+					fire: 0,
+					keepLoaded: 1,
+					autoFire: 1
+				}
+			}
+		}
 	}
-	values[path].value = value;
-	var msg = path + ' ,' + values[path].type + ' ' + value;
-	self.postMessage(msg);
-}
+});
 
 
+server.send();
 
+
+/*
 function parseOSC(osc) {
 	var values = {};
 	var lines = osc.split("\n");
@@ -66,6 +78,8 @@ function parseOSC(osc) {
 	}
 	return values;
 }
+*/
+
 
 
 
@@ -97,13 +111,7 @@ function reportReceived(name,value) {
 
 
 
-var values = parseOSC(osc);
-
-
-
-
-
-
+/*
 self.addEventListener(
 	'message',
 	function(event) {
@@ -114,9 +122,7 @@ self.addEventListener(
 	},
 	false
 );
-
-self.postMessage(osc);
-
+*/
 
 
 
@@ -124,23 +130,22 @@ self.postMessage(osc);
 setInterval(
 	function() {
 
-		setValue(
-			'/values/weapons/ammo/torpedos',
-			getValue('/values/weapons/ammo/torpedos')+1
-		);
+		var torpedos = server.getData().values.weapons.ammo.torpedos + 1;
 
-		var val = getValue('/values/systems/tubes/1/loadedPercent');
+		server.sendUpdate({values: {weapons: {ammo: {torpedos: torpedos} } } });
+
+		var val = server.getData().values.systems.tubes[1].loadedPercent;
 		val+=.01;
 		if(val > 1) val = 1;
 		if(val < 1) {
-			setValue('/values/systems/tubes/1/loadedPercent',val);
+			server.sendUpdate({values: {systems: {tubes: {1: { loadedPercent: val }}}}});
 		}
 
-		var val = getValue('/values/systems/tubes/2/loadedPercent');
+		var val = server.getData().values.systems.tubes[2].loadedPercent;
 		val+=.01;
 		if(val > 1) val = 1;
 		if(val < 1) {
-			setValue('/values/systems/tubes/2/loadedPercent',val);
+			server.sendUpdate({values: {systems: {tubes: {2: { loadedPercent: val }}}}});
 		}
 
 	},

@@ -84,9 +84,10 @@ define(
 			this.__socket = null;
 		}
 		WebSocketDataChannel.prototype = new DataChannelBase();
+		WebSocketDataChannel.prototype.SocketConstructor = WebSocket;
 		WebSocketDataChannel.prototype.open = function(callback) {
 			if(!this.__socket) {
-				this.__socket = new MockSocket(
+				this.__socket = new this.SocketConstructor(
 					this._url,
 					"test"
 				);
@@ -105,6 +106,12 @@ define(
 		}
 
 
+
+		function MockWebSocketDataChannel(url,interpreter) {
+			WebSocketDataChannel.apply(this,[url,interpreter]);
+		}
+		MockWebSocketDataChannel.prototype = new WebSocketDataChannel();
+		MockWebSocketDataChannel.prototype.SocketConstructor = MockSocket;
 
 
 
@@ -130,6 +137,9 @@ define(
 			}
 			if(connectionType.toLowerCase() === "websocket") {
 				return new WebSocketDataChannel(url,interpreter);
+			}
+			if(connectionType.toLowerCase() === "mock-websocket") {
+				return new MockWebSocketDataChannel(url,interpreter);
 			}
 		}
 

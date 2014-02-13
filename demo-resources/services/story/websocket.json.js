@@ -15,22 +15,22 @@ server.setData({
 		},
 		"values": {
 			"url": "demo-resources/services/values/websocket.osc.js",
-			"type": "websocket",
+			"type": "mock-websocket",
 			"format": "osc"
 		},
 		"ui": {
 			"url": "demo-resources/services/ui/websocket.osc.js",
-			"type": "websocket",
+			"type": "mock-websocket",
 			"format": "osc"
 		},
 		"camera1": {
 			"url": "demo-resources/services/visualization/camera1/websocket.json.js",
-			"type": "websocket",
+			"type": "mock-websocket",
 			"format": "json"
 		},
 		"sensors": {
 			"url": "demo-resources/services/sensors/websocket.json.js",
-			"type": "websocket",
+			"type": "mock-websocket",
 			"format": "json"
 		}
 	}

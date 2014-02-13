@@ -1,15 +1,18 @@
 define(
 	[
 		'../base/DataConnection',
-		'../../base/Model'
+		'../../base/Model',
+		'../../registry'
 	],
 	function(
 		DataConnection,
-		Model
+		Model,
+		registry
 	) {
 
 		function StoryDataConnection(user,url) {
-			DataConnection.apply(this,[user,url,'websocket','json']);
+			var socketType = registry.get('mock') ? 'mock-websocket' : 'websocket';
+			DataConnection.apply(this,[user,url,socketType,'json']);
 
 			this.__connections = {};
 			this._resultModel = new Model();
