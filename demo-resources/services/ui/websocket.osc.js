@@ -99,6 +99,7 @@ server.send();
 
 
 
+/*
 setTimeout(function() {
 
 	server.updateData(
@@ -148,3 +149,4 @@ setTimeout(function() {
 
 
 }, 3000);
+*/
