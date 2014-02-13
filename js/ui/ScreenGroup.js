@@ -82,7 +82,7 @@ define(
 								editMode ?
 								<li key="the-new-screen-one">
 									<a
-										class="add-screen-button" 
+										className="add-screen-button" 
 										href="#add-new"
 										onClick={this.__handleNewScreenClick}
 									>+ add</a>

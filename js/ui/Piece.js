@@ -59,14 +59,21 @@ define(
 
 		var Piece = React.createClass({
 			getInitialState: function() {
+
+				var piece = this;
+
+				this.props.definition.$subscribeTo(function() {
+					piece.forceUpdate();
+				});
+
 				if(!ready) {
-					var piece = this;
 					onReady(function() {
 						if(piece.isMounted()) {
 							piece.forceUpdate();
 						}
 					});
 				}
+
 				return {};
 			},
 			render: function() {

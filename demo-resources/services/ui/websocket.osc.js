@@ -1,81 +1,150 @@
+var utilRoot = '../util/';
 
-var response = "\
-/ui/create ,s \"screens\"\n\
-/ui/screens/index ,i 0\n\
-/ui/screens/type ,s \"screen-group\"\n\
-/ui/screens/create ,s \"0\"\n\
-/ui/screens/0/index ,i 0\n\
-/ui/screens/0/type ,s \"screen\"\n\
-/ui/screens/0/label ,s \"Weapons\"\n\
-/ui/screens/0/create ,s \"panels\"\n\
-/ui/screens/0/panels/index ,i 0\n\
-/ui/screens/0/panels/type ,s \"panel-group\"\n\
-/ui/screens/0/panels/create ,s \"0\"\n\
-/ui/screens/0/panels/0/index ,i 0\n\
-/ui/screens/0/panels/0/type ,s \"panel\"\n\
-/ui/screens/0/panels/0/label ,s \"Torpedos\"\n\
-/ui/screens/0/panels/0/x ,i 0\n\
-/ui/screens/0/panels/0/y ,i 0\n\
-/ui/screens/0/panels/0/z ,i 1\n\
-/ui/screens/0/panels/0/create ,s \"controls\"\n\
-/ui/screens/0/panels/0/controls/index ,i 0\n\
-/ui/screens/0/panels/0/controls/type ,s \"control-group\"\n\
-/ui/screens/0/panels/0/controls/create ,s \"0\"\n\
-/ui/screens/0/panels/0/controls/0/index ,i 0\n\
-/ui/screens/0/panels/0/controls/0/type ,s \"control\"\n\
-/ui/screens/0/panels/0/controls/0/url ,s \"/controls/weapons/torpedos/stock\"\n\
-/ui/screens/0/panels/0/controls/create ,s \"1\"\n\
-/ui/screens/0/panels/0/controls/1/index ,i 1\n\
-/ui/screens/0/panels/0/controls/1/type ,s \"control\"\n\
-/ui/screens/0/panels/0/controls/1/url ,s \"/controls/systems/tubes\"\n\
-/ui/screens/0/panels/0/controls/create ,s \"2\"\n\
-/ui/screens/0/panels/0/controls/2/index ,i 2\n\
-/ui/screens/0/panels/0/controls/2/type ,s \"control\"\n\
-/ui/screens/0/panels/0/controls/2/url ,s \"/controls/engineering/energy/levels/tubes\"\n\
-/ui/screens/0/panels/create ,s \"1\"\n\
-/ui/screens/0/panels/1/index ,i 1\n\
-/ui/screens/0/panels/1/type ,s \"panel\"\n\
-/ui/screens/0/panels/1/label ,s \"Phasers\"\n\
-/ui/screens/0/panels/1/x ,i 0\n\
-/ui/screens/0/panels/1/y ,i 8\n\
-/ui/screens/0/panels/1/z ,i 2\n\
-/ui/screens/0/panels/1/create ,s \"controls\"\n\
-/ui/screens/0/panels/1/controls/index ,i 0\n\
-/ui/screens/0/panels/1/controls/type ,s \"control-group\"\n\
-/ui/screens/0/panels/1/controls/create ,s \"0\"\n\
-/ui/screens/0/panels/1/controls/0/index ,i 0\n\
-/ui/screens/0/panels/1/controls/0/type ,s \"control\"\n\
-/ui/screens/0/panels/1/controls/0/url ,s \"/controls/weapons/phasers/switch\"\n\
-/ui/screens/0/panels/1/controls/create ,s \"1\"\n\
-/ui/screens/0/panels/1/controls/1/index ,i 1\n\
-/ui/screens/0/panels/1/controls/1/type ,s \"control\"\n\
-/ui/screens/0/panels/1/controls/1/url ,s \"/controls/weapons/phasers/frequency\"\n\
-/ui/screens/0/panels/1/controls/create ,s \"2\"\n\
-/ui/screens/0/panels/1/controls/2/index ,i 2\n\
-/ui/screens/0/panels/1/controls/2/type ,s \"control\"\n\
-/ui/screens/0/panels/1/controls/2/url ,s \"/controls/engineering/energy/levels/phasers\"\n\
-/ui/screens/0/panels/create ,s \"2\"\n\
-/ui/screens/0/panels/2/index ,i 2\n\
-/ui/screens/0/panels/2/type ,s \"panel\"\n\
-/ui/screens/0/panels/2/label ,s \"a test\"\n\
-/ui/screens/0/panels/2/x ,i 0\n\
-/ui/screens/0/panels/2/y ,i 14\n\
-/ui/screens/0/panels/2/z ,i 3\n\
-/ui/screens/0/panels/create ,s \"3\"\n\
-/ui/screens/0/panels/3/index ,i 3\n\
-/ui/screens/0/panels/3/label ,s \"another test\"\n\
-/ui/screens/0/panels/3/type ,s \"panel\"\n\
-/ui/screens/0/panels/3/x ,i 7\n\
-/ui/screens/0/panels/3/y ,i 14\n\
-/ui/screens/0/panels/3/z ,i 4\n\
-/ui/screens/0/create ,s \"visualization\"\n\
-/ui/screens/0/visualization/index ,i 1\n\
-/ui/screens/0/visualization/type ,s \"visualization\"\n\
-/ui/screens/0/visualization/url ,s \"/camera1\"\n\
-/ui/screens/create ,s \"1\"\n\
-/ui/screens/1/index ,i 1\n\
-/ui/screens/1/label ,s \"engineering\"\n\
-/ui/screens/1/type ,s \"screen\"\n\
-";
+importScripts(utilRoot + 'OSCInterpreter.js',utilRoot + '/MockWebsocketServer.js');
 
-self.postMessage(response);
+var interpreter = new OSCInterpreter();
+
+var server = new MockWebsocketServer(interpreter);
+
+server.setData(
+	{
+		ui: {
+			screens: {
+				type: 'screen-group',
+				index: 0,
+				0: {
+					index: 0,
+					type: 'screen',
+					label: 'helm',
+					visualization: {
+						type: 'visualization',
+						index: 1,
+						url: '/camera1'
+					}
+				},
+				1: {
+					index: 1,
+					type: 'screen',
+					label: 'weapons',
+					panels: {
+						type: 'panel-group',
+						index: 0,
+						0: {
+							type: 'panel',
+							label: 'Torpedos',
+							index: 0,
+							x: 0,
+							y: 0,
+							z: 0,
+							controls: {
+								index: 0,
+								type: 'control-group',
+								0: {
+									type: 'control',
+									index: 0,
+									url: '/controls/weapons/torpedos/stock'
+								},
+								1: {
+									type: 'control',
+									index: 1,
+									url: '/controls/systems/tubes'
+								},
+								2: {
+									type: 'control',
+									index: 2,
+									url: '/controls/engineering/energy/levels/tubes'
+								}
+							}
+						},
+						1: {
+							type: 'panel',
+							index: 1,
+							label: 'Phasers',
+							x: 0,
+							y: 8,
+							z: 2,
+							controls: {
+								type: 'control-group',
+								index: 0,
+								0: {
+									type: 'control',
+									index: 0,
+									url: '/controls/weapons/phasers/switch'
+								},
+								1: {
+									type: 'control',
+									index: 1,
+									url: '/controls/weapons/phasers/frequency'
+								},
+								2: {
+									type: 'control',
+									index: 2,
+									url: '/controls/engineering/energy/levels/phasers'
+								}
+							}
+						}
+					}
+				},
+				2: {
+					index: 2,
+					type: 'screen',
+					label: 'engineering'
+				}
+			}
+		}
+	}
+);
+
+server.send();
+
+
+
+setTimeout(function() {
+
+	server.updateData(
+		{
+			ui: {
+				screens: {
+					3: {
+						type: 'screen',
+						index: 3,
+						label: 'yoo-hoo'
+					}
+				}
+			}
+		}
+	);
+
+	server.send();
+
+}, 2000);
+
+
+
+setTimeout(function() {
+
+	server.sendUpdate(
+		{
+			ui: {
+				screens: {
+					0: {
+						panels: {
+							type: 'panel-group',
+							index: 0,
+							0: {
+								type: 'panel',
+								index: 0,
+								label: 'hey there',
+								x: 10,
+								y: 3,
+								z: 5
+							}
+						}
+					}
+				}
+			}
+		}
+	);
+
+
+}, 3000);
