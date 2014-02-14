@@ -91,6 +91,7 @@ define(
 					this._url,
 					"test"
 				);
+				this.__socket.binaryType = "arraybuffer";
 				var channel = this;
 				this.__socket.onopen = function() {
 					callback();

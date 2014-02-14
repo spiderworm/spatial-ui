@@ -22,7 +22,13 @@ define(
 			return this._on('message-ready',callback);
 		}
 		MockServer.prototype.sendMessage = function(msg) {
-			this.__worker.postMessage(msg);
+			if(msg instanceof Array) {
+				for(var i in msg) {
+					this.__worker.postMessage(msg[i].serialize());
+				}
+			} else {
+				this.__worker.postMessage(msg);
+			}
 		}
 
 		return MockServer;

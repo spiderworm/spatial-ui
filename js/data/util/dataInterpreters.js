@@ -1,5 +1,14 @@
 define(
-	function() {
+	[
+		'./OSC/OSCMessage',
+		'./OSC/DataReader',
+		'./OSC/DataWriter'
+	],
+	function(
+		OSCMessage,
+		OSCDataReader,
+		OSCDataWriter
+	) {
 
 
 
@@ -18,80 +27,61 @@ define(
 
 
 		function OSCDataInterpreter() {}
-		OSCDataInterpreter.prototype.interpret = function(text) {
+		OSCDataInterpreter.prototype.interpret = function(raw) {
+
 			var result = {};
-			var lines = text.split('\n');
-			for(var i=0; i<lines.length; i++) {
-				this.__interpretLine(result,lines[i]);
+			var message = new OSCMessage(raw);
+			if(message.getParameterCount() >= 1) {
+				var paths = message.address.split('/');
+				if(paths[0] === "") {
+					paths.shift();
+				
+					var target = result;
+					while(paths.length > 1) {
+						var path = paths.shift();
+						if(typeof target[path] !== "object") {
+							target[path] = {};
+						}
+						target = target[path];
+					}
+					target[paths[0]] = message.getParameterValue(0);
+				}
 			}
+
 			return result;
 		}
 		OSCDataInterpreter.prototype.stringify = function(obj) {
-			var osc = "";
+			var messages = [];
 
-			function delve(obj,path) {
-				for(var name in obj) {
-					if(typeof obj[name] === "object") {
-						delve(obj[name],path + '/' + name);
-					} else {
-						var val = obj[name];
-						var type = '';
-						if(typeof val === "string") {
-							type = 's';
-							val = "\"" + val + "\"";
+			function delve(obj,basePath) {
+				for(var i in obj) {
+					if(obj.hasOwnProperty(i)) {
+						var path = basePath + '/' + i;
+						if(typeof obj[i] === "object") {
+							delve(obj[i],path);
+						} else {
+							var message = new OSCMessage(path);
+							switch(typeof obj[i]) {
+								case "string":
+									message.addString(obj[i]);
+								break;
+								case "number": {
+									if(parseInt(obj[i]) === obj[i]) {
+										message.addInt32(obj[i]);
+									} else {
+										message.addFloat64(obj[i]);
+									}
+								}
+							}
+							messages.push(message);
 						}
-						if(parseInt(val)===val) {
-							type = 'i';
-						}
-						if(parseFloat(val)===val) {
-							type = 'f'
-						}
-						osc += path + "/" + name + " ," + type + " " + val + "\n";
 					}
 				}
 			}
 
-			delve(obj,"");
+			delve(obj,'');
 
-			return osc;
-		}
-		OSCDataInterpreter.prototype.__interpretLine = function(target,line) {
-			var pieces = line.match(/^([^, ]*) ,([^ ]+) (.*)/);
-			if(pieces) {
-				var name = pieces[1];
-				var format = pieces[2][0];
-				var value = pieces[3];
-
-				if(name === "create") {
-
-				} else {
-
-					if(format === "i") {
-						value = parseInt(value);
-					}
-					if(format === "f") {
-						value = parseFloat(value);
-					}
-					if(format === "s") {
-						value = value.substring(1,value.length - 1);
-					}
-
-					this.__setValue(target,name,value);
-
-				}
-			}
-		}
-		OSCDataInterpreter.prototype.__setValue = function(target,name,value) {
-			var keys = name.split("/");
-			for(var i=0; i<keys.length-1; i++) {
-				if(keys[i] !== "") {
-					if(!target[keys[i]]) {
-						target[keys[i]] = {};
-					}
-					target = target[keys[i]];
-				}
-			}
-			target[keys[keys.length-1]] = value;
+			return messages;
 		}
 
 
