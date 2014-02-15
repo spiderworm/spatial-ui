@@ -18,8 +18,11 @@ define(
 						if(value === "false") {
 							value = false;
 						}
-						if(value === "true") {
+						else if(value === "true") {
 							value = true;
+						}
+						else {
+							value = decodeURIComponent(value);
 						}
 						result[name] = value;
 					}
