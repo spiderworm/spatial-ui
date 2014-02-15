@@ -118,7 +118,7 @@ define(
 		Model.prototype.$each = function(callback) {
 			var keys = this.$getKeys();
 			for(var i=0; i<keys.length; i++) {
-				callback.apply(this,[this[keys[i]]]);
+				callback.apply(this,[this[keys[i]],keys[i]]);
 			}
 		}
 		Model.prototype.$hasKey = function(name) {

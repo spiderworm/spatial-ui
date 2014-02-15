@@ -48,7 +48,6 @@ require(
 	) {
 		registry.set('rootUrl',baseUrl);
 		registry.set('mock',true);
-		registry.set('3D-scale',1);
 
 		var vals = urlUtil.getQueryValues();
 		if(vals.mock !== undefined) {
@@ -62,6 +61,7 @@ require(
 			function(App) {
 				var app = new App();
 				app.start();
+				window.__app = app;
 			}
 		);
 	}

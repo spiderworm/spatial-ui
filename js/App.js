@@ -4,53 +4,94 @@ define(
 		'jsx!./ui/AppUI',
 		'./base/Model',
 		'./user/userManager',
-		'./ui/story/ConnectView',
-		'./util/modelUtil'
+		'./data/story/DataConnection',
+		'./ui/story/ConnectViewModel',
+		'./util/modelUtil',
+		'./registry'
 	],
 	function(
 		React,
 		AppUI,
 		Model,
 		userManager,
-		StoryConnectView,
-		modelUtil
+		StoryConnection,
+		StoryConnectViewModel,
+		modelUtil,
+		registry
 	) {
 		
 		function App() {
-			this._model = new Model();
+			this._rendered = false;
+			this._started = false;
+
+			var model = this._model = new Model({
+				story: {
+					url: '',
+					connectionType: 'websocket',
+					dataFormat: 'osc',
+					connect: false
+				}
+			});
+
+			modelUtil.setRootModel(this._model);
+
+			if(registry.get('mock')) {
+				model.story.$update({
+					url: 'demo-resources/services/story/websocket.json.js',
+					connectionType: 'mock-websocket',
+					dataFormat: 'json',
+					connect: true
+				});
+			}
 
 			var app = this;
-
 			this._model.$subscribeTo(function() {
 				app._render();
 			});
 		}
 		App.prototype.start = function() {
+			this._started = true;
 
 			var user = userManager.getCurrentUser();
 
-			var app = this;
-
-			var storyConnectView = new StoryConnectView(user);
-			storyConnectView.onConnected(function(storyConnection) {
-				app.setModel(storyConnection.getModel());
+			this._model.$update({
+				ui: (new StoryConnectViewModel()).ui
 			});
 
-			this.setModel(storyConnectView.getModel());
+			var app = this;
+
+			this._model.story.$subscribeTo('connect',function(connect){
+				if(connect) {
+					app.__storyConnection = new StoryConnection(
+						user,
+						app._model.story.url,
+						app._model.story.connectionType,
+						app._model.story.dataFormat
+					);
+					app.__storyConnection.getModel().$subscribeTo(
+						function(connectionModel) {
+							app._model.$update(connectionModel);
+						}
+					);
+					app._model.$update({connect: false});
+				}
+			});
 
 		}
-		App.prototype.setModel = function(model) {
-			this._model = model;
-			modelUtil.setRootModel(model);
-			this._render();
+		App.prototype.isStarted = function() {
+			return this._started;
+		}
+		App.prototype.getModel = function() {
+			return this._model;
 		}
 		App.prototype._render = function() {
-			React.unmountComponentAtNode(document.body);
-
-			var appUI = React.renderComponent(
-				AppUI({model: this._model}),
-				document.body
-			);
+			if(!this._rendered) {
+				this._rendered = true;
+				var appUI = React.renderComponent(
+					AppUI({model: this._model}),
+					document.body
+				);
+			}
 		}
 
 

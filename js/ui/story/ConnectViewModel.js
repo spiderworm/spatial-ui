@@ -1,13 +1,9 @@
 define(
 	[
-		'../../base/Model',
-		'../../util/urlUtil',
-		'../../registry'
+		'../../base/Model'
 	],
 	function(
-		Model,
-		urlUtil,
-		registry
+		Model
 	) {
 
 
@@ -42,24 +38,8 @@ define(
 							}
 						}
 					}
-				},
-				values: {
-					url: "",
-					autoConnect: true
 				}
 			});
-
-			if(registry.get('mock')) {
-				model.values.$update({url:'demo-resources/services/story/websocket.json.js'});
-			}
-			var vals = urlUtil.getQueryValues();
-
-			if(vals.story !== undefined) {
-				model.values.$update({url:vals.story});
-			}
-			if(vals.autoConnect !== undefined) {
-				model.values.$update({autoConnect:vals.autoConnect});
-			}
 
 			return model;
 		}

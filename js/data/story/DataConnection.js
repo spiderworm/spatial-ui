@@ -10,29 +10,32 @@ define(
 		registry
 	) {
 
-		function StoryDataConnection(user,url) {
-			var socketType = registry.get('mock') ? 'mock-websocket' : 'websocket';
-			DataConnection.apply(this,[user,url,socketType,'json']);
+		function StoryDataConnection(user,url,connectionType,dataFormat) {
+			DataConnection.apply(this,[user,url,connectionType,dataFormat]);
 
 			this.__connections = {};
 			this._resultModel = new Model();
 
 			this._user = user;
-			var story = this;
+			var storyConnection = this;
 
-			this._model.$subscribeTo('connectionDefinitions',function(definitions) {
-				if(definitions) {
+			this._model.$subscribeTo('story',function(story) {
+				if(story) {
+					story.$subscribeTo('connectionDefinitions',function(definitions) {
+						if(definitions) {
 
-					var keys = definitions.$getKeys();
-					for(var i in keys) {
-						story.__addConnection(
-							keys[i],
-							definitions[keys[i]].url,
-							definitions[keys[i]].type,
-							definitions[keys[i]].format
-						);
-					}
+							var keys = definitions.$getKeys();
+							for(var i in keys) {
+								storyConnection.__addConnection(
+									keys[i],
+									definitions[keys[i]].url,
+									definitions[keys[i]].type,
+									definitions[keys[i]].format
+								);
+							}
 
+						}
+					});
 				}
 			});
 

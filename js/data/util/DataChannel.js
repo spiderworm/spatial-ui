@@ -142,6 +142,7 @@ define(
 			if(connectionType.toLowerCase() === "mock-websocket") {
 				return new MockWebSocketDataChannel(url,interpreter);
 			}
+			throw new Error('invalid connection type');
 		}
 
 
