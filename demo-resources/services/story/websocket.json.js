@@ -1,39 +1,52 @@
-var utilRoot = '../util/';
+importScripts('../../../js/external/require.js');
 
-importScripts(utilRoot + 'JSONInterpreter.js',utilRoot + '/MockWebsocketServer.js');
-
-var interpreter = new JSONInterpreter();
-
-var server = new MockWebsocketServer(interpreter);
-
-server.setData({
-	"connectionDefinitions": {
-		"controls": {
-			"url": "demo-resources/services/controls.json",
-			"type": "ajax",
-			"format": "json"
-		},
-		"values": {
-			"url": "demo-resources/services/values/websocket.osc.js",
-			"type": "mock-websocket",
-			"format": "osc"
-		},
-		"ui": {
-			"url": "demo-resources/services/ui/websocket.osc.js",
-			"type": "mock-websocket",
-			"format": "osc"
-		},
-		"camera1": {
-			"url": "demo-resources/services/visualization/camera1/websocket.json.js",
-			"type": "mock-websocket",
-			"format": "json"
-		},
-		"sensors": {
-			"url": "demo-resources/services/sensors/websocket.json.js",
-			"type": "mock-websocket",
-			"format": "json"
-		}
-	}
+require.config({
+	baseUrl: '../../../js/'
 });
 
-server.send();
+require(
+	[
+		'../demo-resources/services/util/MockWebSocketServer',
+		'data/util/dataInterpreters'
+	],
+	function(
+		MockWebSocketServer,
+		interpreters
+	) {
+
+		var server = new MockWebSocketServer(interpreters.json);
+
+		server.setData({
+			"connectionDefinitions": {
+				"controls": {
+					"url": "demo-resources/services/controls.json",
+					"type": "ajax",
+					"format": "json"
+				},
+				"values": {
+					"url": "demo-resources/services/values/websocket.osc.js",
+					"type": "mock-websocket",
+					"format": "osc"
+				},
+				"ui": {
+					"url": "demo-resources/services/ui/websocket.osc.js",
+					"type": "mock-websocket",
+					"format": "osc"
+				},
+				"camera1": {
+					"url": "demo-resources/services/visualization/camera1/websocket.json.js",
+					"type": "mock-websocket",
+					"format": "json"
+				},
+				"sensors": {
+					"url": "demo-resources/services/sensors/websocket.json.js",
+					"type": "mock-websocket",
+					"format": "json"
+				}
+			}
+		});
+
+		server.send();
+
+	}
+);
