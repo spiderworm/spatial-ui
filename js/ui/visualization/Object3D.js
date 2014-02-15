@@ -30,13 +30,16 @@ define(
 
 			this.__material = new THREE.MeshLambertMaterial({
 				color: 0x0000ff,
-				wireframe: true
+				wireframe: true,
+				side: THREE.DoubleSide
 			});
 
 			var object3D = this;
 
 			model.$subscribeTo('textures',function(textures) {
-				var description = {};
+				var description = {
+					//side: THREE.DoubleSide
+				};
 
 				for(var name in textures) {
 					switch(name) {
@@ -67,6 +70,7 @@ define(
 
 
 			var mesh = new THREE.Mesh(this.__geometry,this.__material);
+			mesh.useQuaternion = true;
 
 			BaseObject3D.apply(this,[mesh,camera]);
 
@@ -136,10 +140,10 @@ define(
 				three.position.x = this._position.x - cameraPos.x;
 				three.position.y = this._position.y - cameraPos.y;
 				three.position.z = this._position.z - cameraPos.z;
-				three.rotation.x = this._rotation.x;
-				three.rotation.y = this._rotation.y;
-				three.rotation.z = this._rotation.z;
-				three.rotation.order = this._rotation.order;
+				three.quaternion.x = this._rotation.x;
+				three.quaternion.y = this._rotation.y;
+				three.quaternion.z = this._rotation.z;
+				three.quaternion.w = this._rotation.w;
 			}
 		}
 

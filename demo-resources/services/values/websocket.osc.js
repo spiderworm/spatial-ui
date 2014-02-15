@@ -19,9 +19,6 @@ require(
 
 		server.setData({
 			values: {
-				helm: {
-					impulse: 10
-				},
 				engineering: {
 					energy: {
 						levels: {

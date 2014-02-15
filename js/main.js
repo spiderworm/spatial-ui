@@ -29,6 +29,10 @@ require.config({
 		},
 		'external/threex.keyboardstate': {
 			exports: 'THREEx.KeyboardState'
+		},
+		'external/OrbitControls': {
+			exports: 'THREE.OrbitControls',
+			deps: ['THREE']
 		}
 	}
 });

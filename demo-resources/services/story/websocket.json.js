@@ -38,8 +38,8 @@ require(
 					"type": "mock-websocket",
 					"format": "json"
 				},
-				"sensors": {
-					"url": "demo-resources/services/sensors/websocket.json.js",
+				"physics": {
+					"url": "demo-resources/services/physics/websocket.json.js",
 					"type": "mock-websocket",
 					"format": "json"
 				}

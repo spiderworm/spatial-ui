@@ -1,6 +1,6 @@
 var data = {
 	"camera1": {
-		"type": "visualization",
+		"type": "bodiesization",
 		"subtype":"camera",
 		"sky": {
 			"type": "box",
@@ -18,10 +18,10 @@ var data = {
 				"id": "moon",
 				"geometry": "demo-resources/geometry/moon.json",
 				"position": {
-					".data": "/sensors/visual/moon/position"
+					".data": "/physics/bodies/moon/position"
 				},
 				"rotation": {
-					".data": "/sensors/visual/moon/rotation"
+					".data": "/physics/bodies/moon/rotation"
 				},
 				"textures": {}
 			},
@@ -34,10 +34,10 @@ var data = {
 				},
 				"geometry": "demo-resources/sun/geometry.json",
 				"position": {
-					".data": "/sensors/visual/sun/position"
+					".data": "/physics/bodies/sun/position"
 				},
 				"rotation": {
-					".data": "/sensors/visual/sun/rotation"
+					".data": "/physics/bodies/sun/rotation"
 				},
 				"textures": {
 					"color": "demo-resources/sun/img/colormap.png"
@@ -47,10 +47,10 @@ var data = {
 				"id": "Teaatis",
 				"geometry": "demo-resources/geometry/Teaatis.json",
 				"position": {
-					".data": "/sensors/visual/Teaatis/position"
+					".data": "/physics/bodies/Teaatis/position"
 				},
 				"rotation": {
-					".data": "/sensors/visual/Teaatis/rotation"
+					".data": "/physics/bodies/Teaatis/rotation"
 				},
 				"textures": {
 					"color": "demo-resources/planet-maps/Teaatis/Colormap.png",
@@ -61,10 +61,10 @@ var data = {
 				"id": "myShip",
 				"geometry": "demo-resources/ship/geometry.js",
 				"position": {
-					".data": "/sensors/visual/myShip/position"
+					".data": "/physics/bodies/myShip/position"
 				},
 				"rotation": {
-					".data": "/sensors/visual/myShip/rotation"
+					".data": "/physics/bodies/myShip/rotation"
 				},
 				"scale": 1,
 				"textures": {}

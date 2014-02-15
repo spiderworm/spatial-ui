@@ -1,6 +1,7 @@
 define(
 	[
 		'THREE',
+		'../../external/OrbitControls',
 		'./BaseObject3D',
 		'../../util/InstanceStore',
 		'../../registry',
@@ -8,6 +9,7 @@ define(
 	],
 	function(
 		THREE,
+		OrbitControls,
 		BaseObject3D,
 		InstanceStore,
 		registry,
@@ -23,13 +25,10 @@ define(
 
 			var model = this.__model = new Model({
 				position: {
-					x: 0,
+					x: 10000,
 					y: 0,
 					z: 0
-				},
-				distance: 9000,
-				angleY: 0,
-				angleX: 5
+				}
 			});
 
 			var camera = this;
@@ -42,23 +41,18 @@ define(
 				);
 			});
 
+			var controls;
+
 			function rotateMouse() {
-				requestAnimationFrame(rotateMouse);
-				model.angleY += .002;
-				model.$setUpdated();
-
-
-				var vector = new THREE.Vector3(model.distance,0,0);
-				var euler = new THREE.Euler(model.angleX,model.angleY,0,'YXZ');
-				vector.applyEuler(euler);
-
-				model.position.$update({
-					x: vector.x,
-					y: vector.y,
-					z: vector.z
-				});
+				requestAnimationFrame(rotateMouse);	
 				if(camera.__ship) {
-					camera.getTHREE().lookAt(camera.__ship.getTHREE().position);
+					if(!controls) {
+						controls = new THREE.OrbitControls(
+							camera.getTHREE(),
+							document.querySelector('canvas')
+						);
+						controls.update();
+					}
 				}
 			}
 			requestAnimationFrame(rotateMouse);

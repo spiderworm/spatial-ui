@@ -9,11 +9,14 @@ define(
 		function MockWebSocketServer(interpreter){
 			this._interpreter = interpreter;
 
+			var server = this;
+
 			self.addEventListener(
 				'message',
 				function(event) {
 					var result = interpreter.interpret(event.data);
 					console.info('message received');
+					server.updateData(result);
 				},
 				false
 			);

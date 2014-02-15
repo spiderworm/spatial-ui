@@ -29,8 +29,35 @@ require(
 							label: 'helm',
 							visualization: {
 								type: 'visualization',
-								index: 1,
+								index: 0,
 								url: '/camera1'
+							},
+							panels: {
+								type: 'panel-group',
+								index: 1,
+								panel1: {
+									type: 'panel',
+									index: 0,
+									controls: {
+										type: 'control-group',
+										index: 0,
+										impulse: {
+											type: 'control',
+											index: 0,
+											url: '/controls/helm/impulse'
+										},
+										rotX: {
+											type: 'control',
+											index: 1,
+											url: '/controls/helm/pitch'
+										},
+										rotY: {
+											type: 'control',
+											index: 1,
+											url: '/controls/helm/yaw'
+										}
+									}
+								}
 							}
 						},
 						1: {

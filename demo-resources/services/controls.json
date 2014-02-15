@@ -6,9 +6,36 @@
 				"subtype": "range",
 				"label": "impulse engines",
 				"description": "impulse engines provide traditional Newtonian movement around space",
-				"min": 0,
-				"max": 100,
-				"dataPath": "/values/helm/impulse"
+				"min": -100000,
+				"max": 100000,
+				"dataPath": "/physics/values/impulse"
+			},
+			"pitch": {
+				"type": "control",
+				"subtype": "range",
+				"label": "Pitch",
+				"description": "turns the ship on the X-axis",
+				"min": -100000,
+				"max": 100000,
+				"dataPath": "/physics/values/thrusters/pitch"
+			},
+			"yaw": {
+				"type": "control",
+				"subtype": "range",
+				"label": "Yaw",
+				"description": "turns the ship on the Y-axis",
+				"min": -100000,
+				"max": 100000,
+				"dataPath": "/physics/values/thrusters/yaw"
+			},
+			"roll": {
+				"type": "control",
+				"subtype": "range",
+				"label": "Roll",
+				"description": "turns the ship on the Z-axis",
+				"min": -100000,
+				"max": 100000,
+				"dataPath": "/physics/values/thrusters/roll"
 			}
 		},
 		"engineering": {
