@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+<script src="../../js/external/require.js" data-main="main"></script>
+<script>
+</script>
+</head>
+<body>
+
+<canvas style="width: 100%; height: 100%"></canvas>
+
+<script>
+
+setTimeout(function() {
+
+require(
+	[
+		'THREE',
+		'external/OrbitControls'
+	],
+	function(
+		THREE,
+		OrbitControls
+	) {
+
+		function timestamp() { return (new Date()).getTime(); }
+
+		function everyFrame(callback) {
+			function frame() {
+				requestAnimationFrame(frame);
+				callback();
+			}
+			requestAnimationFrame(frame);
+		}
+
+
+
+
+		var canvas = document.querySelector('canvas');
+
+		var scene = new THREE.Scene();
+
+		var renderer = new THREE.WebGLRenderer({canvas:canvas, alpha: true});
+		renderer.setSize( canvas.offsetWidth, canvas.offsetHeight );
+
+		var camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth/canvas.offsetHeight, 1, 10000000000000000);
+		camera.position.z = 20;
+		new OrbitControls(camera);
+
+		
+
+		everyFrame(
+			function() {
+				renderer.render(
+					scene,
+					camera
+				);
+			}
+		);
+
+
+
+
+
+
+
+		var rotation = new THREE.Quaternion(1,0,0,0);
+		var angularVelocity = new THREE.Quaternion(0,1,0,1);
+
+		var cubeGeometry = new THREE.CubeGeometry(10,10,10);
+		var mat = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
+		var cube = new THREE.Mesh(cubeGeometry,mat);
+		cube.quaternion.copy(rotation);
+
+		var stamp = timestamp();
+
+		everyFrame(function() {
+			var newStamp = timestamp();
+			var seconds = (newStamp - stamp) / 1000;
+			stamp = newStamp;
+
+			cube.quaternion.x += angularVelocity.x * seconds;
+			cube.quaternion.y += angularVelocity.y * seconds;
+			cube.quaternion.z += angularVelocity.z * seconds;
+			cube.quaternion.w += angularVelocity.w * seconds;
+
+			//console.info(cube.quaternion.x,cube.quaternion.y,cube.quaternion.z,cube.quaternion.w);
+		});
+
+		scene.add(cube);
+
+
+
+	}
+);
+},500);
+
+</script>
+
+</body>
+</html>
