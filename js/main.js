@@ -46,23 +46,11 @@ require(
 		registry,
 		urlUtil
 	) {
-		registry.set('rootUrl',baseUrl);
 		registry.set('mock',true);
 
 		var vals = urlUtil.getQueryValues();
 		if(vals.mock !== undefined) {
 			registry.set('mock',vals.mock);
 		}
-
-		require(
-			[
-				'./App'
-			],
-			function(App) {
-				var app = new App();
-				app.start();
-				window.__app = app;
-			}
-		);
 	}
 );
