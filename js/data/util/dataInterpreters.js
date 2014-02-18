@@ -12,7 +12,7 @@ define(
 
 
 
-		function JSONDataInterpreter() {}
+		function JSONDataInterpreter() { this.wsProtocol = 'json'; }
 		JSONDataInterpreter.prototype.interpret = function(text) {
 			return JSON.parse(text);
 		}
@@ -26,7 +26,7 @@ define(
 
 
 
-		function OSCDataInterpreter() {}
+		function OSCDataInterpreter() { this.wsProtocol = 'osc'; }
 		OSCDataInterpreter.prototype.interpret = function(raw) {
 
 			var result = {};

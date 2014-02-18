@@ -47,7 +47,7 @@ require(
 		urlUtil
 	) {
 		registry.set('rootUrl',baseUrl);
-		registry.set('mock',true);
+		registry.set('mock',false);
 
 		var vals = urlUtil.getQueryValues();
 		if(vals.mock !== undefined) {

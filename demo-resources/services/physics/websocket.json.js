@@ -280,7 +280,11 @@ require(
 				function() {
 					var pos = me.getPosition();
 					var velocity = me.body.getLinearVelocity();
-					console.info(pos.x() + " " + pos.y() + " " + pos.z() + " -- " + velocity.x() + " " + velocity.y() + " " + velocity.z());
+					try
+					{
+						console.info(pos.x() + " " + pos.y() + " " + pos.z() + " -- " + velocity.x() + " " + velocity.y() + " " + velocity.z());
+					} catch (err)
+					{ debugger; }
 				},
 				500
 			);
