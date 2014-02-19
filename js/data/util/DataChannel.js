@@ -118,12 +118,10 @@ define(
 				checkReadyState();
 
 				this.__socket.onopen = function() {
-					console.log("WS Channel Opened to: " + channel._url);
 					callback();
 					channel._setOpened();
 				}
 				this.__socket.onmessage = function (event) {
-					console.log("WS Channel received message: ", event.data);
 					channel._handleRaw(event.data);
 				}
 				this.__socket.onerror = function (event) {

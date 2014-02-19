@@ -7,6 +7,7 @@ define(
 		'./data/story/DataConnection',
 		'./ui/story/ConnectViewModel',
 		'./util/modelUtil',
+		'./util/urlUtil',
 		'./registry'
 	],
 	function(
@@ -17,9 +18,17 @@ define(
 		StoryConnection,
 		StoryConnectViewModel,
 		modelUtil,
+		urlUtil,
 		registry
 	) {
-		
+
+		registry.set('mock',true);
+
+		var vals = urlUtil.getQueryValues();
+		if(vals.mock !== undefined) {
+			registry.set('mock',vals.mock);
+		}
+
 		function App() {
 			this._rendered = false;
 			this._started = false;

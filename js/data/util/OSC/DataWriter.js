@@ -1,6 +1,8 @@
+if (typeof define !== 'function') { var define = require('amdefine')(module); }
+
 define(
 	[],
-	function()
+	function define_DataWriter()
 	{
 		function DataWriter(boundary)
 		{
@@ -102,11 +104,21 @@ define(
 			this._pad(s.length + 1);
 		}
 
+		DataWriter.prototype.writeChunk = function writeChunk(buffer)
+		{
+			var view = new Uint8Array(buffer);
+			for (var b = 0; b < view.length; ++b)
+			{
+				this._data.push(view[b]);
+			}
+		}
+
 		DataWriter.prototype.length = function length()
 		{ return this._data.length; }
 
 		DataWriter.prototype.serialize = function serialize(prependLength)
 		{
+			//console.log("serializing " + this._data.length + " bytes.");
 			var len = this._data.length;
 
 			if (prependLength)
@@ -119,6 +131,7 @@ define(
 			if (prependLength)
 			{
 				len = 4;
+				//console.log("prepending length of " + this._data.length);
 				this._convert.setUint32(0, this._data.length, false);
 				view[0] = this._convert.getUint8(0);
 				view[1] = this._convert.getUint8(1);
@@ -133,3 +146,4 @@ define(
 		return DataWriter;
 	}
 );
+
