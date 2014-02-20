@@ -24,12 +24,12 @@ define(
 				var view = this;
 
 				if(this.props.appModel && this.props.definition) {
-					this.props.definition.$subscribeTo('dataPath',function(dataPath) {
-						if(dataPath && view.props.appModel) {
+					this.props.definition.$subscribeTo('valuePath',function(valuePath) {
+						if(valuePath && view.props.appModel) {
 
 							view._deepSubscribeTo(
 								view.props.appModel,
-								dataPath,
+								valuePath,
 								function(value) {
 									view.setState({
 										value: value
@@ -81,11 +81,11 @@ define(
 				if(
 					this.props.appModel &&
 					this.props.definition &&
-					this.props.definition.dataPath
+					this.props.definition.valuePath
 				) {
 					this._deepSetValue(
 						this.props.appModel,
-						this.props.definition.dataPath,
+						this.props.definition.valuePath,
 						value
 					);
 				}
@@ -132,7 +132,7 @@ define(
 				return null;
 			},
 			_getValueDisplay: function(value) {
-				if(!this.props.definition.dataPath) {
+				if(!this.props.definition.valuePath) {
 					return value;
 				}
 				if(this.state) {
@@ -230,9 +230,9 @@ define(
 					modelPropertyName: null
 				}
 
-				if(this.props.definition.dataPath) {
+				if(this.props.definition.valuePath) {
 
-					var propertyName = this.props.definition.dataPath;
+					var propertyName = this.props.definition.valuePath;
 					var model = this.props.appModel;
 					var matches;
 

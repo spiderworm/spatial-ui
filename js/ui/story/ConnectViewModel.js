@@ -33,7 +33,7 @@ define(
 									submitButton: {
 										display: 'go'
 									},
-									dataPath: '/values/url'
+									valuePath: '/values/url'
 								}
 							}
 						}
