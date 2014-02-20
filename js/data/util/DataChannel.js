@@ -109,14 +109,6 @@ define(
 
 				var channel = this;
 
-				function checkReadyState()
-				{
-					console.log(channel.__socket.readyState);
-					if (channel.__socket.readyState == 0)
-						{ setTimeout(checkReadyState, 1000); }
-				}
-				checkReadyState();
-
 				this.__socket.onopen = function() {
 					callback();
 					channel._setOpened();

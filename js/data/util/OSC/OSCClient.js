@@ -6,11 +6,8 @@ define(
 	],
 	function define_OSCClient(OSCMessage)
 	{
-		function log()
-		{
-			var params = ['| OSCClient | '].concat(Array.prototype.slice.call(arguments));
-			console.log.apply(console, params);
-		}
+		var log = function(){};
+		log = console.log.bind(console, '| OSCClient | ');
 
 		var len = function len(b) 
 		{
@@ -64,6 +61,7 @@ define(
 		{
 			try
 			{
+				log("onMessage:", buffer);
 				var message = new OSCMessage(buffer);
 				if (message.address === "/pong")
 				{
@@ -156,56 +154,7 @@ define(
 
 		WebSocketConnection.prototype.onMessage = function onMessage(event)
 		{
-			//log(event);
-			log("c - received " + len(event.data) + " bytes.");
-			this.inbox.buffers.push(event.data);
-			this.inbox.total += len(event.data);
-			log("c - now have " + this.inbox.total + " bytes.");
-
-			if (this.inbox.buffers.length == 1)
-			{
-				this.inbox.expected = sz(this.inbox.buffers[0]);
-			}
-
-			var needed = this.inbox.expected + 4;
-			while (this.inbox.buffers.length > 0 && this.inbox.total >= needed)
-			{
-				log("c - extracting " + needed + " bytes.");
-				needed -= 4;
-				this.inbox.buffers[0] = this.inbox.buffers[0].slice(4);
-				var buffer = new ArrayBuffer(needed);
-				var view  = new Uint8Array(buffer);
-				var offset = 0;
-
-				while (needed > 0)
-				{
-					if (needed >= len(this.inbox.buffers[0]))
-					{
-						var b = this.inbox.buffers.shift();
-						needed -= len(b);
-						view.set(b, offset);
-						offset += len(b);
-					}
-					else
-					{
-						var b = this.inbox.buffers[0];
-						this.inbox.buffers[0] = b.slice(needed);
-						view.set(b.slice(0,needed), offset);
-						offset += needed;
-						needed = 0;
-					}
-				}
-
-				this.onMessageCB(this, buffer);
-				this.inbox.total -= 4 + len(buffer);
-
-				log("c - now have " + this.inbox.total + " bytes");
-				if (this.inbox.buffers.length > 0)
-				{
-					this.inbox.expected = sz(this.inbox.buffers[0]);
-					needed = this.inbox.expected + 4;
-				}
-			}
+			this.onMessageCB(this, (new Uint8Array(event.data)).buffer);
 		}
 
 		WebSocketConnection.prototype.send = function send(buffer)
@@ -216,14 +165,6 @@ define(
 				return;
 			}
 			
-			var sz = new DataView(new ArrayBuffer(4));
-			sz.setUint32(0, len(buffer), false);
-			log("c -> " + (len(buffer) + 4) + " bytes");
-			//log(buffer);
-			//if (!(buffer instanceof ArrayBuffer))
-			//	{ buffer = new ArrayBuffer(buffer); }
-
-			this.socket.send(sz.buffer);			
 			this.socket.send(buffer);
 		}
 

@@ -6,10 +6,8 @@ define(
 	],
 	function define_module(DataWriter, DataReader)
 	{
-		function log()
-		{
-			//console.log.apply(console, Array.prototype.slice.call(arguments));
-		}
+		var log = function () {};
+		//log = console.log.bind(console, "| OSCMessage | ");
 
 		function string_size(s)
 		{
@@ -126,6 +124,7 @@ define(
 				{ this.address = address; }
 			else if (address instanceof Array)
 			{
+				log("Creating bundle of " + address.length + " messages: ", address);
 				this.address = "#bundle";
 				this.timestamp = timestamp;
 				this.bundle = address.slice();
@@ -237,7 +236,7 @@ define(
 			{
 				serializeTimeCode(this.timestamp, writer);
 
-				log("serializing bundle with " + this.bundle.length + " messages.");
+				//log("serializing bundle with " + this.bundle.length + " messages.");
 				for (var s = 0; s < this.bundle.length; ++s)
 				{
 					writer.writeChunk(this.bundle[s].serialize(true));
@@ -265,7 +264,7 @@ define(
 
 		OSCMessage.prototype.deserialize = function deserialize(buffer)
 		{
-			//log("deserialize()");
+			log("deserialize:", buffer);
 
 			if (!(buffer instanceof ArrayBuffer))
 				{ buffer = buffer.buffer; }
