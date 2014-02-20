@@ -80,19 +80,35 @@ define(
 
 
 		function WebSocketDataChannel(url,interpreter) {
-			DataChannelBase.apply(this,[url,interpreter]);
-			this.__socket = null;
+			var WebServer;
+			if (typeof(global) !== 'undefined')
+			{
+				try { WebServer = requirejs('common/data/WebServer'); }
+				catch (error) {}
+			}
+
+			if (WebServer && url.indexOf(WebServer.ip) >= 0)
+			{
+				// use local connection instead of web socket
+			}
+			else
+			{
+				DataChannelBase.apply(this,[url,interpreter]);
+				this.__socket = null;
+			}
 		}
 		WebSocketDataChannel.prototype = new DataChannelBase();
 		WebSocketDataChannel.prototype.SocketConstructor = WebSocket;
 		WebSocketDataChannel.prototype.open = function(callback) {
 			if(!this.__socket) {
+				console.log("WebSocket: " + this._url + ", " + this._interpreter.wsProtocol);
 				this.__socket = new this.SocketConstructor(
-					this._url,
-					"test"
+					this._url, this._interpreter.wsProtocol
 				);
 				this.__socket.binaryType = "arraybuffer";
+
 				var channel = this;
+
 				this.__socket.onopen = function() {
 					callback();
 					channel._setOpened();
@@ -100,12 +116,14 @@ define(
 				this.__socket.onmessage = function (event) {
 					channel._handleRaw(event.data);
 				}
+				this.__socket.onerror = function (event) {
+					console.log("WS Channel error: ", event);
+				}
 			}
 		}
 		WebSocketDataChannel.prototype._send = function(raw) {
 			this.__socket.send(raw);
 		}
-
 
 
 		function MockWebSocketDataChannel(url,interpreter) {

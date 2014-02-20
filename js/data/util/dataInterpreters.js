@@ -12,7 +12,7 @@ define(
 
 
 
-		function JSONDataInterpreter() {}
+		function JSONDataInterpreter() { this.wsProtocol = 'json'; }
 		JSONDataInterpreter.prototype.interpret = function(text) {
 			return JSON.parse(text);
 		}
@@ -26,25 +26,36 @@ define(
 
 
 
-		function OSCDataInterpreter() {}
+		function OSCDataInterpreter() { this.wsProtocol = 'osc'; }
 		OSCDataInterpreter.prototype.interpret = function(raw) {
 
 			var result = {};
 			var message = new OSCMessage(raw);
-			if(message.getParameterCount() >= 1) {
-				var paths = message.address.split('/');
-				if(paths[0] === "") {
-					paths.shift();
-				
-					var target = result;
-					while(paths.length > 1) {
-						var path = paths.shift();
-						if(typeof target[path] !== "object") {
-							target[path] = {};
-						}
-						target = target[path];
+
+			function recurse(message)
+			{
+				if (message.bundle)
+				{
+					for (var i = 0; i < message.bundle.length; ++i)
+					{
+						recurse(message.bundle[i]);
 					}
-					target[paths[0]] = message.getParameterValue(0);
+				}
+				else if(message.getParameterCount() >= 1) {
+					var paths = message.address.split('/');
+					if(paths[0] === "") {
+						paths.shift();
+					
+						var target = result;
+						while(paths.length > 1) {
+							var path = paths.shift();
+							if(typeof target[path] !== "object") {
+								target[path] = {};
+							}
+							target = target[path];
+						}
+						target[paths[0]] = message.getParameterValue(0);
+					}
 				}
 			}
 

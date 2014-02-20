@@ -1,11 +1,13 @@
+if (typeof define !== 'function') { var define = require('amdefine')(module); }
+
 define(
 	[],
-	function()
+	function define_DataReader()
 	{
 		function DataReader(buffer, boundary)
 		{
 			boundary = boundary || 4;
-
+			
 			this._buffer = buffer;
 			this._view = new DataView(buffer);
 			this._index = 0;
@@ -88,12 +90,19 @@ define(
 
 		DataReader.prototype.readChunk = function readChunk(length)
 		{
-			var buf = this._buffer.slice(this._index, length);
+			var buf = this._buffer.slice(this._index, this._index + length);
+			this._index += length;
+			return buf;
 		}
 
-		DataReader.prototype.length = function length()
-		{ return this._buffer.byteLength; }
+		DataReader.prototype.__defineGetter__('length', function length()
+			{ return this._buffer.byteLength; });
+		DataReader.prototype.__defineGetter__('index', function index()
+			{ return this._index; });
+		DataReader.prototype.__defineGetter__('rest', function rest()
+			{ return this.length - this.index; });
 
 		return DataReader;
 	}
 );
+

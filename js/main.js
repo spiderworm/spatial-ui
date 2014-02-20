@@ -6,26 +6,34 @@ if (window.require !== window.requirejs) {
 
 (function() {
 
-	var x = new XMLHttpRequest();
-	x.open('GET','js/require-config.json',false);
-	x.send();
-	var config = JSON.parse(x.responseText);
-	require.config(config);
-
 	var app;
 
-	require(
-		[
-			'./App'
-		],
-		function(App) {
-			app = new App();
-			app.start();
+	var x = new XMLHttpRequest();
+	x.open('GET','js/require-config.json',true);
+	x.onreadystatechange = function ()
+	{
+		if (x.readyState == 4)
+		{
+			var config = JSON.parse(x.responseText);
+			require.config(config);
+
+			require(
+				[
+					'./App'
+				],
+				function(App) {
+					app = new App();
+					app.start();
+				}
+			);
 		}
-	);
+	}
+
+	x.send();
 
 	function API() {
 		var api = this;
+		this.__callbacks = [];
 		this.__interval = setInterval(function() {
 			api.__checkReady();
 		}, 100);
@@ -63,7 +71,7 @@ if (window.require !== window.requirejs) {
 				clearInterval(this.__interval);
 				delete this.__interval;
 			}
-			while(this.__callbacks) {
+			while(this.__callbacks.length) {
 				var callback = this.__callbacks.shift();
 				callback();
 			}
@@ -72,4 +80,5 @@ if (window.require !== window.requirejs) {
 
 	window.api = new API();
 
+	/* SERVER INSERTION POINT */
 })();

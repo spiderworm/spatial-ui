@@ -1,10 +1,14 @@
+
 define(
 	[
 		'./DataWriter',
 		'./DataReader'
 	],
-	function(DataWriter, DataReader)
+	function define_module(DataWriter, DataReader)
 	{
+		var log = function () {};
+		//log = console.log.bind(console, "| OSCMessage | ");
+
 		function string_size(s)
 		{
 			var len = s.toString().length + 1;
@@ -47,10 +51,56 @@ define(
 		function deserializeString(r)
 		{ return r.readString(); }
 
+		function serializeTimeCode(t, w)
+		{
+			if (t == null || t == 0)
+			{
+				w.writeUint32(0);
+				w.writeUint32(1);
+			}
+			else
+			{
+				var time = t/1000;
+				var seconds = Math.floor(time);
+				var fraction = Math.floor((time - seconds) * 0xffffffff);
+				log("timestamp serialized: " + seconds + " " + fraction + " <= " + t);
+				w.writeUint32(seconds);
+				w.writeUint32(fraction);
+			}
+		}
+
+		function deserializeTimeCode(r)
+		{
+			var seconds = r.readUint32();
+			var fraction = r.readUint32();
+
+			if (seconds === 0 && fraction === 1)
+			{
+				return 0;
+			}
+			else
+			{
+				var t = Math.floor((seconds + (fraction / 0xffffffff)) * 1000);
+				log("timestamp deserialized: " + seconds + " " + fraction + " " + t);
+				return t;
+			}
+		}
+
 		function serializeBlob(v, w)
-		{ throw new Error('Blob not implemented yet'); }
+		{
+			if (v instanceof ArrayBuffer)
+			{
+				w.writeInt32(v.byteLength);
+				w.writeChunk(v);
+			}
+			else
+				{ throw new Error("Can only serialize ArrayBuffer."); }
+		}
 		function deserializeBlob(r)
-		{ throw new Error('Blob not implemented yet'); }
+		{
+			var len = r.readInt32();
+			return r.readChunk(len);
+		}
 
 		function serializeNil(v, w) {}
 		function deserializeNil(r) { return null; }
@@ -65,13 +115,20 @@ define(
 			this.deserialize = deserialize_fn;
 		}
 
-		function OSCMessage(address)
+		function OSCMessage(address, timestamp)
 		{
 			this.routingState = OSCMessage.STATE_UNHANDLED;
 			this._parameters = [];
 
 			if (typeof(address) === 'string')
 				{ this.address = address; }
+			else if (address instanceof Array)
+			{
+				log("Creating bundle of " + address.length + " messages: ", address);
+				this.address = "#bundle";
+				this.timestamp = timestamp;
+				this.bundle = address.slice();
+			}
 			else if (typeof(address.byteLength) !== 'undefined')
 				{ this.deserialize(address); }
 		}
@@ -94,7 +151,7 @@ define(
 			OSCMessage.TYPE_STRING    = new OSCType('s'.charCodeAt(0), serializeString,  deserializeString),
 			OSCMessage.TYPE_BLOB      = new OSCType('b'.charCodeAt(0), serializeBlob,    deserializeBlob),
 			OSCMessage.TYPE_INT64     = new OSCType('h'.charCodeAt(0), serializeInt64,   deserializeInt64),
-			OSCMessage.TYPE_TIME      = new OSCType('t'.charCodeAt(0), serializeInt64,   deserializeInt64),
+			OSCMessage.TYPE_TIME      = new OSCType('t'.charCodeAt(0), serializeTimeCode,deserializeTimeCode),
 			OSCMessage.TYPE_FLOAT64   = new OSCType('d'.charCodeAt(0), serializeFloat64, deserializeFloat64),
 			OSCMessage.TYPE_SYMBOL    = new OSCType('S'.charCodeAt(0), serializeString,  deserializeString),
 			OSCMessage.TYPE_CHAR      = new OSCType('c'.charCodeAt(0), serializeInt32,   deserializeInt32),
@@ -105,6 +162,18 @@ define(
 			OSCMessage.TYPE_NIL       = new OSCType('N'.charCodeAt(0), serializeNil,     deserializeNil),
 			OSCMessage.TYPE_INFINITUM = new OSCType('I'.charCodeAt(0), serializeNil,     deserializeInfinitum)
 		];
+
+		OSCMessage.typeForChar = function typeForChar(c)
+		{
+			c = c.charCodeAt(0);
+			for (var t = 0; t < OSCMessage._types.length; ++t)
+			{
+				if (OSCMessage._types[t].code === c)
+					{ return OSCMessage._types[t]; }
+			}
+			debugger;
+			return null;
+		}
 
 		OSCMessage.prototype.addParameter = addParameter;
 
@@ -149,6 +218,8 @@ define(
 			for (var p = 0; p < this._parameters.length; ++p)
 			{
 				var type = this._parameters[p].t;
+				if (type == null)
+					{ debugger; }
 				typeTag += String.fromCharCode(type.code);
 			}
 
@@ -161,18 +232,31 @@ define(
 			var writer = new DataWriter(4);
 
 			serializeString(this.address, writer);
-			serializeString(typeTag, writer);
-
-			// parameter values
-			for (var p = 0; p < this._parameters.length; ++p)
+			if (this.address === "#bundle")
 			{
-				var type = this._parameters[p].t;
-				var value = this._parameters[p].v;
+				serializeTimeCode(this.timestamp, writer);
 
-				if (typeof(type.serialize) !== 'function')
-					{ throw new Error("Unsupported OSC Type."); }
+				//log("serializing bundle with " + this.bundle.length + " messages.");
+				for (var s = 0; s < this.bundle.length; ++s)
+				{
+					writer.writeChunk(this.bundle[s].serialize(true));
+				}
+			}
+			else
+			{
+				serializeString(typeTag, writer);
 
-				type.serialize(value, writer);
+				// parameter values
+				for (var p = 0; p < this._parameters.length; ++p)
+				{
+					var type = this._parameters[p].t;
+					var value = this._parameters[p].v;
+
+					if (typeof(type.serialize) !== 'function')
+						{ throw new Error("Unsupported OSC Type."); }
+
+					type.serialize(value, writer);
+				}
 			}
 
 			return writer.serialize(prependSize);
@@ -180,7 +264,7 @@ define(
 
 		OSCMessage.prototype.deserialize = function deserialize(buffer)
 		{
-			//console.log("deserialize()");
+			log("deserialize:", buffer);
 
 			if (!(buffer instanceof ArrayBuffer))
 				{ buffer = buffer.buffer; }
@@ -188,16 +272,30 @@ define(
 			var reader = new DataReader(buffer, 4);
 
 			this.address = reader.readString();
-			//console.log("address: " + this.address);
+			log("address: " + this.address);
 
 			if (this.address === "#bundle")
 			{
+				log("deserializing bundle");
 
+				this.timestamp = deserializeTimeCode(reader);
+
+				this.bundle = [];
+				while (reader.rest > 0)
+				{
+					var len = reader.readUint32();
+					log(len + " byte message");
+					if (reader.rest >= len)
+					{
+						var sub = reader.readChunk(len);
+						this.bundle.push(new OSCMessage(sub));
+					}
+				}
 			}
 			else
 			{
 				var typeTag = reader.readString();
-				//console.log("types: " + typeTag);
+				log("types: " + typeTag);
 
 				if (typeTag.charAt() === ',')
 				{
@@ -225,16 +323,30 @@ define(
 
 		OSCMessage.prototype.toString = function toString()
 		{
-			var str = this.address + this._typeTag();
-			//console.log("MSG.toString(): ", str);
-
-			for (var i = 0; i < this._parameters.length; ++i)
+			if (this.address === "#bundle")
 			{
-				//console.log("  p1: " + String.fromCharCode(this._parameters[i].t.code) + ", " +
-				//	this._parameters[i].v.toString());
+				var str = "BUNDLE [\n";
+				for (var i = 0; i < this.bundle.length; ++i)
+				{
+					str += "    " + this.bundle[i].toString() + "\n";
+				}
+				str += "]";
+				if (this.timestamp)
+					{ str += " @ " + this.timestamp; }
+			}
+			else
+			{
+				var str = this.address + this._typeTag();
+				//log("MSG.toString(): ", str);
 
-				if (this._parameters[i].t.serialize != serializeNil)
-					{ str += " " + this._parameters[i].v.toString(); }
+				for (var i = 0; i < this._parameters.length; ++i)
+				{
+					//log("  p1: " + String.fromCharCode(this._parameters[i].t.code) + ", " +
+					//	this._parameters[i].v.toString());
+
+					if (this._parameters[i].t.serialize != serializeNil)
+						{ str += " " + this._parameters[i].v.toString(); }
+				}
 			}
 			return str;
 		}
@@ -242,3 +354,5 @@ define(
 		return OSCMessage;
 	}
 );
+
+
