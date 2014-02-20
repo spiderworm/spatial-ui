@@ -42,7 +42,6 @@ define(
 					}
 				}
 				else if(message.getParameterCount() >= 1) {
-					console.info
 					var paths = message.address.split('/');
 					if(paths[0] === "") {
 						paths.shift();
@@ -55,7 +54,15 @@ define(
 							}
 							target = target[path];
 						}
-						target[paths[0]] = message.getParameterValue(0);
+						var count = message.getParameterCount();
+						if(count === 1) {
+							target[paths[0]] = message.getParameterValue(0);
+						} else {
+							target[paths[0]] = [];
+							for(var i=0; i<count; i++) {
+								target[paths[i]].push(message.getParameterValue(i));
+							}
+						}
 					}
 				}
 			}

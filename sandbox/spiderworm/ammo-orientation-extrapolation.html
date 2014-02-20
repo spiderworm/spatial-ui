@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+<script src="../../js/external/require.js" data-main="main"></script>
+<script>
+</script>
+</head>
+<body>
+
+<canvas style="width: 100%; height: 100%"></canvas>
+
+<script>
+
+setTimeout(function() {
+
+require(
+	[
+		'THREE',
+		'external/OrbitControls',
+		'external/ammo'
+	],
+	function(
+		THREE,
+		OrbitControls,
+		Ammo
+	) {
