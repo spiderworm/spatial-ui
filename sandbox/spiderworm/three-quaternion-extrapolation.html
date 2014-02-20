@@ -16,11 +16,13 @@ setTimeout(function() {
 require(
 	[
 		'THREE',
-		'external/OrbitControls'
+		'external/OrbitControls',
+		'external/ammo'
 	],
 	function(
 		THREE,
-		OrbitControls
+		OrbitControls,
+		Ammo
 	) {
 
 		function timestamp() { return (new Date()).getTime(); }
@@ -32,6 +34,48 @@ require(
 			}
 			requestAnimationFrame(frame);
 		}
+
+		function quatToAngleAxis(quat) {
+			var angle, x=0, y=0, z=0;
+
+			if (quat.w > 1) quat.normalise();
+			angle = 2 * Math.acos(quat.w);
+			var s = Math.sqrt(1-quat.w*quat.w);
+			if (s === 0) {
+				x = quat.x;
+				y = quat.y;
+				z = quat.z;
+			} else {
+				x = quat.x / s;
+				y = quat.y / s;
+				z = quat.z / s;
+			}
+			return {
+				angle: angle,
+				axis: new THREE.Vector3(x,y,z)
+			}
+		}
+
+		function angleAxisToQuat(angleAxis) {
+			return new THREE.Quaternion(
+				Math.sin(angleAxis.angle/2)*angleAxis.axis.x,
+				Math.sin(angleAxis.angle/2)*angleAxis.axis.y,
+				Math.sin(angleAxis.angle/2)*angleAxis.axis.z,
+				Math.cos(angleAxis.angle/2)
+			);
+		}
+
+		function multiplyQuaternions(a,b) {
+			return new THREE.Quaternion(
+				a.x * b.w + a.w * b.x + a.y * b.z - a.z * b.y,
+				a.y * b.w + a.w * b.y + a.z * b.x - a.x * b.z,
+				a.z * b.w + a.w * b.z + a.x * b.y - a.y * b.x,
+				a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z
+			);
+		}
+
+
+
 
 
 
@@ -65,11 +109,13 @@ require(
 
 
 		var rotation = new THREE.Quaternion(1,0,0,0);
-		var angularVelocity = new THREE.Quaternion(0,1,0,1);
+		var angularVelocity = new THREE.Quaternion(0,0.003000000026077032,0,0);
+		angularVelocity.normalize();
 
 		var cubeGeometry = new THREE.CubeGeometry(10,10,10);
 		var mat = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
 		var cube = new THREE.Mesh(cubeGeometry,mat);
+		window.cube = cube;
 		cube.quaternion.copy(rotation);
 
 		var stamp = timestamp();
@@ -79,12 +125,12 @@ require(
 			var seconds = (newStamp - stamp) / 1000;
 			stamp = newStamp;
 
-			cube.quaternion.x += angularVelocity.x * seconds;
-			cube.quaternion.y += angularVelocity.y * seconds;
-			cube.quaternion.z += angularVelocity.z * seconds;
-			cube.quaternion.w += angularVelocity.w * seconds;
+			var angleAxis = quatToAngleAxis(angularVelocity);
+			quat = angleAxisToQuat({angle: angleAxis.angle * seconds, axis: angleAxis.axis});
+			cube.quaternion.copy(
+				multiplyQuaternions(cube.quaternion,quat)
+			);
 
-			//console.info(cube.quaternion.x,cube.quaternion.y,cube.quaternion.z,cube.quaternion.w);
 		});
 
 		scene.add(cube);

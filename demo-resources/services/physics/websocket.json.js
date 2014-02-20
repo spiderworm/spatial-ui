@@ -30,7 +30,7 @@ require(
 		var teaatisPosition = new Ammo.btVector3(9000000000, 0, 0);
 		var teaatisVelocity = new Ammo.btVector3(0, 0, 0);
 		var teaatisRotation = new Ammo.btQuaternion(0,1,0,1);
-		var teaatisSpin = new Ammo.btVector3(0,.003,0);
+		var teaatisSpin = new Ammo.btVector3(0,.3,0);
 
 		var sunSize = 1.391e9;
 		var sunPosition = new Ammo.btVector3(0,0,0);
@@ -117,7 +117,62 @@ require(
 
 
 
+		function quatToAngleAxis(quat) {
+			var angle, x=0, y=0, z=0;
 
+			if (quat.w > 1) normalize(quat);
+			angle = 2 * Math.acos(quat.w);
+			var s = Math.sqrt(1-quat.w*quat.w);
+			if (s === 0) {
+				x = quat.x;
+				y = quat.y;
+				z = quat.z;
+			} else {
+				x = quat.x / s;
+				y = quat.y / s;
+				z = quat.z / s;
+			}
+			return {
+				angle: angle,
+				axis: {x: x,y: y,z: z}
+			};
+		}
+
+		function angleAxisToQuat(angleAxis) {
+			return {
+				x: Math.sin(angleAxis.angle/2)*angleAxis.axis.x,
+				y: Math.sin(angleAxis.angle/2)*angleAxis.axis.y,
+				z: Math.sin(angleAxis.angle/2)*angleAxis.axis.z,
+				w: Math.cos(angleAxis.angle/2)
+			};
+		}
+
+		function multiplyQuaternions(a,b) {
+			return {
+				x: a.x * b.w + a.w * b.x + a.y * b.z - a.z * b.y,
+				y: a.y * b.w + a.w * b.y + a.z * b.x - a.x * b.z,
+				z: a.z * b.w + a.w * b.z + a.x * b.y - a.y * b.x,
+				w: a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z
+			};
+		}
+
+		function copyQuaternion(dest,source) {
+			dest.x = source.x;
+			dest.y = source.y;
+			dest.z = source.z;
+			dest.w = source.w;
+		}
+
+
+		function normalize(quat) {
+			var magnitude = Math.sqrt((quat.x*quat.x)+(quat.y*quat.y)+(quat.z*quat.z)+(quat.w*quat.w));
+			quat.x = quat.x/magnitude;
+			quat.y = quat.y/magnitude;
+			quat.z = quat.z/magnitude;
+			quat.w = quat.w/magnitude;
+		}
+
+		var lastOrientation, lastAngularVelocity;
 
 
 
@@ -145,7 +200,7 @@ require(
 				system.__tick();
 			}
 
-			setInterval(doPhysics,50);
+			setInterval(doPhysics,1000);
 		}
 		SolarSystem.prototype.add = function(obj) {
 			this.__objects.push(obj);
@@ -168,7 +223,7 @@ require(
 			this.physics.stepSimulation(secs, 5);
 
 			for(var i in this.__objects) {
-				this.__objects[i].update();
+				this.__objects[i].update(secs);
 			}
 
 		}
@@ -179,7 +234,7 @@ require(
 			this.id = id;
 			this.__transform = new Ammo.btTransform();
 		}
-		SystemObject.prototype.update = function() {
+		SystemObject.prototype.update = function(seconds) {
 			var update = {position: {velocity: {}}, rotation: {velocity: {}}};
 
 			var vector = this.getPosition();
@@ -187,7 +242,7 @@ require(
 			update.position.y = vector.y();
 			update.position.z = vector.z();
 
-			var vector = this.body.getLinearVelocity();
+			var vector = this.body.getInterpolationLinearVelocity();
 			update.position.velocity.x = vector.x();
 			update.position.velocity.y = vector.y();
 			update.position.velocity.z = vector.z();
@@ -198,11 +253,15 @@ require(
 			update.rotation.z = vector.z();
 			update.rotation.w = vector.w();
 
-			var vector = this.body.getAngularVelocity();
-			update.rotation.velocity.x = vector.x()*.45;
-			update.rotation.velocity.y = vector.y()*.45;
-			update.rotation.velocity.z = vector.z()*.45;
-			update.rotation.velocity.w = vector.w()*.45;
+			var euler = this.body.getAngularVelocity();
+			update.rotation.velocity.x = euler.x();
+			update.rotation.velocity.y = euler.y();
+			update.rotation.velocity.z = euler.z();
+
+			if(this.id === "Teaatis") {
+				lastOrientation = update.rotation;
+				lastAngularVelocity = update.rotation.velocity;
+			}
 
 			this.__sendUpdate(update);
 		}
@@ -228,10 +287,6 @@ require(
 					force * (wells[i].position.y() - myPosition.y())/dist2,
 					force * (wells[i].position.z() - myPosition.z())/dist2
 				);
-
-				if(this.id === "ship") {
-					//console.info(vector.x() + " " + vector.y() + " " + vector.z());
-				}
 
 				this.body.applyCentralImpulse(vector);
 
@@ -273,18 +328,6 @@ require(
 
 		function Ship() {
 			SystemObject.apply(this,[new AmmoShip(),"ship"]);
-
-			var me = this;
-
-			setInterval(
-				function() {
-					var pos = me.getPosition();
-					var velocity = me.body.getLinearVelocity();
-					console.info(pos.x() + " " + pos.y() + " " + pos.z() + " -- " + velocity.x() + " " + velocity.y() + " " + velocity.z());
-				},
-				500
-			);
-
 		}
 		Ship.prototype = new SystemObject();
 		Ship.prototype.tick = function() {
@@ -358,6 +401,7 @@ require(
 							"z": teaatisRotation.z(),
 							"w": teaatisRotation.w(),
 							"velocity": {
+								"type": "eulerYPR",
 								"x": 0,
 								"y": 0,
 								"z": 0,
@@ -382,6 +426,7 @@ require(
 							"z": 0,
 							"w": 0,
 							"velocity": {
+								"type": "eulerYPR",
 								"x": 0,
 								"y": 0,
 								"z": 0,
@@ -401,11 +446,13 @@ require(
 							}
 						},
 						"rotation": {
+							"id": "teaatis",
 							"x": 0,
 							"y": 0,
 							"z": 0,
 							"w": 0,
 							"velocity": {
+								"type": "eulerYPR",
 								"x": 0,
 								"y": 0,
 								"z": 0,
@@ -431,6 +478,7 @@ require(
 							"z": 0,
 							"w": 0,
 							"velocity": {
+								"type": "eulerYPR",
 								"x": 0,
 								"y": 0,
 								"z": 0,

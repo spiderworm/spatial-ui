@@ -1,9 +1,11 @@
 define(
 	[
-		'../base/Model'
+		'../base/Model',
+		'../external/ammo'
 	],
 	function(
-		Model
+		Model,
+		Ammo
 	) {
 
 		function Extrapolator() {
@@ -76,13 +78,108 @@ define(
 
 		Extrapolator.prototype.__tickModel = function(model,seconds) {
 			if(model.velocity && model.velocity instanceof Model) {
-				var keys = model.velocity.$getKeys();
-				for(var i in keys) {
-					if(keys[i] !== "velocity") {
-						model[keys[i]] += seconds * model.velocity[keys[i]];
-					}
+				switch(model.velocity.type) {
+					case 'quaternion':
+
+						var angleAxis = quatToAngleAxis(model.velocity);
+						var velQuat = angleAxisToQuat({angle: angleAxis.angle * seconds *1, axis: angleAxis.axis});
+						normalize(velQuat);
+						var newQuat = multiplyQuaternions(model,velQuat);
+						copyQuaternion(model,newQuat);
+
+					break;
+					case 'eulerYPR':
+
+
+						var vel = new Ammo.btQuaternion();
+						vel.setEuler(model.velocity.y,model.velocity.x,model.velocity.z);
+						vel.normalize();
+						vel = {x: vel.x(), y: vel.y(), z: vel.z(), w: vel.w()};
+
+						var rot = new Ammo.btQuaternion(model.x,model.y,model.z,model.w);
+						rot = {x: rot.x(), y: rot.y(), z: rot.z(), w: rot.w()};
+
+						var angleAxis = quatToAngleAxis(vel);
+						var velQuat = angleAxisToQuat({angle: angleAxis.angle * seconds, axis: angleAxis.axis});
+						normalize(velQuat);
+						var newQuat = multiplyQuaternions(rot,velQuat);
+
+						model.x = newQuat.x;
+						model.y = newQuat.y;
+						model.z = newQuat.z;
+						model.w = newQuat.w;
+
+					break;
+					case 'linear':
+					default:
+						var keys = model.velocity.$getKeys();
+						for(var i in keys) {
+							if(keys[i] !== "velocity") {
+								model[keys[i]] += seconds * model.velocity[keys[i]];
+							}
+						}
+					break;
 				}
 			}
+		}
+
+
+
+
+
+		function quatToAngleAxis(quat) {
+			var angle, x=0, y=0, z=0;
+
+			if (quat.w > 1) normalize(quat);
+			angle = 2 * Math.acos(quat.w);
+			var s = Math.sqrt(1-quat.w*quat.w);
+			if (s === 0) {
+				x = quat.x;
+				y = quat.y;
+				z = quat.z;
+			} else {
+				x = quat.x / s;
+				y = quat.y / s;
+				z = quat.z / s;
+			}
+			return {
+				angle: angle,
+				axis: {x: x,y: y,z: z}
+			};
+		}
+
+		function angleAxisToQuat(angleAxis) {
+			return {
+				x: Math.sin(angleAxis.angle/2)*angleAxis.axis.x,
+				y: Math.sin(angleAxis.angle/2)*angleAxis.axis.y,
+				z: Math.sin(angleAxis.angle/2)*angleAxis.axis.z,
+				w: Math.cos(angleAxis.angle/2)
+			};
+		}
+
+		function multiplyQuaternions(a,b) {
+			return {
+				x: a.x * b.w + a.w * b.x + a.y * b.z - a.z * b.y,
+				y: a.y * b.w + a.w * b.y + a.z * b.x - a.x * b.z,
+				z: a.z * b.w + a.w * b.z + a.x * b.y - a.y * b.x,
+				w: a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z
+			};
+		}
+
+		function copyQuaternion(dest,source) {
+			dest.x = source.x;
+			dest.y = source.y;
+			dest.z = source.z;
+			dest.w = source.w;
+		}
+
+
+		function normalize(quat) {
+			var magnitude = Math.sqrt((quat.x*quat.x)+(quat.y*quat.y)+(quat.z*quat.z)+(quat.w*quat.w));
+			quat.x = quat.x/magnitude;
+			quat.y = quat.y/magnitude;
+			quat.z = quat.z/magnitude;
+			quat.w = quat.w/magnitude;
 		}
 
 
