@@ -1,14 +1,51 @@
 {
 	"controls": {
 		"helm": {
+			"steering": {
+				"type": "control",
+				"subtype": "multi",
+				"label": "steering",
+				"subControls": {
+					"type":"control-group",
+					"impulse": {
+						"type": "control",
+						"index": 0,
+						"path": "/controls/helm/impulse"
+					},
+					"pitch": {
+						"type": "control",
+						"index": 1,
+						"path": "/controls/helm/pitch"
+					},
+					"yaw": {
+						"type": "control",
+						"index": 2,
+						"path": "/controls/helm/yaw"
+					}
+				}
+			},
 			"impulse": {
 				"type": "control",
-				"subtype": "range",
-				"label": "impulse engines",
-				"description": "impulse engines provide traditional Newtonian movement around space",
-				"min": -1000,
-				"max": 1000,
-				"valuePath": "/physics/values/impulse"
+				"subtype": "multi",
+				"label": "impulse",
+				"inlineControls": {
+					"throttle": {
+						"type": "control",
+						"subtype": "range",
+						"description": "impulse engines provide traditional Newtonian movement around space",
+						"min": -1000,
+						"max": 1000,
+						"valuePath": "/physics/values/impulse/throttle"
+					},
+					"killThrottle": {
+						"type": "control",
+						"subtype": "button",
+						"description": "kill the throttle",
+						"display": "kill",
+						"message": "kill",
+						"valuePath": "/physics/values/impulse/kill"
+					}
+				}
 			},
 			"pitch": {
 				"type": "control",
@@ -120,12 +157,12 @@
 					"0": {
 						"type": "control",
 						"index": 0,
-						"url": "/controls/systems/tubes/1"
+						"path": "/controls/systems/tubes/1"
 					},
 					"1": {
 						"type": "control",
 						"index": 1,
-						"url": "/controls/systems/tubes/2"
+						"path": "/controls/systems/tubes/2"
 					}
 				},
 				"1": {

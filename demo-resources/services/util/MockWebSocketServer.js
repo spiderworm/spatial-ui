@@ -15,7 +15,7 @@ define(
 				'message',
 				function(event) {
 					var result = interpreter.interpret(event.data);
-					console.info('message received');
+					console.info('message received: ' + event.data);
 					server.updateData(result);
 				},
 				false
@@ -55,7 +55,11 @@ define(
 				}
 			}
 
-			return clone(data);
+			if(typeof data === "object") {
+				return clone(data);
+			} else {
+				return data;
+			}
 		}
 
 		MockWebSocketServer.prototype.setData = function(data) {

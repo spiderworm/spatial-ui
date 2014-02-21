@@ -36,6 +36,11 @@ define(
 						channel.send(updateObj);
 					}
 				});
+				model.$deepOnPinged(function(ping,source) {
+					if(source !== dataConnectionSource) {
+						channel.send(ping);
+					}
+				});
 
 				modelExtrapolator.enable(model);
 			}

@@ -84,17 +84,15 @@ define(
 
 					this._deepSubscribeTo(
 						this.props.definition,
-						'url',
-						function(url) {
-							if(url) {
+						'path',
+						function(path) {
+							if(path) {
 								view.setState({
-									path: url
+									path: path
 								});
-
-
 								view._deepSubscribeTo(
 									view.props.appModel,
-									url,
+									path,
 									function(definition) {
 										view.setState({
 											definition: definition

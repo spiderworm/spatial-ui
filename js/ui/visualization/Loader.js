@@ -17,7 +17,7 @@ define(
 
 				this._deepSubscribeTo(
 					this.props.appModel,
-					this.props.definition.url,
+					this.props.definition.path,
 					function(definition) {
 						loader.setState({definition: definition});
 					}

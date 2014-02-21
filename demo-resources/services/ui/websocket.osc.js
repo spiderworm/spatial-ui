@@ -30,7 +30,7 @@ require(
 							visualization: {
 								type: 'visualization',
 								index: 0,
-								url: '/camera1'
+								path: '/camera1'
 							},
 							panels: {
 								type: 'panel-group',
@@ -38,23 +38,24 @@ require(
 								panel1: {
 									type: 'panel',
 									index: 0,
+									label: "engines",
 									controls: {
 										type: 'control-group',
 										index: 0,
 										impulse: {
 											type: 'control',
 											index: 0,
-											url: '/controls/helm/impulse'
+											path: '/controls/helm/impulse'
 										},
 										rotX: {
 											type: 'control',
 											index: 1,
-											url: '/controls/helm/pitch'
+											path: '/controls/helm/pitch'
 										},
 										rotY: {
 											type: 'control',
 											index: 1,
-											url: '/controls/helm/yaw'
+											path: '/controls/helm/yaw'
 										}
 									}
 								}
@@ -80,17 +81,17 @@ require(
 										0: {
 											type: 'control',
 											index: 0,
-											url: '/controls/weapons/torpedos/stock'
+											path: '/controls/weapons/torpedos/stock'
 										},
 										1: {
 											type: 'control',
 											index: 1,
-											url: '/controls/systems/tubes'
+											path: '/controls/systems/tubes'
 										},
 										2: {
 											type: 'control',
 											index: 2,
-											url: '/controls/engineering/energy/levels/tubes'
+											path: '/controls/engineering/energy/levels/tubes'
 										}
 									}
 								},
@@ -107,17 +108,17 @@ require(
 										0: {
 											type: 'control',
 											index: 0,
-											url: '/controls/weapons/phasers/switch'
+											path: '/controls/weapons/phasers/switch'
 										},
 										1: {
 											type: 'control',
 											index: 1,
-											url: '/controls/weapons/phasers/frequency'
+											path: '/controls/weapons/phasers/frequency'
 										},
 										2: {
 											type: 'control',
 											index: 2,
-											url: '/controls/engineering/energy/levels/phasers'
+											path: '/controls/engineering/energy/levels/phasers'
 										}
 									}
 								}

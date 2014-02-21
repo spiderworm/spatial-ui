@@ -11,6 +11,7 @@ define(
 		var modelMixin = {
 			_deepSubscribeTo: function(model,path,callback) {
 				var mixin = this;
+				if(!path) debugger;
 				var matches = path.match(/^\/?([^\/]*)(?:\/(.*))?$/);
 				if(matches) {
 					var nextPath = matches[1];
@@ -45,6 +46,23 @@ define(
 				}
 				model[nodes[0]] = value;
 				model.$setUpdated();
+			},
+			_deepPing: function(model,path,value) {
+				var nodes = path.split('/');
+				while(nodes.length > 1) {
+					var node = nodes.shift();
+					if(node === ""){
+						continue;
+					}
+					if(!model[node]) {
+						model[node] = {};
+						model.$setUpdated();
+					}
+					model = model[node];
+				}
+				var ping = {};
+				ping[nodes[0]] = value;
+				model.$ping(ping);
 			},
 			__subscriptions: []
 		};

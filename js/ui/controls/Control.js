@@ -56,42 +56,57 @@ define(
 
 			},
 			_nextValue: function() {
+				var value = this.state.value;
+
 				var allowedValues = this.__getPropertyForValue('allowedValues',this.state.value);
 
-				if(!allowedValues) {
-					return;
+				if(allowedValues) {
+
+					var first, foundCurrent=false;
+					for(var i in allowedValues.$getKeys()) {
+						if(first===undefined) {
+							first = allowedValues[i];
+						}
+						if(foundCurrent) {
+							value = allowedValues[i];
+							break;
+						}
+						if(allowedValues[i] === this.state.value) {
+							foundCurrent = true;
+							continue;
+						}
+					}
+
+					if(value===undefined) {
+						value = first;
+					}
+
 				}
 
-				var first, next, foundCurrent=false;
-				for(var i in allowedValues.$getKeys()) {
-					if(first===undefined) {
-						first = allowedValues[i];
-					}
-					if(foundCurrent) {
-						next = allowedValues[i];
-						break;
-					}
-					if(allowedValues[i] === this.state.value) {
-						foundCurrent = true;
-						continue;
-					}
-				}
-
-				if(next===undefined) {
-					next = first;
-				}
-
-				this._setValue(next);
+				this._setValue(value);
 			},
 			_setValue: function(value) {
-				if(this.props.definition.valuePath) {
-					this._deepSetValue(
-						this.props.appModel,
-						this.props.definition.valuePath,
-						value
-					);
+				var message = this.__getPropertyForValue('message',value);
+				if(message) {
+					if(this.props.definition.valuePath) {
+						this._deepPing(
+							this.props.appModel,
+							this.props.definition.valuePath,
+							message
+						);
+					} else {
+						this.props.definition.$ping({value: value});
+					}
 				} else {
-					this.props.definition.$update({value: value});
+					if(this.props.definition.valuePath) {
+						this._deepSetValue(
+							this.props.appModel,
+							this.props.definition.valuePath,
+							value
+						);
+					} else {
+						this.props.definition.$update({value: value});
+					}
 				}
 			},
 			_getControlNode: function(children) {

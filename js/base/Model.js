@@ -89,6 +89,16 @@ define(
 		Model.prototype.$deepOnUpdated = function(callback) {
 			return this._on('deep-updated',callback);
 		}
+		Model.prototype.$ping = function(ping,source) {
+			this._fire('pinged',[ping,source]);
+			this._fire('deep-pinged',[ping,source]);
+		}
+		Model.prototype.$onPinged = function(callback) {
+			return this._on('pinged',callback);
+		}
+		Model.prototype.$deepOnPinged = function(callback) {
+			return this._on('deep-pinged',callback);
+		}
 		Model.prototype.$setUpdated = function(updates,source) {
 			this._$modelizeRecursively();
 			if(!updates) {
@@ -143,6 +153,13 @@ define(
 										var update = {};
 										update[theName] = childUpdate;
 										model._fire('deep-updated',[update,source]);
+									}
+								);
+								val.$deepOnPinged(
+									function(childPing,source) {
+										var ping = {};
+										ping[theName] = childPing;
+										model._fire('deep-pinged',[ping,source]);
 									}
 								);
 							}

@@ -231,8 +231,8 @@ require(
 			this.__tickPosition(seconds);
 		}
 		Ship.prototype.__tickPosition = function(seconds) {
-			var values = server.getData('/physics/values');
-			var thrust = values.impulse * this.body.mass * seconds * 10000;
+			var throttle = server.getData('/physics/values/impulse/throttle');
+			var thrust = throttle * this.body.mass * seconds * 10000;
 			if(thrust !== 0) {
 				var impulseEuler = new CANNON.Vec3(0,0,thrust);
 
@@ -334,7 +334,10 @@ require(
 		server.setData({
 			"physics": {
 				"values": {
-					"impulse": 0,
+					"impulse": {
+						"throttle": 0,
+						"kill": ""
+					},
 					"thrusters": {
 						"pitch": 0,
 						"yaw": 0,
