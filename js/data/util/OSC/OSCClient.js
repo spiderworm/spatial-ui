@@ -55,13 +55,13 @@ define(
 		}
 
 		OSCClient.prototype.onError = function onError(error)
-		{ log(error); }
+		{ log(error.stack || error); }
 
 		OSCClient.prototype.onMessage = function onMessage(connection, buffer)
 		{
 			try
 			{
-				log("onMessage:", buffer);
+				//log("onMessage:", buffer);
 				var message = new OSCMessage(buffer);
 				if (message.address === "/pong")
 				{

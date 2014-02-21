@@ -133,12 +133,6 @@ define(
 				{ this.deserialize(address); }
 		}
 
-		function addParameter(type, value)
-		{
-			this._parameters.push({ t: type, v: value });
-			return this;
-		}
-
 		OSCMessage.STATE_UNHANDLED = 0;
 		OSCMessage.STATE_HANDLED = 1;
 		OSCMessage.STATE_IGNORED = 2;
@@ -160,7 +154,8 @@ define(
 			OSCMessage.TYPE_TRUE      = new OSCType('T'.charCodeAt(0), serializeNil,     deserializeTrue),
 			OSCMessage.TYPE_FALSE     = new OSCType('F'.charCodeAt(0), serializeNil,     deserializeFalse),
 			OSCMessage.TYPE_NIL       = new OSCType('N'.charCodeAt(0), serializeNil,     deserializeNil),
-			OSCMessage.TYPE_INFINITUM = new OSCType('I'.charCodeAt(0), serializeNil,     deserializeInfinitum)
+			OSCMessage.TYPE_INFINITUM = new OSCType('I'.charCodeAt(0), serializeNil,     deserializeInfinitum),
+			OSCMessage.TYPE_ARRAY     = new OSCType('['.charCodeAt(0))
 		];
 
 		OSCMessage.typeForChar = function typeForChar(c)
@@ -175,7 +170,16 @@ define(
 			return null;
 		}
 
-		OSCMessage.prototype.addParameter = addParameter;
+		OSCMessage.prototype.addParameter = function addParameter(type, value)
+		{
+			if (this.__curArray)
+				{ this.__curArray.push({ t: type, v: value }); }
+			else
+				{ this._parameters.push({ t: type, v: value }); }
+
+			log("Parameter Added ", this);
+			return this;
+		}
 
 		OSCMessage.prototype.getParameterCount = function getParameterCount()
 		{ return this._parameters.length; }
@@ -186,10 +190,39 @@ define(
 				{ return this._parameters[index].t }
 		}
 
-		OSCMessage.prototype.getParameterValue = function getParameterValue(index)
+		OSCMessage.prototype.getParameterValue = function getParameterValue()
 		{
-			if (index >= 0 && index < this._parameters.length)
-				{ return this._parameters[index].v }
+			function getValueAtIndex(array)
+			{
+				var index = arguments[1];
+				if (index >= 0 && index < array.length)
+				{
+					if (array[index].t === OSCMessage.TYPE_ARRAY)
+					{
+						return getValueAtIndex.apply(undefined, 
+							[array].concat(Array.prototype.slice.call(arguments, 2)));
+					}
+					return array[index].v;
+				}
+				return null;
+			}
+			return getValueAtIndex.apply(undefined,
+				[this._parameters].concat(Array.prototype.slice.call(arguments)));
+		}
+
+		OSCMessage.prototype.getParameterValues = function getParameterValues()
+		{
+			function recurse(array)
+			{
+				return array.map(function (o) 
+					{
+						if (o.t === OSCMessage.TYPE_ARRAY)
+							{ return recurse(o.v); }
+						else
+							{ return o.v; }
+					});
+			}
+			return recurse(this._parameters);
 		}
 
 		// official type tags
@@ -211,19 +244,47 @@ define(
 		OSCMessage.prototype.addNil       = function (v) { return this.addParameter(OSCMessage.TYPE_NIL, v); }
 		OSCMessage.prototype.addInfinitum = function (v) { return this.addParameter(OSCMessage.TYPE_INFINITUM, v); }
 
+		OSCMessage.prototype.openArray = function openArray()
+		{
+			var array = [];
+			this.addParameter(OSCMessage.TYPE_ARRAY, array);
+			var lastArray = this.__curArray;
+			this.__curArray = array;
+			this.__curArray.lastArray = lastArray;
+
+			return this;
+		}
+
+		OSCMessage.prototype.closeArray = function closeArray()
+		{
+			this.__curArray = this.__curArray.lastArray;
+			return this;
+		}
+
 		OSCMessage.prototype._typeTag = function typeTag()
 		{
-			var typeTag = ",";
-
-			for (var p = 0; p < this._parameters.length; ++p)
+			function getTypes(array)
 			{
-				var type = this._parameters[p].t;
-				if (type == null)
-					{ debugger; }
-				typeTag += String.fromCharCode(type.code);
+				var typeTag = "";
+				for (var p = 0; p < array.length; ++p)
+				{
+					var type = array[p].t;
+					if (type == null)
+						{ debugger; }
+
+					if (type === OSCMessage.TYPE_ARRAY)
+					{
+						typeTag += "[" + getTypes(array[p].v) + "]";
+					}
+					else
+					{
+						typeTag += String.fromCharCode(type.code);
+					}
+				}
+				return typeTag;
 			}
 
-			return typeTag;
+			return "," + getTypes(this._parameters);
 		}
 
 		OSCMessage.prototype.serialize = function serialize(prependSize)
@@ -247,16 +308,28 @@ define(
 				serializeString(typeTag, writer);
 
 				// parameter values
-				for (var p = 0; p < this._parameters.length; ++p)
+				function serializeValues(array)
 				{
-					var type = this._parameters[p].t;
-					var value = this._parameters[p].v;
+					for (var p = 0; p < array.length; ++p)
+					{
+						var type = array[p].t;
+						var value = array[p].v;
 
-					if (typeof(type.serialize) !== 'function')
-						{ throw new Error("Unsupported OSC Type."); }
+						if (type === OSCMessage.TYPE_ARRAY)
+						{
+							serializeValues(value);
+						}
+						else
+						{
+							if (typeof(type.serialize) !== 'function')
+								{ throw new Error("Unsupported OSC Type."); }
 
-					type.serialize(value, writer);
+							type.serialize(value, writer);
+						}
+					}
 				}
+
+				serializeValues(this._parameters);
 			}
 
 			return writer.serialize(prependSize);
@@ -302,16 +375,27 @@ define(
 					for (var i = 1; i < typeTag.length; ++i)
 					{
 						var type = typeTag.charCodeAt(i);
-						for (var t = 0; t < OSCMessage._types.length; ++t)
+						if (type === OSCMessage.TYPE_ARRAY.code)
 						{
-							var typeObj = OSCMessage._types[t];
-							if (typeObj.code == type)
+							this.openArray();
+						}
+						else if (type === ']'.charCodeAt())
+						{
+							this.closeArray();
+						}
+						else
+						{
+							for (var t = 0; t < OSCMessage._types.length; ++t)
 							{
-								if (typeObj.deserialize)
-									{ this.addParameter(typeObj, typeObj.deserialize(reader)); }
-								else
-									{ throw new Error("Unsupported type in buffer"); }
-								break;
+								var typeObj = OSCMessage._types[t];
+								if (typeObj.code == type)
+								{
+									if (typeObj.deserialize)
+										{ this.addParameter(typeObj, typeObj.deserialize(reader)); }
+									else
+										{ throw new Error("Unsupported type in buffer"); }
+									break;
+								}
 							}
 						}
 					}
@@ -339,14 +423,25 @@ define(
 				var str = this.address + this._typeTag();
 				//log("MSG.toString(): ", str);
 
-				for (var i = 0; i < this._parameters.length; ++i)
+				function build(array)
 				{
-					//log("  p1: " + String.fromCharCode(this._parameters[i].t.code) + ", " +
-					//	this._parameters[i].v.toString());
+					for (var i = 0; i < array.length; ++i)
+					{
+						//log("  p1: " + String.fromCharCode(this._parameters[i].t.code) + ", " +
+						//	this._parameters[i].v.toString());
 
-					if (this._parameters[i].t.serialize != serializeNil)
-						{ str += " " + this._parameters[i].v.toString(); }
+						if (array[i].t === OSCMessage.TYPE_ARRAY)
+						{
+							str += " [";
+							build(array[i].v);
+							str += " ]";
+						}
+						else if (array[i].t.serialize != serializeNil)
+							{ str += " " + array[i].v.toString(); }
+					}
 				}
+
+				build(this._parameters);
 			}
 			return str;
 		}
