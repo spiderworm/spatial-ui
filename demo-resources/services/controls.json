@@ -8,7 +8,6 @@
 				"description": "impulse engines provide traditional Newtonian movement around space",
 				"min": -1000,
 				"max": 1000,
-				"value": "100",
 				"valuePath": "/physics/values/impulse"
 			},
 			"pitch": {

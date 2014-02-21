@@ -23,28 +23,34 @@ define(
 
 				var view = this;
 
-				if(this.props.appModel && this.props.definition) {
-					this.props.definition.$subscribeTo('valuePath',function(valuePath) {
-						if(valuePath && view.props.appModel) {
-
-							view._deepSubscribeTo(
-								view.props.appModel,
-								valuePath,
-								function(value) {
-									view.setState({
-										value: value
-									});
-									if(view.state.inactiveValue === undefined) {
-										view.setState({
-											inactiveValue: value
-										});
-									}
-								}
-							);
-
-						}
+				function setValue(value) {
+					view.setState({
+						value: value
 					});
+					if(view.state.inactiveValue === undefined) {
+						view.setState({
+							inactiveValue: value
+						});
+					}
 				}
+
+				this.props.definition.$subscribeTo('valuePath',function(valuePath) {
+					if(valuePath) {
+						view._deepSubscribeTo(
+							view.props.appModel,
+							valuePath,
+							setValue
+						);
+					} else {
+						setValue(view.props.definition.value);
+					}
+				});
+
+				this.props.definition.$subscribeTo('value',function(value) {
+					if(!view.props.definition.valuePath) {
+						setValue(value);
+					}
+				});
 
 				return {};
 
@@ -78,16 +84,14 @@ define(
 				this._setValue(next);
 			},
 			_setValue: function(value) {
-				if(
-					this.props.appModel &&
-					this.props.definition &&
-					this.props.definition.valuePath
-				) {
+				if(this.props.definition.valuePath) {
 					this._deepSetValue(
 						this.props.appModel,
 						this.props.definition.valuePath,
 						value
 					);
+				} else {
+					this.props.definition.$update({value: value});
 				}
 			},
 			_getControlNode: function(children) {
@@ -132,12 +136,8 @@ define(
 				return null;
 			},
 			_getValueDisplay: function(value) {
-				if(!this.props.definition.valuePath) {
-					return value;
-				}
-				if(this.state) {
-					value = arguments.length !== 0 ? value : this.state.value;
-				}
+				value = arguments.length > 0 ? value : this.state.value;
+				
 				var display = this.__getPropertyForValue('display',value) || value;
 
 				var format = this._getDisplayFormat();

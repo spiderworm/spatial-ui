@@ -69,6 +69,9 @@ define(
 				}
 			);
 		}
+		AJAXDataChannel.prototype.send = function() {
+			throw new Error('sending over an AJAXDataChannel is totally not supported, dude');
+		}
 
 
 
