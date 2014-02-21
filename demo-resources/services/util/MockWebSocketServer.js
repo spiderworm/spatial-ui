@@ -22,7 +22,7 @@ define(
 			);
 		}
 
-		MockWebSocketServer.prototype.getData = function() {
+		MockWebSocketServer.prototype.getData = function(path) {
 
 			function clone(data) {
 				var result = {};
@@ -38,7 +38,24 @@ define(
 				return result;
 			}
 
-			return clone(this._data);
+			if(!path) {
+				path = "/";
+			}
+
+			var data = this._data;
+			var paths = path.split('/');
+			while(paths.length > 0) {
+				path = paths.shift();
+				if(path !== "") {
+					if(data[path]) {
+						data = data[path];
+					} else {
+						return undefined;
+					}
+				}
+			}
+
+			return clone(data);
 		}
 
 		MockWebSocketServer.prototype.setData = function(data) {

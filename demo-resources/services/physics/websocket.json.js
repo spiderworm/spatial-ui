@@ -16,8 +16,17 @@ require(
 		interpreters
 	) {
 
+
+
+
+
+
+
+		var physicsTickMS = 100;
+		var serverSendMS = 250;
+
 		//var gravitationalConstant = 6.674e-11;
-		var gravitationalConstant = 1e+3;
+		//var gravitationalConstant = 1e+3;
 		var gravitationalConstant = 0;
 
 		var shipSize = 1000;
@@ -97,7 +106,7 @@ require(
 				system.__tick();
 			}
 
-			setInterval(doPhysics,100);
+			setInterval(doPhysics,physicsTickMS);
 		}
 		SolarSystem.prototype.add = function(obj) {
 			this.__objects.push(obj);
@@ -219,9 +228,27 @@ require(
 			this.__tickPitch(seconds);
 			this.__tickYaw(seconds);
 			this.__tickRoll(seconds);
+			this.__tickPosition(seconds);
+		}
+		Ship.prototype.__tickPosition = function(seconds) {
+			var values = server.getData('/physics/values');
+			var thrust = values.impulse * this.body.mass * seconds * 10000;
+			if(thrust !== 0) {
+				var impulseEuler = new CANNON.Vec3(0,0,thrust);
+
+				var orientationQuat = this.body.quaternion;
+				var orientationMatrix = quatToMatrix(orientationQuat);
+
+				impulseEuler = orientationMatrix.vmult(impulseEuler);
+
+				this.body.applyImpulse(
+					impulseEuler,
+					this.body.position
+				);
+			}
 		}
 		Ship.prototype.__tickPitch = function(seconds) {
-			var values = server.getData().physics.values;
+			var values = server.getData('/physics/values');
 			var impulse = new CANNON.Vec3(0,0,0);
 			var point = new CANNON.Vec3(0,0,0);
 
@@ -240,7 +267,7 @@ require(
 			this.body.applyImpulse(impulse,point);
 		}
 		Ship.prototype.__tickYaw = function(seconds) {
-			var values = server.getData().physics.values;
+			var values = server.getData('/physics/values');
 			var impulse = new CANNON.Vec3(0,0,0);
 			var point = new CANNON.Vec3(0,0,0);
 
@@ -258,7 +285,7 @@ require(
 			this.body.applyImpulse(impulse,point);
 		}
 		Ship.prototype.__tickRoll = function(seconds) {
-			var values = server.getData().physics.values;
+			var values = server.getData('/physics/values');
 			var impulse = new CANNON.Vec3(0,0,0);
 			var point = new CANNON.Vec3(0,0,0);
 
@@ -429,10 +456,57 @@ require(
 
 		send();
 
-		setInterval(send,250);
+		setInterval(send,serverSendMS);
 
 
 
+
+
+
+
+		function quatToEular(quat) {
+			var x,y,z;
+			var s = -2 * (quat.y*quat.z + quat.w*quat.x);
+			if (Math.abs(s) > .99999999) {
+				x = s * Math.PI/2;
+				y = Math.atan2(-quat.x*quat.z - quat.w*quat.y, .5 - quat.y*quat.y - quat.z*quat.z);
+				z = 0;
+			} else {
+				x = Math.asin(s);
+				y = Math.atan2(quat.x*quat.z - quat.w*quat.y, .5 - quat.x*quat.x - quat.y*quat.y);
+				z = Math.atan2(quat.x*quat.y - quat.w*quat.z, .5 - quat.x*quat.x - quat.z*quat.z);
+			}
+			return new CANNON.Vec3(x,y,z);
+		}
+
+		function eularToQuat(euler) {
+			return new CANNON.Quaternion(
+				-(Math.sin(euler.x/2) * Math.cos(euler.y/2) * Math.cos(euler.z/2)) +
+				-(Math.cos(euler.x/2) * Math.sin(euler.y/2) * Math.sin(euler.z/2)),
+				(Math.cos(euler.x/2) * Math.sin(euler.y/2) * Math.cos(euler.z/2)) +
+				-(Math.sin(euler.x/2) * Math.cos(euler.y/2) * Math.sin(euler.z/2)),
+				(Math.cos(euler.x/2) * Math.cos(euler.y/2) * Math.sin(euler.z/2)) +
+				-(Math.sin(euler.x/2) * Math.sin(euler.y/2) * Math.cos(euler.z/2)),
+				(Math.cos(euler.x/2) * Math.cos(euler.y/2) * Math.cos(euler.z/2)) +
+				(Math.sin(euler.x/2) * Math.sin(euler.y/2) * Math.sin(euler.z/2))
+			);
+		}
+
+		function quatToMatrix(q) {
+			return new CANNON.Mat3(
+				[
+					1-(2*q.y*q.y)-(2*q.z*q.z),
+					(2*q.x*q.y)+(2*q.w*q.z),
+					(2*q.x*q.z)-(2*q.w*q.y),
+					(2*q.x*q.y)-(2*q.w*q.z),
+					1-(2*q.x*q.x)-(2*q.z*q.z),
+					(2*q.y*q.z)+(2*q.w*q.x),
+					2*(q.x*q.z)+2*(q.y*q.w),
+					2*(q.y*q.z)-2*(q.w*q.x),
+					1-2*(q.x*q.x)-2*(q.y*q.y)
+				]
+			);
+		}
 
 
 	}
