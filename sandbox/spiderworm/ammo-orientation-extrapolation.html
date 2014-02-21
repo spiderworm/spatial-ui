@@ -17,10 +17,80 @@ require(
 	[
 		'THREE',
 		'external/OrbitControls',
-		'external/ammo'
+		'external/ammo',
+		'external/cannon',
+		'ui/util/everyFrame'
 	],
 	function(
 		THREE,
 		OrbitControls,
-		Ammo
+		Ammo,
+		CANNON,
+		everyFrame
 	) {
+
+
+
+
+		var canvas = document.querySelector('canvas');
+
+		var scene = new THREE.Scene();
+
+		var renderer = new THREE.WebGLRenderer({canvas:canvas, alpha: true});
+		renderer.setSize( canvas.offsetWidth, canvas.offsetHeight );
+
+		var camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth/canvas.offsetHeight, 1, 10000000000000000);
+		camera.position.z = 20;
+		new OrbitControls(camera);
+
+		
+
+		everyFrame(
+			function() {
+				renderer.render(
+					scene,
+					camera
+				);
+			}
+		);
+
+
+
+
+
+		// Setup our world
+		var world = new CANNON.World();
+		world.gravity.set(0,0,-9.82);
+		world.broadphase = new CANNON.NaiveBroadphase();
+
+		// Create a sphere
+		var mass = 5, radius = 1;
+		var sphereShape = new CANNON.Sphere(radius);
+		var sphereBody = new CANNON.RigidBody(mass,sphereShape);
+		sphereBody.angularVelocity.set(0,1,2);
+		sphereBody.position.set(0,0,10);
+		world.add(sphereBody);
+
+		// Create a plane
+		var groundShape = new CANNON.Plane();
+		var groundBody = new CANNON.RigidBody(0,groundShape);
+		world.add(groundBody);
+
+		// Step the simulation
+		setInterval(function(){
+			world.step(1.0/60.0);
+			console.log("Sphere z position: " + sphereBody.position.z);
+		}, 1000);
+
+
+
+
+	}
+);
+
+}, 1000);
+
+</script>
+
+</body>
+</html>
