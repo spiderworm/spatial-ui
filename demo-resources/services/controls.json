@@ -6,36 +6,36 @@
 				"subtype": "range",
 				"label": "impulse engines",
 				"description": "impulse engines provide traditional Newtonian movement around space",
-				"min": -100000,
-				"max": 100000,
-				"dataPath": "/physics/values/impulse"
+				"min": -1000,
+				"max": 1000,
+				"valuePath": "/physics/values/impulse"
 			},
 			"pitch": {
 				"type": "control",
 				"subtype": "range",
 				"label": "Pitch",
 				"description": "turns the ship on the X-axis",
-				"min": -100000,
-				"max": 100000,
-				"dataPath": "/physics/values/thrusters/pitch"
+				"min": -1000,
+				"max": 1000,
+				"valuePath": "/physics/values/thrusters/pitch"
 			},
 			"yaw": {
 				"type": "control",
 				"subtype": "range",
 				"label": "Yaw",
 				"description": "turns the ship on the Y-axis",
-				"min": -100000,
-				"max": 100000,
-				"dataPath": "/physics/values/thrusters/yaw"
+				"min": -1000,
+				"max": 1000,
+				"valuePath": "/physics/values/thrusters/yaw"
 			},
 			"roll": {
 				"type": "control",
 				"subtype": "range",
 				"label": "Roll",
 				"description": "turns the ship on the Z-axis",
-				"min": -100000,
-				"max": 100000,
-				"dataPath": "/physics/values/thrusters/roll"
+				"min": -1000,
+				"max": 1000,
+				"valuePath": "/physics/values/thrusters/roll"
 			}
 		},
 		"engineering": {
@@ -48,7 +48,7 @@
 						"description": "power provided to the impulse engines (manufacturer recommended level: 100)",
 						"min": 0,
 						"max": 200,
-						"dataPath": "/values/engineering/energy/levels/impulse"
+						"valuePath": "/values/engineering/energy/levels/impulse"
 					},
 					"tubes": {
 						"type": "control",
@@ -57,7 +57,7 @@
 						"description": "power provided to the tubes (manufacturer recommended level: 100)",
 						"min": 0,
 						"max": 200,
-						"dataPath": "/values/engineering/energy/levels/tubes"
+						"valuePath": "/values/engineering/energy/levels/tubes"
 					},
 					"phasers": {
 						"type": "control",
@@ -66,7 +66,7 @@
 						"description": "power provided to the phasers (manufacturer recommended level: 100)",
 						"min": 0,
 						"max": 200,
-						"dataPath": "/values/engineering/energy/levels/phasers"	
+						"valuePath": "/values/engineering/energy/levels/phasers"	
 					}
 				}
 			}
@@ -78,7 +78,7 @@
 					"subtype": "output",
 					"label": "torpedos",
 					"description": "current stock of torpedos",
-					"dataPath": "/values/weapons/ammo/torpedos"
+					"valuePath": "/values/weapons/ammo/torpedos"
 				}
 			},
 			"phasers": {
@@ -98,7 +98,7 @@
 							"display": "disabled"
 						}
 					],
-					"dataPath": "/values/weapons/phasers/enabled"
+					"valuePath": "/values/weapons/phasers/enabled"
 				},
 				"frequency": {
 					"type": "control",
@@ -106,7 +106,7 @@
 					"label": "phasers frequency",
 					"description": "set phasers frequency",
 					"allowedValues": ["A","B","C","D"],
-					"dataPath": "/values/weapons/phasers/frequency"
+					"valuePath": "/values/weapons/phasers/frequency"
 				}
 			}
 		},
@@ -137,20 +137,20 @@
 							"type": "control",
 							"subtype": "output",
 							"description": "current ammo in tube",
-							"dataPath": "/values/systems/tubes/1/currentAmmo"
+							"valuePath": "/values/systems/tubes/1/currentAmmo"
 						},
 						{
 							"type": "control",
 							"subtype": "output",
 							"description": "percentage that current ammo is loaded",
-							"dataPath": "/values/systems/tubes/1/loadedPercent",
+							"valuePath": "/values/systems/tubes/1/loadedPercent",
 							"format": "%"
 						},
 						{
 							"type": "control",
 							"subtype": "button",
 							"description": "attack target with tube contents",
-							"dataPath": "/values/systems/tubes/1/fire",
+							"valuePath": "/values/systems/tubes/1/fire",
 							"button": true,
 							"allowedValues": [1,0],
 							"display": "fire",
@@ -161,7 +161,7 @@
 							"subtype": "checkbox",
 							"description": "automatically fire when ammo is loaded",
 							"label": "auto fire",
-							"dataPath": "/values/systems/tubes/1/autoFire",
+							"valuePath": "/values/systems/tubes/1/autoFire",
 							"checkbox": true,
 							"allowedValues": [1,0]
 						}
@@ -182,27 +182,27 @@
 											"display": "none"
 										}
 									],
-									"dataPath": "/values/systems/tubes/1/selectedAmmo"
+									"valuePath": "/values/systems/tubes/1/selectedAmmo"
 								},
 								{
 									"type": "control",
 									"subtype": "button",
 									"allowedValues": [1,0],
-									"dataPath": "/values/systems/tubes/1/load",
+									"valuePath": "/values/systems/tubes/1/load",
 									"display": "load"
 								},
 								{
 									"type": "control",
 									"subtype": "button",
 									"allowedValues": [1,0],
-									"dataPath": "/values/systems/tubes/1/unload",
+									"valuePath": "/values/systems/tubes/1/unload",
 									"display": "unload"
 								},
 								{
 									"type": "control",
 									"subtype": "checkbox",
 									"allowedValues": [1,0],
-									"dataPath": "/values/systems/tubes/1/keepLoaded",
+									"valuePath": "/values/systems/tubes/1/keepLoaded",
 									"label": "keep loaded"
 								}
 							]
@@ -217,19 +217,19 @@
 						{
 							"type": "control",
 							"subtype": "output",
-							"dataPath": "/values/systems/tubes/2/currentAmmo"
+							"valuePath": "/values/systems/tubes/2/currentAmmo"
 						},
 						{
 							"type": "control",
 							"subtype": "output",
 							"description": "percentage that current ammo is loaded",
-							"dataPath": "/values/systems/tubes/2/loadedPercent",
+							"valuePath": "/values/systems/tubes/2/loadedPercent",
 							"format": "%"
 						},
 						{
 							"type": "control",
 							"subtype": "button",
-							"dataPath": "/values/systems/tubes/2/fire",
+							"valuePath": "/values/systems/tubes/2/fire",
 							"allowedValues": [1,0],
 							"display": "fire"
 						},
@@ -237,7 +237,7 @@
 							"type": "control",
 							"subtype": "checkbox",
 							"label": "auto fire",
-							"dataPath": "/values/systems/tubes/2/autoFire",
+							"valuePath": "/values/systems/tubes/2/autoFire",
 							"allowedValues": [1,0]
 						}
 					],
@@ -257,27 +257,27 @@
 											"display": "none"
 										}
 									],
-									"dataPath": "/values/systems/tubes/2/selectedAmmo"
+									"valuePath": "/values/systems/tubes/2/selectedAmmo"
 								},
 								{
 									"type": "control",
 									"subtype": "button",
 									"allowedValues": [1,0],
-									"dataPath": "/values/systems/tubes/2/load",
+									"valuePath": "/values/systems/tubes/2/load",
 									"display": "load"
 								},
 								{
 									"type": "control",
 									"subtype": "button",
 									"allowedValues": [1,0],
-									"dataPath": "/values/systems/tubes/2/unload",
+									"valuePath": "/values/systems/tubes/2/unload",
 									"display": "unload"
 								},
 								{
 									"type": "control",
 									"subtype": "checkbox",
 									"allowedValues": [1,0],
-									"dataPath": "/values/systems/tubes/2/keepLoaded",
+									"valuePath": "/values/systems/tubes/2/keepLoaded",
 									"label": "keep loaded"
 								}
 							]

@@ -1,11 +1,13 @@
 define(
 	[
 		'../base/Model',
-		'../external/ammo'
+		'../external/ammo',
+		'../external/cannon'
 	],
 	function(
 		Model,
-		Ammo
+		Ammo,
+		CANNON
 	) {
 
 		function Extrapolator() {
@@ -91,23 +93,37 @@ define(
 					case 'eulerYPR':
 
 
-						var vel = new Ammo.btQuaternion();
-						vel.setEuler(model.velocity.y,model.velocity.x,model.velocity.z);
-						vel.normalize();
-						vel = {x: vel.x(), y: vel.y(), z: vel.z(), w: vel.w()};
 
-						var rot = new Ammo.btQuaternion(model.x,model.y,model.z,model.w);
-						rot = {x: rot.x(), y: rot.y(), z: rot.z(), w: rot.w()};
 
-						var angleAxis = quatToAngleAxis(vel);
-						var velQuat = angleAxisToQuat({angle: angleAxis.angle * seconds, axis: angleAxis.axis});
-						normalize(velQuat);
-						var newQuat = multiplyQuaternions(rot,velQuat);
+						var w = new CANNON.Quaternion();
+						var wq = new CANNON.Quaternion();
+						var angularVelo = model.velocity;
+						var quat = new CANNON.Quaternion();
+						quat.set(model.x,model.y,model.z,model.w);
+						var half_dt = seconds/2;
+						var quatNormalize = true;
+						var quatNormalizeFast = false;
 
-						model.x = newQuat.x;
-						model.y = newQuat.y;
-						model.z = newQuat.z;
-						model.w = newQuat.w;
+
+						w.set(angularVelo.x, angularVelo.y, angularVelo.z, 0);
+						w.mult(quat,wq);
+						quat.x += half_dt * wq.x;
+						quat.y += half_dt * wq.y;
+						quat.z += half_dt * wq.z;
+						quat.w += half_dt * wq.w;
+						if(quatNormalize){
+							if(quatNormalizeFast){
+								quat.normalizeFast();
+							} else {
+								quat.normalize();
+							}
+						}
+
+
+						model.x = quat.x;
+						model.y = quat.y;
+						model.z = quat.z;
+						model.w = quat.w;
 
 					break;
 					case 'linear':

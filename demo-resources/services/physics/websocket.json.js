@@ -9,7 +9,7 @@ require(
 	[
 		'../demo-resources/services/util/MockWebSocketServer',
 		'data/util/dataInterpreters',
-		'external/ammo'
+		'external/cannon'
 	],
 	function(
 		MockWebSocketServer,
@@ -21,175 +21,72 @@ require(
 		var gravitationalConstant = 0;
 
 		var shipSize = 1000;
-		var shipPosition = new Ammo.btVector3(5200000000, 0, 0);
-		var shipVelocity = new Ammo.btVector3(0, 0, 0);
+		var shipPosition = new CANNON.Vec3(5200000000, 0, 0);
+		var shipVelocity = new CANNON.Vec3(0, 0, 0);
 		var shipMass = 10000;
 
 		var teaatisSize = 1.2742e7;
 		var teaatisMass = 5.97219e+24;
-		var teaatisPosition = new Ammo.btVector3(9000000000, 0, 0);
-		var teaatisVelocity = new Ammo.btVector3(0, 0, 0);
-		var teaatisRotation = new Ammo.btQuaternion(0,1,0,1);
-		var teaatisSpin = new Ammo.btVector3(0,.3,0);
+		var teaatisPosition = new CANNON.Vec3(9000000000, 0, 0);
+		var teaatisVelocity = new CANNON.Vec3(0, 0, 0);
+		var teaatisRotationVector = new CANNON.Vec3(0, 1, 0);
+		var teaatisRotationAmount = Math.PI/2;
+		var teaatisRotation = new CANNON.Quaternion(
+			teaatisRotationVector.x*Math.sin(teaatisRotationAmount/2),
+			teaatisRotationVector.y*Math.sin(teaatisRotationAmount/2),
+			teaatisRotationVector.z*Math.sin(teaatisRotationAmount/2),
+			Math.cos(teaatisRotationAmount/2)
+		);
+		var teaatisSpin = new CANNON.Vec3(0,.005,0);
 
 		var sunSize = 1.391e9;
-		var sunPosition = new Ammo.btVector3(0,0,0);
+		var sunPosition = new CANNON.Vec3(0,0,0);
 		var sunMass =  1.98892e+30;
 
 		var moonSize = 100000;
-		var moonPosition = new Ammo.btVector3(3844000000, 0, 0);
+		var moonPosition = new CANNON.Vec3(3844000000, 0, 0);
 		var moonMass = 10000000;
 
 
-		function AmmoSystem() {
-			var collisionConfiguration = new Ammo.btDefaultCollisionConfiguration();
-			var dispatcher = new Ammo.btCollisionDispatcher( collisionConfiguration );
-			var overlappingPairCache = new Ammo.btDbvtBroadphase();
-			var solver = new Ammo.btSequentialImpulseConstraintSolver();
-			var system = new Ammo.btDiscreteDynamicsWorld( dispatcher, overlappingPairCache, solver, collisionConfiguration );
-			system.setGravity(new Ammo.btVector3(0, 0, 0));
+		function PhysicsSystem() {
+			var system = new CANNON.World();
+			system.gravity.set(0,0,0);
+			system.broadphase = new CANNON.NaiveBroadphase();
 			return system;
 		}
 
 
-		function AmmoSun() {
-			var startTransform = new Ammo.btTransform();
-			startTransform.setIdentity();
-			startTransform.setOrigin(sunPosition);
-			var localInertia = new Ammo.btVector3(0, 0, 0);
-			var shape = new Ammo.btBoxShape(new Ammo.btVector3( sunSize/2, sunSize/2, sunSize/2 ));
-			shape.calculateLocalInertia( sunMass, localInertia );
-			var motionState = new Ammo.btDefaultMotionState( startTransform );
-			var rbInfo = new Ammo.btRigidBodyConstructionInfo( sunMass, motionState, shape, localInertia );
-			var body = new Ammo.btRigidBody( rbInfo );
-			body.setActivationState(4);
+		function PhysicsSun() {
+			var shape = new CANNON.Sphere(sunSize/2);
+			var body = new CANNON.RigidBody(sunMass,shape);
+			body.angularVelocity.set(0,0,0);
+			body.position.set(sunPosition.x,sunPosition.y,sunPosition.z);
 			return body;
 		}
 
-		function AmmoShip() {
-			var startTransform = new Ammo.btTransform();
-			startTransform.setIdentity();
-			startTransform.setOrigin(shipPosition);
-			var localInertia = new Ammo.btVector3(0, 0, 0);
-			var shape = new Ammo.btBoxShape(new Ammo.btVector3( shipSize/2, shipSize/2, shipSize/2 ));
-			shape.calculateLocalInertia( shipMass, localInertia );
-			var motionState = new Ammo.btDefaultMotionState( startTransform );
-			var rbInfo = new Ammo.btRigidBodyConstructionInfo( shipMass, motionState, shape, localInertia );
-			var body = new Ammo.btRigidBody( rbInfo );
-			body.setActivationState(4);
-			body.setLinearVelocity(shipVelocity);
+		function PhysicsShip() {
+			var shape = new CANNON.Sphere(shipSize/2);
+			var body = new CANNON.RigidBody(shipMass,shape);
+			body.angularVelocity.set(0,0,0);
+			body.position.set(shipPosition.x,shipPosition.y,shipPosition.z);
 			return body;
 		}
 
-		function AmmoTeaatis() {
-			var startTransform = new Ammo.btTransform();
-			startTransform.setIdentity();
-			startTransform.setOrigin(teaatisPosition);
-			startTransform.setRotation(teaatisRotation);
-			var localInertia = new Ammo.btVector3(0,0,0);
-			var shape = new Ammo.btSphereShape(teaatisSize/2);
-			shape.calculateLocalInertia( teaatisMass, localInertia );
-			var motionState = new Ammo.btDefaultMotionState( startTransform );
-			var rbInfo = new Ammo.btRigidBodyConstructionInfo( teaatisMass, motionState, shape, localInertia );
-			var body = new Ammo.btRigidBody( rbInfo );
-			body.setActivationState(4);
-			body.setLinearVelocity(teaatisVelocity);
-			body.setAngularVelocity(teaatisSpin);
+		function PhysicsTeaatis() {
+			var shape = new CANNON.Sphere(teaatisSize/2);
+			var body = new CANNON.RigidBody(teaatisMass,shape);
+			body.angularVelocity.set(teaatisSpin.x,teaatisSpin.y,teaatisSpin.z);
+			body.position.set(teaatisPosition.x,teaatisPosition.y,teaatisPosition.z);
+			body.quaternion.set(teaatisRotation.x,teaatisRotation.y,teaatisRotation.z,teaatisRotation.w);
 			return body;
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		function quatToAngleAxis(quat) {
-			var angle, x=0, y=0, z=0;
-
-			if (quat.w > 1) normalize(quat);
-			angle = 2 * Math.acos(quat.w);
-			var s = Math.sqrt(1-quat.w*quat.w);
-			if (s === 0) {
-				x = quat.x;
-				y = quat.y;
-				z = quat.z;
-			} else {
-				x = quat.x / s;
-				y = quat.y / s;
-				z = quat.z / s;
-			}
-			return {
-				angle: angle,
-				axis: {x: x,y: y,z: z}
-			};
-		}
-
-		function angleAxisToQuat(angleAxis) {
-			return {
-				x: Math.sin(angleAxis.angle/2)*angleAxis.axis.x,
-				y: Math.sin(angleAxis.angle/2)*angleAxis.axis.y,
-				z: Math.sin(angleAxis.angle/2)*angleAxis.axis.z,
-				w: Math.cos(angleAxis.angle/2)
-			};
-		}
-
-		function multiplyQuaternions(a,b) {
-			return {
-				x: a.x * b.w + a.w * b.x + a.y * b.z - a.z * b.y,
-				y: a.y * b.w + a.w * b.y + a.z * b.x - a.x * b.z,
-				z: a.z * b.w + a.w * b.z + a.x * b.y - a.y * b.x,
-				w: a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z
-			};
-		}
-
-		function copyQuaternion(dest,source) {
-			dest.x = source.x;
-			dest.y = source.y;
-			dest.z = source.z;
-			dest.w = source.w;
-		}
-
-
-		function normalize(quat) {
-			var magnitude = Math.sqrt((quat.x*quat.x)+(quat.y*quat.y)+(quat.z*quat.z)+(quat.w*quat.w));
-			quat.x = quat.x/magnitude;
-			quat.y = quat.y/magnitude;
-			quat.z = quat.z/magnitude;
-			quat.w = quat.w/magnitude;
-		}
-
-		var lastOrientation, lastAngularVelocity;
-
-
-
-
-
-
-
-
-
-
 
 
 
 
 
 		function SolarSystem(physics) {
-			this.physics = new AmmoSystem();
+			this.physics = new PhysicsSystem();
 
 			this.__objects = [];
 
@@ -200,11 +97,11 @@ require(
 				system.__tick();
 			}
 
-			setInterval(doPhysics,1000);
+			setInterval(doPhysics,100);
 		}
 		SolarSystem.prototype.add = function(obj) {
 			this.__objects.push(obj);
-			this.physics.addRigidBody(obj.body);
+			this.physics.add(obj.body);
 		}
 		SolarSystem.prototype.__tick = function() {			
 			var stamp = (new Date()).getTime();
@@ -217,10 +114,10 @@ require(
 			}
 			for(i in this.__objects) {
 				this.__objects[i].applyGravityWells(gravityWells);
-				this.__objects[i].tick();
+				this.__objects[i].tick(secs);
 			}
 
-			this.physics.stepSimulation(secs, 5);
+			this.physics.step(secs);
 
 			for(var i in this.__objects) {
 				this.__objects[i].update(secs);
@@ -232,73 +129,61 @@ require(
 		function SystemObject(body,id) {
 			this.body = body;
 			this.id = id;
-			this.__transform = new Ammo.btTransform();
 		}
 		SystemObject.prototype.update = function(seconds) {
 			var update = {position: {velocity: {}}, rotation: {velocity: {}}};
 
-			var vector = this.getPosition();
-			update.position.x = vector.x();
-			update.position.y = vector.y();
-			update.position.z = vector.z();
+			update.position.x = this.body.position.x;
+			update.position.y = this.body.position.y;
+			update.position.z = this.body.position.z;
 
-			var vector = this.body.getInterpolationLinearVelocity();
-			update.position.velocity.x = vector.x();
-			update.position.velocity.y = vector.y();
-			update.position.velocity.z = vector.z();
+			update.position.velocity.x = this.body.velocity.x;
+			update.position.velocity.y = this.body.velocity.y;
+			update.position.velocity.z = this.body.velocity.z;
 
-			var vector = this.getRotation();
-			update.rotation.x = vector.x();
-			update.rotation.y = vector.y();
-			update.rotation.z = vector.z();
-			update.rotation.w = vector.w();
+			update.rotation.x = this.body.quaternion.x;
+			update.rotation.y = this.body.quaternion.y;
+			update.rotation.z = this.body.quaternion.z;
+			update.rotation.w = this.body.quaternion.w;
 
-			var euler = this.body.getAngularVelocity();
-			update.rotation.velocity.x = euler.x();
-			update.rotation.velocity.y = euler.y();
-			update.rotation.velocity.z = euler.z();
-
-			if(this.id === "Teaatis") {
-				lastOrientation = update.rotation;
-				lastAngularVelocity = update.rotation.velocity;
-			}
+			update.rotation.velocity.x = this.body.angularVelocity.x;
+			update.rotation.velocity.y = this.body.angularVelocity.y;
+			update.rotation.velocity.z = this.body.angularVelocity.z;
 
 			this.__sendUpdate(update);
 		}
 		SystemObject.prototype.getGravityWell = function() {
 			var well = {};
 			well.source = this;
-			well.position = this.getPosition();
-			well.mass = 1/this.body.getInvMass();
+			well.position = this.body.position;
+			well.mass = this.body.mass;
 			return well;
 		}
 		SystemObject.prototype.applyGravityWells = function(wells) {
-			var myPosition = this.getPosition();
-			var myMass = 1/this.body.getInvMass();
+			var myPosition = this.body.position;
+			var myMass = this.body.mass;
 			for(var i in wells) {
 				if(wells[i].source === this) {
 					continue;
 				}
 
-				var dist2 = myPosition.distance2(wells[i].position);
+				var dist2 = Math.pow(wells[i].position.x,2) + Math.pow(wells[i].position.y,2) + Math.pow(wells[i].position.z,2);
 				var force = gravitationalConstant * myMass * wells[i].mass / dist2
-				var vector = new Ammo.btVector3(
-					force * (wells[i].position.x() - myPosition.x())/dist2,
-					force * (wells[i].position.y() - myPosition.y())/dist2,
-					force * (wells[i].position.z() - myPosition.z())/dist2
+				var impulse = new CANNON.Vec3(
+					force * (wells[i].position.x - myPosition.x/dist2),
+					force * (wells[i].position.y - myPosition.y/dist2),
+					force * (wells[i].position.z - myPosition.z/dist2)
 				);
 
-				this.body.applyCentralImpulse(vector);
+				this.body.applyImpulse(impulse,myPosition);
 
 			}
 		}
 		SystemObject.prototype.getPosition = function() {
-			this.body.getMotionState().getWorldTransform(this.__transform);
-			return this.__transform.getOrigin();
+			return this.body.position;
 		}
 		SystemObject.prototype.getRotation = function() {
-			this.body.getMotionState().getWorldTransform(this.__transform);
-			return this.__transform.getRotation();
+			return this.body.quaternion;
 		}
 		SystemObject.prototype.tick = function() {}
 		SystemObject.prototype.__sendUpdate = function() {
@@ -309,7 +194,7 @@ require(
 
 
 		function Sun() {
-			SystemObject.apply(this,[new AmmoSun(),"sun"]);
+			SystemObject.apply(this,[new PhysicsSun(),"sun"]);
 		}
 		Sun.prototype = new SystemObject();
 		Sun.prototype.__sendUpdate = function(update) {
@@ -318,7 +203,7 @@ require(
 
 
 		function Teaatis() {
-			SystemObject.apply(this,[new AmmoTeaatis(),"Teaatis"]);
+			SystemObject.apply(this,[new PhysicsTeaatis(),"Teaatis"]);
 		}
 		Teaatis.prototype = new SystemObject();
 		Teaatis.prototype.__sendUpdate = function(update) {
@@ -327,22 +212,68 @@ require(
 
 
 		function Ship() {
-			SystemObject.apply(this,[new AmmoShip(),"ship"]);
+			SystemObject.apply(this,[new PhysicsShip(),"ship"]);
 		}
 		Ship.prototype = new SystemObject();
-		Ship.prototype.tick = function() {
+		Ship.prototype.tick = function(seconds) {
+			this.__tickPitch(seconds);
+			this.__tickYaw(seconds);
+			this.__tickRoll(seconds);
+		}
+		Ship.prototype.__tickPitch = function(seconds) {
 			var values = server.getData().physics.values;
-			var rotVector = this.body.getOrientation().getAxis();
-			this.body.applyCentralForce(new Ammo.btVector3(
-				rotVector.x() * values.impulse*1000,
-				rotVector.y() * values.impulse*1000,
-				rotVector.z() * values.impulse*1000
-			));
-			this.body.applyTorque(new Ammo.btVector3(
-				values.thrusters.pitch*1000,
-				values.thrusters.yaw*1000,
-				values.thrusters.roll*1000
-			));
+			var impulse = new CANNON.Vec3(0,0,0);
+			var point = new CANNON.Vec3(0,0,0);
+
+			impulse.y = values.thrusters.pitch*this.body.mass*seconds;
+
+			point.x = this.body.position.x;
+			point.y = this.body.position.y;
+			point.z = this.body.position.z + 10;
+
+			this.body.applyImpulse(impulse,point);
+
+			impulse.y = -impulse.y;
+
+			point.z = this.body.position.z - 10;
+
+			this.body.applyImpulse(impulse,point);
+		}
+		Ship.prototype.__tickYaw = function(seconds) {
+			var values = server.getData().physics.values;
+			var impulse = new CANNON.Vec3(0,0,0);
+			var point = new CANNON.Vec3(0,0,0);
+
+			impulse.z = values.thrusters.yaw*this.body.mass*seconds;
+
+			point.x = this.body.position.x + 10;
+			point.y = this.body.position.y;
+			point.z = this.body.position.z;
+
+			this.body.applyImpulse(impulse,point);
+
+			impulse.z = -impulse.z;
+
+			point.x = this.body.position.x - 10;
+			this.body.applyImpulse(impulse,point);
+		}
+		Ship.prototype.__tickRoll = function(seconds) {
+			var values = server.getData().physics.values;
+			var impulse = new CANNON.Vec3(0,0,0);
+			var point = new CANNON.Vec3(0,0,0);
+
+			impulse.y = values.thrusters.roll*this.body.mass*seconds;
+
+			point.x = this.body.position.x + 10;
+			point.y = this.body.position.y;
+			point.z = this.body.position.z;
+
+			this.body.applyImpulse(impulse,point);
+
+			impulse.y = -impulse.y;
+
+			point.x = this.body.position.x - 10;
+			this.body.applyImpulse(impulse,point);
 		}
 		Ship.prototype.__sendUpdate = function(update) {
 			server.updateData({physics: {bodies: {myShip: update}}});
@@ -386,9 +317,9 @@ require(
 				"bodies": {
 					"moon": {
 						"position": {
-							"x": teaatisPosition.x(),
-							"y": teaatisPosition.y(),
-							"z": teaatisPosition.z(),
+							"x": teaatisPosition.x,
+							"y": teaatisPosition.y,
+							"z": teaatisPosition.z,
 							"velocity": {
 								"x": 0,
 								"y": 0,
@@ -396,10 +327,10 @@ require(
 							}
 						},
 						"rotation": {
-							"x": teaatisRotation.x(),
-							"y": teaatisRotation.y(),
-							"z": teaatisRotation.z(),
-							"w": teaatisRotation.w(),
+							"x": teaatisRotation.x,
+							"y": teaatisRotation.y,
+							"z": teaatisRotation.z,
+							"w": teaatisRotation.w,
 							"velocity": {
 								"type": "eulerYPR",
 								"x": 0,
@@ -498,7 +429,7 @@ require(
 
 		send();
 
-		setInterval(send,1000);
+		setInterval(send,250);
 
 
 

@@ -23,6 +23,9 @@
 		},
 		"external/ammo": {
 			"exports": "Ammo"
+		},
+		"external/cannon": {
+			"exports": "CANNON"
 		}
 	}
 }

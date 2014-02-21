@@ -41,7 +41,6 @@ define(
 					}
 				}
 				else if(message.getParameterCount() >= 1) {
-					console.info
 					var paths = message.address.split('/');
 					if(paths[0] === "") {
 						paths.shift();

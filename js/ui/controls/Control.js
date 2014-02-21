@@ -23,28 +23,34 @@ define(
 
 				var view = this;
 
-				if(this.props.appModel && this.props.definition) {
-					this.props.definition.$subscribeTo('dataPath',function(dataPath) {
-						if(dataPath && view.props.appModel) {
-
-							view._deepSubscribeTo(
-								view.props.appModel,
-								dataPath,
-								function(value) {
-									view.setState({
-										value: value
-									});
-									if(view.state.inactiveValue === undefined) {
-										view.setState({
-											inactiveValue: value
-										});
-									}
-								}
-							);
-
-						}
+				function setValue(value) {
+					view.setState({
+						value: value
 					});
+					if(view.state.inactiveValue === undefined) {
+						view.setState({
+							inactiveValue: value
+						});
+					}
 				}
+
+				this.props.definition.$subscribeTo('valuePath',function(valuePath) {
+					if(valuePath) {
+						view._deepSubscribeTo(
+							view.props.appModel,
+							valuePath,
+							setValue
+						);
+					} else {
+						setValue(view.props.definition.value);
+					}
+				});
+
+				this.props.definition.$subscribeTo('value',function(value) {
+					if(!view.props.definition.valuePath) {
+						setValue(value);
+					}
+				});
 
 				return {};
 
@@ -78,16 +84,14 @@ define(
 				this._setValue(next);
 			},
 			_setValue: function(value) {
-				if(
-					this.props.appModel &&
-					this.props.definition &&
-					this.props.definition.dataPath
-				) {
+				if(this.props.definition.valuePath) {
 					this._deepSetValue(
 						this.props.appModel,
-						this.props.definition.dataPath,
+						this.props.definition.valuePath,
 						value
 					);
+				} else {
+					this.props.definition.$update({value: value});
 				}
 			},
 			_getControlNode: function(children) {
@@ -132,12 +136,8 @@ define(
 				return null;
 			},
 			_getValueDisplay: function(value) {
-				if(!this.props.definition.dataPath) {
-					return value;
-				}
-				if(this.state) {
-					value = arguments.length !== 0 ? value : this.state.value;
-				}
+				value = arguments.length > 0 ? value : this.state.value;
+				
 				var display = this.__getPropertyForValue('display',value) || value;
 
 				var format = this._getDisplayFormat();
@@ -230,9 +230,9 @@ define(
 					modelPropertyName: null
 				}
 
-				if(this.props.definition.dataPath) {
+				if(this.props.definition.valuePath) {
 
-					var propertyName = this.props.definition.dataPath;
+					var propertyName = this.props.definition.valuePath;
 					var model = this.props.appModel;
 					var matches;
 
