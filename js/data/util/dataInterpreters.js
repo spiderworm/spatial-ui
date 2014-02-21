@@ -31,7 +31,6 @@ define(
 
 			var result = {};
 			var message = new OSCMessage(raw);
-
 			function recurse(message)
 			{
 				if (message.bundle)
@@ -54,21 +53,15 @@ define(
 							}
 							target = target[path];
 						}
-						var count = message.getParameterCount();
-						if(count === 1) {
-							target[paths[0]] = message.getParameterValue(0);
-						} else {
-							target[paths[0]] = [];
-							for(var i=0; i<count; i++) {
-								target[paths[i]].push(message.getParameterValue(i));
-							}
-						}
+						if (message.getParameterCount() > 1)
+							{ target[paths[0]] = message.getParameterValues(); }
+						else
+							{ target[paths[0]] = message.getParameterValue(0); }
 					}
 				}
 			}
 
 			recurse(message);
-
 			return result;
 		}
 		OSCDataInterpreter.prototype.stringify = function(obj) {
@@ -102,7 +95,13 @@ define(
 
 			delve(obj,'');
 
-			return messages;
+			console.info("sending: ", messages);
+			if (messages.length == 0)
+				{ return null; }
+			else if (messages.length == 1)
+				{ return messages[0].serialize(); }
+			else
+				{ return (new OSCMessage(messages)).serialize(); }
 		}
 
 
