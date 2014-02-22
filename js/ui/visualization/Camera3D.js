@@ -25,9 +25,9 @@ define(
 
 			var model = this.__model = new Model({
 				position: {
-					x: 10000,
-					y: 0,
-					z: 0
+					x: 0,
+					y: 1000,
+					z: -8000
 				}
 			});
 

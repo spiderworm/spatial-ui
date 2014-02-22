@@ -331,6 +331,14 @@ require(
 
 		var server = new MockWebSocketServer(interpreters.json);
 
+		server.onDataReceived(function(data) {
+			server.updateData(data);
+		});
+
+		server.onDataReceived('/physics/values/impulse/kill',function() {
+			server.updateData('/physics/values/impulse/throttle',0);
+		});
+
 		server.setData({
 			"physics": {
 				"values": {

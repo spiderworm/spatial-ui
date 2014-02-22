@@ -41,7 +41,7 @@
 						"type": "control",
 						"subtype": "button",
 						"description": "kill the throttle",
-						"display": "kill",
+						"display": "0",
 						"message": "kill",
 						"valuePath": "/physics/values/impulse/kill"
 					}
