@@ -11,7 +11,6 @@ define(
 		var modelMixin = {
 			_deepSubscribeTo: function(model,path,callback) {
 				var mixin = this;
-				if(!path) debugger;
 				var matches = path.match(/^\/?([^\/]*)(?:\/(.*))?$/);
 				if(matches) {
 					var nextPath = matches[1];

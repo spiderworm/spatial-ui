@@ -62,13 +62,14 @@ define(
 
 				if(allowedValues) {
 
-					var first, foundCurrent=false;
+					var first, foundCurrent=false, set=false;
 					for(var i in allowedValues.$getKeys()) {
 						if(first===undefined) {
 							first = allowedValues[i];
 						}
 						if(foundCurrent) {
 							value = allowedValues[i];
+							set = true;
 							break;
 						}
 						if(allowedValues[i] === this.state.value) {
@@ -77,7 +78,7 @@ define(
 						}
 					}
 
-					if(value===undefined) {
+					if(!set) {
 						value = first;
 					}
 

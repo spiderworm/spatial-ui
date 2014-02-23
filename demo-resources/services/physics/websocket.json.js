@@ -231,7 +231,7 @@ require(
 			this.__tickPosition(seconds);
 		}
 		Ship.prototype.__tickPosition = function(seconds) {
-			var throttle = server.getData('/physics/values/impulse/throttle');
+			var throttle = server.getData('/physics/values/thrusters/forward');
 			var thrust = throttle * this.body.mass * seconds * 10000;
 			if(thrust !== 0) {
 				var impulseEuler = new CANNON.Vec3(0,0,thrust);
@@ -252,7 +252,7 @@ require(
 			var impulse = new CANNON.Vec3(0,0,0);
 			var point = new CANNON.Vec3(0,0,0);
 
-			impulse.y = values.thrusters.pitch*this.body.mass*seconds;
+			impulse.y = values.thrusters.pitch.throttle*this.body.mass*seconds;
 
 			point.x = this.body.position.x;
 			point.y = this.body.position.y;
@@ -335,19 +335,32 @@ require(
 			server.updateData(data);
 		});
 
-		server.onDataReceived('/physics/values/impulse/kill',function() {
-			server.updateData('/physics/values/impulse/throttle',0);
+		server.onDataReceived('/physics/values/thrusters/kill',function(msg) {
+			switch(msg) {
+				case "forward":
+					server.updateData('/physics/values/thrusters/forward',0);
+				break;
+				case "x":
+					server.updateData('/physics/values/thrusters/pitch/throttle',0);
+				break;
+				case "y":
+					server.updateData('/physics/values/thrusters/yaw',0);
+				break;
+				case "z":
+					server.updateData('/physics/values/thrusters/roll',0);
+				break;
+			}
 		});
 
 		server.setData({
 			"physics": {
 				"values": {
-					"impulse": {
-						"throttle": 0,
-						"kill": ""
-					},
 					"thrusters": {
-						"pitch": 0,
+						"forward": 0,
+						"pitch": {
+							throttle: 0,
+							stablize: 1
+						},
 						"yaw": 0,
 						"roll": 0
 					}

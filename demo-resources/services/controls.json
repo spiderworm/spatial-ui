@@ -27,7 +27,7 @@
 			"impulse": {
 				"type": "control",
 				"subtype": "multi",
-				"label": "impulse",
+				"label": "Impulse",
 				"inlineControls": {
 					"throttle": {
 						"type": "control",
@@ -35,44 +35,94 @@
 						"description": "impulse engines provide traditional Newtonian movement around space",
 						"min": -1000,
 						"max": 1000,
-						"valuePath": "/physics/values/impulse/throttle"
+						"valuePath": "/physics/values/thrusters/forward"
 					},
-					"killThrottle": {
+					"kill": {
 						"type": "control",
 						"subtype": "button",
-						"description": "kill the throttle",
+						"description": "kill the impulse engines",
 						"display": "0",
-						"message": "kill",
-						"valuePath": "/physics/values/impulse/kill"
+						"message": "forward",
+						"valuePath": "/physics/values/thrusters/kill"
 					}
 				}
 			},
 			"pitch": {
 				"type": "control",
-				"subtype": "range",
+				"subtype": "multi",
 				"label": "Pitch",
-				"description": "turns the ship on the X-axis",
-				"min": -1000,
-				"max": 1000,
-				"valuePath": "/physics/values/thrusters/pitch"
+				"inlineControls": {
+					"throttle": {
+						"type": "control",
+						"subtype": "range",
+						"description": "turns the ship on the X-axis",
+						"min": -1000,
+						"max": 1000,
+						"valuePath": "/physics/values/thrusters/pitch/throttle"
+					},
+					"kill": {
+						"type": "control",
+						"subtype": "button",
+						"description": "kill the pitch thrusters",
+						"display": "0",
+						"message": "x",
+						"valuePath": "/physics/values/thrusters/kill"
+					},
+					"autoStablize": {
+						"type": "control",
+						"subtype": "checkbox",
+						"label": "auto-stablize",
+						"description": "stablize X-axis rotation when at 0",
+						"allowedValues": [1,0],
+						"valuePath": "/physics/values/thrusters/pitch/stablize"
+					}
+				}
 			},
 			"yaw": {
 				"type": "control",
-				"subtype": "range",
+				"subtype": "multi",
 				"label": "Yaw",
-				"description": "turns the ship on the Y-axis",
-				"min": -1000,
-				"max": 1000,
-				"valuePath": "/physics/values/thrusters/yaw"
+				"inlineControls": {
+					"throttle": {
+						"type": "control",
+						"subtype": "range",
+						"description": "turns the ship on the Y-axis",
+						"min": -1000,
+						"max": 1000,
+						"valuePath": "/physics/values/thrusters/yaw"
+					},
+					"kill": {
+						"type": "control",
+						"subtype": "button",
+						"description": "kill the yaw thrusters",
+						"display": "0",
+						"message": "y",
+						"valuePath": "/physics/values/thrusters/kill"
+					}
+				}
 			},
 			"roll": {
 				"type": "control",
-				"subtype": "range",
+				"subtype": "multi",
 				"label": "Roll",
-				"description": "turns the ship on the Z-axis",
-				"min": -1000,
-				"max": 1000,
-				"valuePath": "/physics/values/thrusters/roll"
+				"inlineControls": {
+					"throttle": {
+						"type": "control",
+						"subtype": "range",
+						"description": "turns the ship on the Z-axis",
+						"min": -1000,
+						"max": 1000,
+						"valuePath": "/physics/values/thrusters/roll"
+					},
+					"kill": {
+						"type": "control",
+						"subtype": "button",
+						"description": "kill the roll thrusters",
+						"display": "0",
+						"message": "z",
+						"valuePath": "/physics/values/thrusters/kill"
+					}
+				}
 			}
 		},
 		"engineering": {
