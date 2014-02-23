@@ -140,32 +140,9 @@ define(
 			return this.$hasKey(name);
 		}
 		Model.prototype._$modelizeRecursively = function() {
-			var model = this;
 			for(var name in this) {
 				if(this.$hasKey(name)) {
-					(function() {
-						var theName = name;
-						var val = Model.modelize(model[name]);
-						if(val instanceof Model) {
-							if(val !== model[name]) {
-								val.$deepOnUpdated(
-									function(childUpdate,source) {
-										var update = {};
-										update[theName] = childUpdate;
-										model._fire('deep-updated',[update,source]);
-									}
-								);
-								val.$deepOnPinged(
-									function(childPing,source) {
-										var ping = {};
-										ping[theName] = childPing;
-										model._fire('deep-pinged',[ping,source]);
-									}
-								);
-							}
-						}
-						model[name] = val;
-					})();
+					this[name] = Model.modelize(this[name])
 				}
 			}
 		}
@@ -173,6 +150,7 @@ define(
 			var updates = {};
 			for(var name in this._$shadow) {
 				if(this._$shadow[name] !== this[name]) {
+					this.__$addEvents(name);
 					updates[name] = this[name];
 					this._$shadow[name] = this[name];
 				}
@@ -180,13 +158,32 @@ define(
 			var keys = this.$getKeys();
 			for(var i=0; i<keys.length; i++) {
 				if(this._$shadow[keys[i]] !== this[keys[i]]) {
+					this.__$addEvents(keys[i]);
 					updates[keys[i]] = this[keys[i]];
 					this._$shadow[keys[i]] = this[keys[i]];
 				}
 			}
 			return updates;
 		}
-
+		Model.prototype.__$addEvents = function(prop) {
+			if(this[prop] instanceof Model) {
+				var model = this;
+				this[prop].$deepOnUpdated(
+					function(childUpdate,source) {
+						var update = {};
+						update[prop] = childUpdate;
+						model._fire('deep-updated',[update,source]);
+					}
+				);
+				this[prop].$deepOnPinged(
+					function(childPing,source) {
+						var ping = {};
+						ping[prop] = childPing;
+						model._fire('deep-pinged',[ping,source]);
+					}
+				);
+			}	
+		}
 
 
 

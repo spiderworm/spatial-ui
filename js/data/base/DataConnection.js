@@ -4,20 +4,23 @@ define(
 		'../../base/EventObject',
 		'../../base/Model',
 		'../util/DataChannel',
-		'../../util/modelExtrapolator'
+		'../../util/modelExtrapolator',
+		'../util/DataSourceModelBinder'
 	],
 	function(
 		InstanceStore,
 		EventObject,
 		Model,
 		Channel,
-		modelExtrapolator
+		modelExtrapolator,
+		DataSourceModelBinder
 	) {
 
 
 
 
 		var dataConnectionSource = {};
+		var dataSourceModelBinder = new DataSourceModelBinder(dataConnectionSource);
 
 		function DataConnection(user,url,connectionType,dataFormat) {
 			EventObject.apply(this);
@@ -26,7 +29,7 @@ define(
 				var connection = this;
 				var channel = this._channel = new Channel(url,connectionType,dataFormat);
 				channel.onData(function(data) {
-					model.$update(data,dataConnectionSource);
+					dataSourceModelBinder.bind(data,model);
 				});
 				channel.open(function() {
 					connection._setConnected();
@@ -55,7 +58,6 @@ define(
 		DataConnection.prototype._setConnected = function() {
 			this._fire('connected',[this]);
 		}
-
 
 
 
