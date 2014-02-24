@@ -89,7 +89,7 @@
 						"description": "turns the ship on the Y-axis",
 						"min": -1000,
 						"max": 1000,
-						"valuePath": "/physics/values/thrusters/yaw"
+						"valuePath": "/physics/values/thrusters/yaw/throttle"
 					},
 					"kill": {
 						"type": "control",
@@ -98,6 +98,14 @@
 						"display": "0",
 						"message": "y",
 						"valuePath": "/physics/values/thrusters/kill"
+					},
+					"autoStablize": {
+						"type": "control",
+						"subtype": "checkbox",
+						"label": "auto-stablize",
+						"description": "stablize Y-axis rotation when at 0",
+						"allowedValues": [1,0],
+						"valuePath": "/physics/values/thrusters/yaw/stablize"
 					}
 				}
 			},
@@ -112,7 +120,7 @@
 						"description": "turns the ship on the Z-axis",
 						"min": -1000,
 						"max": 1000,
-						"valuePath": "/physics/values/thrusters/roll"
+						"valuePath": "/physics/values/thrusters/roll/throttle"
 					},
 					"kill": {
 						"type": "control",
@@ -121,6 +129,14 @@
 						"display": "0",
 						"message": "z",
 						"valuePath": "/physics/values/thrusters/kill"
+					},
+					"autoStablize": {
+						"type": "control",
+						"subtype": "checkbox",
+						"label": "auto-stablize",
+						"description": "stablize Z-axis rotation when at 0",
+						"allowedValues": [1,0],
+						"valuePath": "/physics/values/thrusters/roll/stablize"
 					}
 				}
 			}

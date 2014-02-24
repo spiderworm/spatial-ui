@@ -30,7 +30,7 @@ require(
 		var gravitationalConstant = 0;
 
 		var shipSize = 1000;
-		var shipPosition = new CANNON.Vec3(5200000000, 0, 0);
+		var shipPosition = new CANNON.Vec3(8993129000, 0, 0);
 		var shipVelocity = new CANNON.Vec3(0, 0, 0);
 		var shipMass = 10000;
 
@@ -232,14 +232,19 @@ require(
 		}
 		Ship.prototype.__tickPosition = function(seconds) {
 			var throttle = server.getData('/physics/values/thrusters/forward');
-			var thrust = throttle * this.body.mass * seconds * 10000;
+			var thrust = -throttle * this.body.mass * seconds * 10000;
 			if(thrust !== 0) {
 				var impulseEuler = new CANNON.Vec3(0,0,thrust);
+
+				//console.info('impulse start ' + impulseEuler.x + ' ' + impulseEuler.y + ' ' + impulseEuler.z);
 
 				var orientationQuat = this.body.quaternion;
 				var orientationMatrix = quatToMatrix(orientationQuat);
 
+				//console.info('orientation matrix ' + orientationMatrix.elements[0] + ' ' + orientationMatrix.elements[1] + ' ' + orientationMatrix.elements[2] + ' ' + orientationMatrix.elements[3] + ' ' + orientationMatrix.elements[4] + ' ' + orientationMatrix.elements[5] + ' ' + orientationMatrix.elements[6] + ' ' + orientationMatrix.elements[7] + ' ' + orientationMatrix.elements[8]);
+
 				impulseEuler = orientationMatrix.vmult(impulseEuler);
+				//console.info('impulse ' + impulseEuler.x + ' ' + impulseEuler.y + ' ' + impulseEuler.z);
 
 				this.body.applyImpulse(
 					impulseEuler,
@@ -271,7 +276,7 @@ require(
 			var impulse = new CANNON.Vec3(0,0,0);
 			var point = new CANNON.Vec3(0,0,0);
 
-			impulse.z = values.thrusters.yaw*this.body.mass*seconds;
+			impulse.z = values.thrusters.yaw.throttle*this.body.mass*seconds;
 
 			point.x = this.body.position.x + 10;
 			point.y = this.body.position.y;
@@ -289,7 +294,7 @@ require(
 			var impulse = new CANNON.Vec3(0,0,0);
 			var point = new CANNON.Vec3(0,0,0);
 
-			impulse.y = values.thrusters.roll*this.body.mass*seconds;
+			impulse.y = values.thrusters.roll.throttle*this.body.mass*seconds;
 
 			point.x = this.body.position.x + 10;
 			point.y = this.body.position.y;
@@ -344,10 +349,10 @@ require(
 					server.updateData('/physics/values/thrusters/pitch/throttle',0);
 				break;
 				case "y":
-					server.updateData('/physics/values/thrusters/yaw',0);
+					server.updateData('/physics/values/thrusters/yaw/throttle',0);
 				break;
 				case "z":
-					server.updateData('/physics/values/thrusters/roll',0);
+					server.updateData('/physics/values/thrusters/roll/throttle',0);
 				break;
 			}
 		});
@@ -361,8 +366,14 @@ require(
 							throttle: 0,
 							stablize: 1
 						},
-						"yaw": 0,
-						"roll": 0
+						"yaw": {
+							throttle: 0,
+							stablize: 1
+						},
+						"roll": {
+							throttle: 0,
+							stablize: 1
+						}
 					}
 				},
 				"bodies": {
