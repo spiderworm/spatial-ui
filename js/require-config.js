@@ -1,4 +1,5 @@
-{
+require = {
+	"waitSeconds": 0,
 	"paths": {
 		"react": "external/react",
 		"jsx": "external/require-jsx",
@@ -28,4 +29,4 @@
 			"exports": "CANNON"
 		}
 	}
-}
+};

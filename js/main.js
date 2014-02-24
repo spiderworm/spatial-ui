@@ -8,29 +8,16 @@ if (window.require !== window.requirejs) {
 
 	var app;
 
-	var x = new XMLHttpRequest();
-	x.open('GET','js/require-config.json',true);
-	x.onreadystatechange = function ()
-	{
-		if (x.readyState == 4)
-		{
-			var config = JSON.parse(x.responseText);
-			require.config(config);
-
-			require(
-				[
-					'./App'
-				],
-				function(App) {
-					app = new App();
-					app.start();
-				}
-			);
+	require(
+		[
+			'./App'
+		],
+		function(App) {
+			app = new App();
+			app.start();
 		}
-	}
-
-	x.send();
-
+	);
+	
 	function API() {
 		var api = this;
 		this.__callbacks = [];
