@@ -90,40 +90,26 @@ define(
 						copyQuaternion(model,newQuat);
 
 					break;
-					case 'eulerYPR':
+					case 'rotation':
 
+						var halftime = seconds/2;
+						var q1 = new CANNON.Quaternion();
+						var q2 = new CANNON.Quaternion();
+						var q3 = new CANNON.Quaternion();
+						q3.set(model.x,model.y,model.z,model.w);
 
+						q1.set(model.velocity.x, model.velocity.y, model.velocity.z, 0);
+						q1.mult(q3,q2);
+						q3.x += halftime * q2.x;
+						q3.y += halftime * q2.y;
+						q3.z += halftime * q2.z;
+						q3.w += halftime * q2.w;
+						q3.normalize();
 
-
-						var w = new CANNON.Quaternion();
-						var wq = new CANNON.Quaternion();
-						var angularVelo = model.velocity;
-						var quat = new CANNON.Quaternion();
-						quat.set(model.x,model.y,model.z,model.w);
-						var half_dt = seconds/2;
-						var quatNormalize = true;
-						var quatNormalizeFast = false;
-
-
-						w.set(angularVelo.x, angularVelo.y, angularVelo.z, 0);
-						w.mult(quat,wq);
-						quat.x += half_dt * wq.x;
-						quat.y += half_dt * wq.y;
-						quat.z += half_dt * wq.z;
-						quat.w += half_dt * wq.w;
-						if(quatNormalize){
-							if(quatNormalizeFast){
-								quat.normalizeFast();
-							} else {
-								quat.normalize();
-							}
-						}
-
-
-						model.x = quat.x;
-						model.y = quat.y;
-						model.z = quat.z;
-						model.w = quat.w;
+						model.x = q3.x;
+						model.y = q3.y;
+						model.z = q3.z;
+						model.w = q3.w;
 
 					break;
 					case 'linear':

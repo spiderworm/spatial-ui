@@ -232,7 +232,7 @@ require(
 		}
 		Ship.prototype.__tickPosition = function(seconds) {
 			var throttle = server.getData('/physics/values/thrusters/forward');
-			var thrust = -throttle * this.body.mass * seconds * 10000;
+			var thrust = throttle * this.body.mass * seconds * 10000;
 			if(thrust !== 0) {
 				var impulseEuler = new CANNON.Vec3(0,0,thrust);
 
@@ -394,11 +394,10 @@ require(
 							"z": teaatisRotation.z,
 							"w": teaatisRotation.w,
 							"velocity": {
-								"type": "eulerYPR",
+								"type": "rotation",
 								"x": 0,
 								"y": 0,
-								"z": 0,
-								"w": 0
+								"z": 0
 							}
 						}
 					},
@@ -419,11 +418,10 @@ require(
 							"z": 0,
 							"w": 0,
 							"velocity": {
-								"type": "eulerYPR",
+								"type": "rotation",
 								"x": 0,
 								"y": 0,
-								"z": 0,
-								"w": 0
+								"z": 0
 							}
 						}
 					},
@@ -445,11 +443,10 @@ require(
 							"z": 0,
 							"w": 0,
 							"velocity": {
-								"type": "eulerYPR",
+								"type": "rotation",
 								"x": 0,
 								"y": 0,
-								"z": 0,
-								"w": 0
+								"z": 0
 							}
 						}
 					},
@@ -471,11 +468,10 @@ require(
 							"z": 0,
 							"w": 0,
 							"velocity": {
-								"type": "eulerYPR",
+								"type": "rotation",
 								"x": 0,
 								"y": 0,
-								"z": 0,
-								"w": 0
+								"z": 0
 							}
 						}
 					}
