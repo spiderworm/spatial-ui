@@ -1,15 +1,30 @@
 define(
 	[
-		'../../base/Model'
+		'../../base/Model',
+		'../../util/ModelExtrapolator'
 	],
 	function(
-		Model
+		Model,
+		ModelExtrapolator
 	) {
 
-		function DataSourceModelBinder(dataSource) {
+		var dataModelBinderSource = {name:'dataModelBinderSource'};
+
+		function DataSourceModelBinder(dataSource,sourceModel,clientModel) {
 			this._source = dataSource;
+			this._sourceModel = sourceModel;
+			this._clientModel = clientModel;
+
+			var handler = sourceModel.$deepOnUpdated(function(update,source) {
+				if(source !== dataModelBinderSource) {
+					clientModel.$update(update,dataModelBinderSource);
+				}
+			});
+
+			var modelExtrapolator = new ModelExtrapolator(this._sourceModel,this._clientModel);
 		}
-		DataSourceModelBinder.prototype.bind = function(data,model) {
+		DataSourceModelBinder.prototype.bindData = function(data,model) {
+			model = model || this._sourceModel;
 			var updates = {};
 			var updated = false;
 
@@ -60,7 +75,7 @@ define(
 								model[i] = new Model();
 								updated = true;
 							}
-							this.bind(data[i],model[i]);
+							this.bindData(data[i],model[i]);
 						} else {
 							updates[i] = data[i];
 						}

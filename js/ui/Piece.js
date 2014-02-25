@@ -88,6 +88,7 @@ define(
 								<ScreenGroup
 									definition={this.props.definition}
 									appModel={this.props.appModel}
+									user={this.props.user}
 									editable={editable}
 								></ScreenGroup>
 							);
@@ -97,6 +98,7 @@ define(
 								<Screen
 									definition={this.props.definition}
 									appModel={this.props.appModel}
+									user={this.props.user}
 									hidden={options.activeScreen !== this.props.definition}
 									editable={editable}
 								></Screen>
@@ -107,6 +109,7 @@ define(
 								<PanelGroup
 									definition={this.props.definition}
 									appModel={this.props.appModel}
+									user={this.props.user}
 									editable={editable}
 								></PanelGroup>
 							);
@@ -116,6 +119,7 @@ define(
 								<Panel
 									appModel={this.props.appModel}
 									definition={this.props.definition}
+									user={this.props.user}
 									gridMode={options.gridMode || false}
 									editable={editable}
 								></Panel>
@@ -126,6 +130,7 @@ define(
 								<ControlGroup
 									appModel={this.props.appModel}
 									definition={this.props.definition}
+									user={this.props.user}
 									editable={editable}
 								></ControlGroup>
 							);
@@ -135,6 +140,7 @@ define(
 								<ControlLoader
 									appModel={this.props.appModel}
 									definition={this.props.definition}
+									user={this.props.user}
 									editable={editable}
 								></ControlLoader>
 							);
@@ -144,6 +150,7 @@ define(
 								<VisualizationLoader
 									definition={this.props.definition}
 									appModel={this.props.appModel}
+									user={this.props.user}
 								></VisualizationLoader>
 							);
 						break;
@@ -186,8 +193,9 @@ define(
 				return result;
 			},
 			_getSubPieceNodes: function(definitionModel,appModel,options) {
+				var user = this.props.user;
 				return this._mapSubPieces(definitionModel,function(definition,id) {
-					return <Piece key={id} definition={definition} appModel={appModel} options={options}></Piece>;
+					return <Piece key={id} definition={definition} appModel={appModel} options={options} user={user}></Piece>;
 				});
 			}
 		};

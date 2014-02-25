@@ -63,6 +63,7 @@ define(
 				}
 
 				var view = this;
+				var user = this.props.user;
 				return (
 					<section
 						style={style}
@@ -78,7 +79,7 @@ define(
 						<h1>{this.props.definition.label}</h1>
 						{this.props.definition.$map(function(definition) {
 							if(typeof(definition) === "object") {
-								return <Piece appModel={appModel} definition={definition} />;
+								return <Piece appModel={appModel} definition={definition} user={user} />;
 							}
 						})}
 						{this.props.children}

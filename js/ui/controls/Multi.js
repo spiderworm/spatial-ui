@@ -21,6 +21,7 @@ define(
 			},
 			render: function() {
 				var appModel = this.props.appModel;
+				var user = this.props.user;
 				var view = this;
 				var inlineControls;
 				if(this.props.definition.inlineControls) {
@@ -31,6 +32,7 @@ define(
 								appModel={appModel}
 								definition={definition}
 								inline={true}
+								user={user}
 							></ControlLoader>
 						);
 					});

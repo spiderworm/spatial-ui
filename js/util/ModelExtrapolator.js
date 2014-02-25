@@ -2,18 +2,42 @@ define(
 	[
 		'../base/Model',
 		'../external/ammo',
-		'../external/cannon'
+		'../external/cannon',
+		'../util/InstanceStore'
 	],
 	function(
 		Model,
 		Ammo,
-		CANNON
+		CANNON,
+		InstanceStore
 	) {
 
-		function Extrapolator() {
-			this._lastStamp = (new Date()).getTime();
+var count = 0;
 
-			this._models = [];
+
+		var instances = new InstanceStore();
+
+		function Extrapolator(sourceModel,clientModel) {
+			var instance = instances.find([clientModel]) || this;
+			if(instance !== this) {
+				return instance;
+			}
+			instances.add(this,[clientModel]);
+
+if(sourceModel.id === "myShip" && sourceModel.velocity) {
+	//debugger;
+	clientModel.$onUpdated(function(update,source) {
+		if(count < 100 && window.doDebug) {
+			count++;
+			console.info(update,source);
+		}
+	});
+}
+
+			this._sourceModel = sourceModel;
+			this._clientModel = clientModel;
+
+			this._lastStamp = (new Date()).getTime();
 
 			var extrapolator = this;
 			function doTick() {
@@ -22,33 +46,27 @@ define(
 			}
 
 			requestAnimationFrame(doTick);
+
+			this.enable();
 		}
-		Extrapolator.prototype.enable = function(model) {
-
-			if(model.__extrapolating) {
-				return;
-			}
-
-			model.__extrapolating = true;
+		Extrapolator.prototype.enable = function() {
+			var clientModel = this._clientModel;
+			var sourceModel = this._sourceModel;
 
 			var extrapolator = this;
 
-			model.$subscribeTo(
+			clientModel.$subscribeTo(
 				'velocity',
 				function(velocity) {
-					if(velocity) {
-						extrapolator.__add(model);
-					} else {
-						extrapolator.__remove(model);
-					}
+
 				}
 			);
 
-			model.$subscribeTo(
+			clientModel.$subscribeTo(
 				function() {
-					this.$each(function(subModel) {
+					this.$each(function(subModel,index) {
 						if(subModel instanceof Model) {
-							extrapolator.enable(subModel);
+							new Extrapolator(sourceModel[index],subModel);
 						}
 					});
 				}
@@ -56,40 +74,16 @@ define(
 
 		}
 
-		Extrapolator.prototype.__add = function(model) {
-			if(model.velocity instanceof Model && this._models.indexOf(model) === -1) {
-				this._models.push(model);
-			}
-		}
-
-		Extrapolator.prototype.__remove = function(model) {
-			var i = this._models.indexOf(model);
-			if(i !== -1) {
-				this._models.splice(i,1);
-			}
-		}
-
 		Extrapolator.prototype.__tick = function() {
 			var stamp = (new Date()).getTime();
 			var seconds = (stamp - this._lastStamp)/1000;
 			this._lastStamp = stamp;
-			for(var i in this._models) {
-				this.__tickModel(this._models[i],seconds);
-			}
-		}
 
-		Extrapolator.prototype.__tickModel = function(model,seconds) {
+			var model = this._clientModel;
+
 			if(model.velocity && model.velocity instanceof Model) {
+
 				switch(model.velocity.type) {
-					case 'quaternion':
-
-						var angleAxis = quatToAngleAxis(model.velocity);
-						var velQuat = angleAxisToQuat({angle: angleAxis.angle * seconds *1, axis: angleAxis.axis});
-						normalize(velQuat);
-						var newQuat = multiplyQuaternions(model,velQuat);
-						copyQuaternion(model,newQuat);
-
-					break;
 					case 'rotation':
 
 						var halftime = seconds/2;
@@ -106,24 +100,36 @@ define(
 						q3.w += halftime * q2.w;
 						q3.normalize();
 
-						model.x = q3.x;
-						model.y = q3.y;
-						model.z = q3.z;
-						model.w = q3.w;
+						model.$update(
+							{
+								x: q3.x,
+								y: q3.y,
+								z: q3.z,
+								w: q3.w
+							},
+							this
+						);
 
 					break;
 					case 'linear':
 					default:
+
+						var update = {};
+
 						var keys = model.velocity.$getKeys();
 						for(var i in keys) {
 							if(keys[i] !== "velocity") {
-								model[keys[i]] += seconds * model.velocity[keys[i]];
+								update[keys[i]] = model[keys[i]] + seconds * model.velocity[keys[i]];
 							}
 						}
+
+						model.$update(update,this);
+
 					break;
 				}
 			}
 		}
+
 
 
 
@@ -185,8 +191,6 @@ define(
 		}
 
 
-		var extrapolator = new Extrapolator();
-
-		return extrapolator;
+		return Extrapolator;
 	}
 );

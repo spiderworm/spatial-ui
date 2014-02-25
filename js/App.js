@@ -62,6 +62,7 @@ define(
 			this._started = true;
 
 			var user = userManager.getCurrentUser();
+			this._user = user;
 
 			this._model.$update({
 				ui: (new StoryConnectViewModel()).ui
@@ -97,7 +98,7 @@ define(
 			if(!this._rendered) {
 				this._rendered = true;
 				var appUI = React.renderComponent(
-					AppUI({model: this._model}),
+					AppUI({model: this._model, user: this._user}),
 					document.body
 				);
 			}

@@ -1,14 +1,12 @@
 define(
 	[
 		'react',
-		'jsx!./Loader',
 		'jsx!../Piece',
 		'../util/reactKeyGenerator',
 		'../modelMixin'
 	],
 	function(
 		React,
-		ControlLoader,
 		Piece,
 		keyGenerator,
 		modelMixin
@@ -93,20 +91,22 @@ define(
 						this._deepPing(
 							this.props.appModel,
 							this.props.definition.valuePath,
-							message
+							message,
+							this.props.user
 						);
 					} else {
-						this.props.definition.$ping({value: value});
+						this.props.definition.$ping({value: value},this.props.user);
 					}
 				} else {
 					if(this.props.definition.valuePath) {
 						this._deepSetValue(
 							this.props.appModel,
 							this.props.definition.valuePath,
-							value
+							value,
+							this.props.user
 						);
 					} else {
-						this.props.definition.$update({value: value});
+						this.props.definition.$update({value: value},this.props.user);
 					}
 				}
 			},
@@ -145,7 +145,7 @@ define(
 
 				if(subControls) {
 					return (
-						<Piece appModel={appModel} definition={subControls}></Piece>
+						<Piece appModel={appModel} definition={subControls} user={this.props.user}></Piece>
 					);
 				}
 

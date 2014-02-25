@@ -30,7 +30,7 @@ define(
 				}
 
 			},
-			_deepSetValue: function(model,path,value) {
+			_deepSetValue: function(model,path,value,user) {
 				var nodes = path.split('/');
 				while(nodes.length > 1) {
 					var node = nodes.shift();
@@ -44,9 +44,9 @@ define(
 					model = model[node];
 				}
 				model[nodes[0]] = value;
-				model.$setUpdated();
+				model.$setUpdated(null,user);
 			},
-			_deepPing: function(model,path,value) {
+			_deepPing: function(model,path,value,user) {
 				var nodes = path.split('/');
 				while(nodes.length > 1) {
 					var node = nodes.shift();
@@ -61,7 +61,7 @@ define(
 				}
 				var ping = {};
 				ping[nodes[0]] = value;
-				model.$ping(ping);
+				model.$ping(ping,user);
 			},
 			__subscriptions: []
 		};

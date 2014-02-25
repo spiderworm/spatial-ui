@@ -153,7 +153,8 @@ define(
 							return Constructor({
 								definition: definition,
 								appModel: appModel,
-								inline: inline
+								inline: inline,
+								user: this.props.user
 							});
 						}
 

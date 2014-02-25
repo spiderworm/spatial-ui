@@ -4,7 +4,6 @@ define(
 		'../../base/EventObject',
 		'../../base/Model',
 		'../util/DataChannel',
-		'../../util/modelExtrapolator',
 		'../util/DataSourceModelBinder'
 	],
 	function(
@@ -12,40 +11,40 @@ define(
 		EventObject,
 		Model,
 		Channel,
-		modelExtrapolator,
 		DataSourceModelBinder
 	) {
 
 
 
 
-		var dataConnectionSource = {};
-		var dataSourceModelBinder = new DataSourceModelBinder(dataConnectionSource);
+		var dataConnectionSource = {name:'dataConnectionSource'};
 
 		function DataConnection(user,url,connectionType,dataFormat) {
 			EventObject.apply(this);
-			var model = this._model = new Model();
+			var clientModel = this._model = new Model();
+			var sourceModel = new Model();
+
+			var dataSourceModelBinder = new DataSourceModelBinder(dataConnectionSource,sourceModel,clientModel);
+
 			if(url && connectionType && dataFormat) {
 				var connection = this;
 				var channel = this._channel = new Channel(url,connectionType,dataFormat);
 				channel.onData(function(data) {
-					dataSourceModelBinder.bind(data,model);
+					dataSourceModelBinder.bindData(data);
 				});
 				channel.open(function() {
 					connection._setConnected();
 				});
-				model.$deepOnUpdated(function(updateObj,source) {
-					if(source !== dataConnectionSource) {
+				clientModel.$deepOnUpdated(function(updateObj,source) {
+					if(source === user) {
 						channel.send(updateObj);
 					}
 				});
-				model.$deepOnPinged(function(ping,source) {
-					if(source !== dataConnectionSource) {
+				clientModel.$deepOnPinged(function(ping,source) {
+					if(source === user) {
 						channel.send(ping);
 					}
 				});
-
-				modelExtrapolator.enable(model);
 			}
 		}
 		DataConnection.prototype = new EventObject();

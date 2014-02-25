@@ -89,23 +89,6 @@ require(
 
 
 
-
-		/*
-		self.addEventListener(
-			'message',
-			function(event) {
-				var newVals = parseOSC(event.data);
-				for(var name in newVals) {
-					handleMessageReceived(newVals[name]);
-				}
-			},
-			false
-		);
-		*/
-
-
-
-
 		setInterval(
 			function() {
 
