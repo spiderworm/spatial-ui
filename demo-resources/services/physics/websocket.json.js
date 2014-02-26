@@ -22,8 +22,8 @@ require(
 
 
 
-		var physicsTickMS = 100;
-		var serverSendMS = 250;
+		var physicsTickMS = 1000/50;
+		var serverSendMS = 1000/30;
 
 		//var gravitationalConstant = 6.674e-11;
 		//var gravitationalConstant = 1e+3;
@@ -232,7 +232,7 @@ require(
 		}
 		Ship.prototype.__tickPosition = function(seconds) {
 			var throttle = server.getData('/physics/values/thrusters/forward');
-			var thrust = throttle * this.body.mass * seconds * 10000;
+			var thrust = throttle * this.body.mass * seconds * 1000;
 			if(thrust !== 0) {
 				var impulseEuler = new CANNON.Vec3(0,0,thrust);
 
@@ -452,7 +452,7 @@ require(
 					},
 					"myShip": {
 						"position": {
-							"id": "myShip",
+							"id": "myShip1",
 							"x": 0,
 							"y": 0,
 							"z": 0,

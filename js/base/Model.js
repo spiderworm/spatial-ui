@@ -4,7 +4,7 @@ define(
 
 
 
-		function Model(vals) {
+		function Model(vals,id) {
 			if(arguments.length === 0) {
 				vals = {};
 			}
@@ -12,10 +12,14 @@ define(
 				throw new Error('Model must be passed an object')
 			}
 			EventObject.apply(this);
+			this._$modelID = id || null;
 			this._$shadow = {};
 			this.$update(vals);
 		}
 		Model.prototype = new EventObject();
+		Model.prototype.$getID = function() {
+			return this._$modelID;
+		}
 		Model.prototype.$subscribeTo = function(a,b) {
 			var callback, prop, lastVal, firstRun;
 			if(arguments.length === 1) {
@@ -68,6 +72,7 @@ define(
 			this.$update(vals,source);
 		}
 		Model.prototype.$update = function(vals,source) {
+
 			var updates = {};
 			for(var name in vals) {
 				if(this.$hasKey.apply(vals,[name])) {
@@ -87,7 +92,9 @@ define(
 			return this._on('updated',callback);
 		}
 		Model.prototype.$deepOnUpdated = function(callback) {
-			return this._on('deep-updated',callback);
+			return this._on('deep-updated',function() {
+				callback.apply(this,arguments);
+			});
 		}
 		Model.prototype.$ping = function(ping,source) {
 			this._fire('pinged',[ping,source]);

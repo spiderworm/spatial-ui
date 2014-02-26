@@ -129,6 +129,7 @@ define(
 					object3D._rotation = rotation;
 				}
 			);
+			
 		}
 
 		Object3D.prototype = new BaseObject3D();

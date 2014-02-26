@@ -21,17 +21,22 @@ define(
 
 		function DataConnection(user,url,connectionType,dataFormat) {
 			EventObject.apply(this);
-			var clientModel = this._model = new Model();
-			var sourceModel = new Model();
-
-			var dataSourceModelBinder = new DataSourceModelBinder(dataConnectionSource,sourceModel,clientModel);
-
 			if(url && connectionType && dataFormat) {
-				var connection = this;
+
 				var channel = this._channel = new Channel(url,connectionType,dataFormat);
-				channel.onData(function(data) {
-					dataSourceModelBinder.bindData(data);
-				});
+
+				var dataSourceModelBinder = new DataSourceModelBinder(channel);
+				var clientModel = this._model = dataSourceModelBinder.getClientModel();
+
+				clientModel.$onUpdated(function(update,source) {
+					this.$each(function(val,key) {
+						if(val && val.$getID && val.$getID() && val.$getID()[0] === "s") {
+							debugger;
+						}
+					});
+				}).asynchronous = false;
+
+				var connection = this;
 				channel.open(function() {
 					connection._setConnected();
 				});

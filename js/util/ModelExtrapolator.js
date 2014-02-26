@@ -12,34 +12,73 @@ define(
 		InstanceStore
 	) {
 
-var count = 0;
+
+
+		function clone(val) {
+			switch(typeof val) {
+				case "object":
+					if(val === null) {
+						return val;
+					}
+					var result = {};
+					if(val instanceof Model) {
+						val.$each(function(subval,index) {
+							result[index] = clone(subval);
+						});
+					} else {
+						for(var index in val) {
+							result[index] = clone(val[index]);
+						}
+					}
+					return result;
+				break;
+				default:
+					return val;
+				break;
+			}
+		}
+
 
 
 		var instances = new InstanceStore();
 
-		function Extrapolator(sourceModel,clientModel) {
-			var instance = instances.find([clientModel]) || this;
+		function Extrapolator(sourceModel,targetModel) {
+
+			var instance = instances.find([targetModel]) || this;
 			if(instance !== this) {
 				return instance;
 			}
-			instances.add(this,[clientModel]);
-
-if(sourceModel.id === "myShip" && sourceModel.velocity) {
-	//debugger;
-	clientModel.$onUpdated(function(update,source) {
-		if(count < 100 && window.doDebug) {
-			count++;
-			console.info(update,source);
-		}
-	});
-}
+			instances.add(this,[targetModel]);
 
 			this._sourceModel = sourceModel;
-			this._clientModel = clientModel;
+			this._targetModel = targetModel;
 
 			this._lastStamp = (new Date()).getTime();
 
+			this._smoothing = {};
+
 			var extrapolator = this;
+
+			sourceModel.$subscribeTo(function() {
+				extrapolator._lastStamp = (new Date()).getTime();
+				var smoothing = {};
+				this.$each(function(val,key) {
+					if(!targetModel.$hasKey(key)) {
+						targetModel[key] = clone(val);
+					}
+					if(typeof val === "number") {
+						var smooth = parseFloat(val-targetModel[key]);
+						if(!isNaN(smooth) && smooth !== 0) {
+							smoothing[key] = smooth;
+						}
+					} else if(typeof val !== "object" || val === null) {
+						targetModel[key] = val;
+					}
+				});
+				extrapolator._smoothing = smoothing;
+				targetModel.$setUpdated(null,extrapolator);
+			});
+
 			function doTick() {
 				requestAnimationFrame(doTick);
 				extrapolator.__tick();
@@ -47,25 +86,10 @@ if(sourceModel.id === "myShip" && sourceModel.velocity) {
 
 			requestAnimationFrame(doTick);
 
-			this.enable();
-		}
-		Extrapolator.prototype.enable = function() {
-			var clientModel = this._clientModel;
-			var sourceModel = this._sourceModel;
-
-			var extrapolator = this;
-
-			clientModel.$subscribeTo(
-				'velocity',
-				function(velocity) {
-
-				}
-			);
-
-			clientModel.$subscribeTo(
+			targetModel.$subscribeTo(
 				function() {
 					this.$each(function(subModel,index) {
-						if(subModel instanceof Model) {
+						if(subModel instanceof Model && sourceModel.$hasKey(index)) {
 							new Extrapolator(sourceModel[index],subModel);
 						}
 					});
@@ -73,26 +97,26 @@ if(sourceModel.id === "myShip" && sourceModel.velocity) {
 			);
 
 		}
-
 		Extrapolator.prototype.__tick = function() {
 			var stamp = (new Date()).getTime();
 			var seconds = (stamp - this._lastStamp)/1000;
-			this._lastStamp = stamp;
 
-			var model = this._clientModel;
+			var extrapolator = this;
 
-			if(model.velocity && model.velocity instanceof Model) {
+			var update = {};
 
-				switch(model.velocity.type) {
+			if(this._targetModel.velocity && this._targetModel.velocity instanceof Model) {
+
+				switch(this._targetModel.velocity.type) {
 					case 'rotation':
 
 						var halftime = seconds/2;
 						var q1 = new CANNON.Quaternion();
 						var q2 = new CANNON.Quaternion();
 						var q3 = new CANNON.Quaternion();
-						q3.set(model.x,model.y,model.z,model.w);
+						q3.set(this._targetModel.x,this._targetModel.y,this._targetModel.z,this._targetModel.w);
 
-						q1.set(model.velocity.x, model.velocity.y, model.velocity.z, 0);
+						q1.set(this._targetModel.velocity.x, this._targetModel.velocity.y, this._targetModel.velocity.z, 0);
 						q1.mult(q3,q2);
 						q3.x += halftime * q2.x;
 						q3.y += halftime * q2.y;
@@ -100,34 +124,40 @@ if(sourceModel.id === "myShip" && sourceModel.velocity) {
 						q3.w += halftime * q2.w;
 						q3.normalize();
 
-						model.$update(
-							{
-								x: q3.x,
-								y: q3.y,
-								z: q3.z,
-								w: q3.w
-							},
-							this
-						);
+						update = {
+							x: q3.x,
+							y: q3.y,
+							z: q3.z,
+							w: q3.w
+						};
 
 					break;
 					case 'linear':
 					default:
 
-						var update = {};
-
-						var keys = model.velocity.$getKeys();
+						var keys = this._targetModel.velocity.$getKeys();
 						for(var i in keys) {
 							if(keys[i] !== "velocity") {
-								update[keys[i]] = model[keys[i]] + seconds * model.velocity[keys[i]];
+								update[keys[i]] = this._targetModel[keys[i]] + seconds * this._targetModel.velocity[keys[i]];
 							}
 						}
-
-						model.$update(update,this);
 
 					break;
 				}
 			}
+
+				for(var key in this._smoothing) {
+					var amt = this._smoothing[key] * 1/30;
+					this._smoothing[key] -= amt;
+					if(!update.hasOwnProperty(key)) {
+						update[key] = this._targetModel[key] || 0;
+					}
+					update[key] += amt;
+				}
+
+
+			this._targetModel.$update(update,this);
+
 		}
 
 

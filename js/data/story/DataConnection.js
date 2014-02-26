@@ -26,12 +26,14 @@ define(
 
 							var keys = definitions.$getKeys();
 							for(var i in keys) {
-								storyConnection.__addConnection(
-									keys[i],
-									definitions[keys[i]].url,
-									definitions[keys[i]].type,
-									definitions[keys[i]].format
-								);
+								if(definitions[keys[i]].url) {
+									storyConnection.__addConnection(
+										keys[i],
+										definitions[keys[i]].url,
+										definitions[keys[i]].type,
+										definitions[keys[i]].format
+									);
+								}
 							}
 
 						}

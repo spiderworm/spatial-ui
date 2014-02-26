@@ -1,93 +1,109 @@
 define(
 	[
 		'../../base/Model',
-		'../../util/ModelExtrapolator'
+		'../TimeDataStore',
+		'../Timeline',
+		'../TimelineModelSynchronizer',
+		'../../util/clone'
 	],
 	function(
 		Model,
-		ModelExtrapolator
+		TimeDataStore,
+		Timeline,
+		TimelineModelSynchronizer,
+		clone
 	) {
 
-		var dataModelBinderSource = {name:'dataModelBinderSource'};
 
-		function DataSourceModelBinder(dataSource,sourceModel,clientModel) {
-			this._source = dataSource;
-			this._sourceModel = sourceModel;
-			this._clientModel = clientModel;
 
-			var handler = sourceModel.$deepOnUpdated(function(update,source) {
-				if(source !== dataModelBinderSource) {
-					clientModel.$update(update,dataModelBinderSource);
-				}
+
+
+
+
+
+		function DataSourceModelBinder(channel) {
+
+			this._data = {};
+			var clientModel = this._clientModel = new Model({},"clientModel");
+
+			var ms = (new Date()).getTime();
+
+			this._timeDataStore = new TimeDataStore(ms,this._data);
+			this._timeline = new Timeline(this._timeDataStore,ms-100);
+			this._timeline.play();
+			this._modelSynchronizer = new TimelineModelSynchronizer(this._timeline,clientModel);
+
+			this._channel = channel;
+
+			var dataSourceModelBuilder = this;
+
+			channel.onData(function(data) {
+				dataSourceModelBuilder.__handleData(data,(new Date()).getTime());
 			});
 
-			var modelExtrapolator = new ModelExtrapolator(this._sourceModel,this._clientModel);
 		}
-		DataSourceModelBinder.prototype.bindData = function(data,model) {
-			model = model || this._sourceModel;
-			var updates = {};
-			var updated = false;
+		DataSourceModelBinder.prototype.getClientModel = function() {
+			return this._clientModel;
+		}
+		DataSourceModelBinder.prototype.__handleData = function(update,timestamp) {
 
-			for(var i in data) {
-				switch(i) {
-					case "@push":
-						if(!model.__pushed) {
-							model.__pushed = {};
-						}
-						if(!model.__pushed[data[i]]) {
-							model.__pushed[data[i]] = [];
-						}
-						model.__pushed[data[i]].unshift(model[data[i]]);
-						delete model[data[i]];
-						updated = true;
-					break;
-					case "@pop":
-						if(!model.__pushed) {
-							model.__pushed = {};
-						}
-						if(!model.__pushed[data[i]]) {
-							model.__pushed[data[i]] = [];
-						}
-						var result = model.__pushed[data[i]].shift();
-						model[data[i]] = result;
-						update = true;
-					break;
-					case "@clear":
-						if(!model.__pushed) {
-							model.__pushed = {};
-						}
-						if(!model.__pushed[data[i]]) {
-							model.__pushed[data[i]] = [];
-						}
-						while(model.__pushed[data[i]][0]) {
-							model.__pushed[data[i]].shift();
-						}
-						delete model[data[i]];
-						updated = true;
-					break;
-					case "@remove":
-						delete model[data[i]];
-						updated = true;
-					break;
-					default:
-						if(data[i] && typeof data[i] === "object") {
-							if(model[i] instanceof Model === false) {
-								model[i] = new Model();
-								updated = true;
+			function handle(update,data) {
+
+				for(var i in update) {
+					switch(i) {
+						case "@push":
+							if(!data.__pushed) {
+								data.__pushed = {};
 							}
-							this.bindData(data[i],model[i]);
-						} else {
-							updates[i] = data[i];
-						}
-					break;
+							if(!data.__pushed[update[i]]) {
+								data.__pushed[update[i]] = [];
+							}
+							data.__pushed[update[i]].unshift(data[update[i]]);
+							data[update[i]] = undefined;
+						break;
+						case "@pop":
+							if(!data.__pushed) {
+								data.__pushed = {};
+							}
+							if(!data.__pushed[update[i]]) {
+								data.__pushed[update[i]] = [];
+							}
+							var result = data.__pushed[update[i]].shift();
+							data[update[i]] = result;
+						break;
+						case "@clear":
+							if(!data.__pushed) {
+								data.__pushed = {};
+							}
+							if(!data.__pushed[update[i]]) {
+								data.__pushed[update[i]] = [];
+							}
+							while(data.__pushed[update[i]][0]) {
+								data.__pushed[update[i]].shift();
+							}
+							data[update[i]] = undefined;
+						break;
+						case "@remove":
+							data[update[i]] = undefined;
+						break;
+						default:
+							if(update[i] && typeof update[i] === "object") {
+								if(typeof data[i] !== "object") {
+									data[i] = {};
+								}
+								handle(update[i],data[i]);
+							} else {
+								data[i] = update[i];
+							}
+						break;
+					}
 				}
+
 			}
 
-			if(updated) {
-				model.$setUpdated(null,this._source);
-			}
+			handle(update,this._data);
 
-			model.$update(updates,this._source);
+			this._timeDataStore.addData(timestamp,clone(this._data));
 
 		}
 

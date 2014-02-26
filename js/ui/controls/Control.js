@@ -227,16 +227,18 @@ define(
 				return null;
 			},
 			__getValueMap: function(value) {
-
+				var result = null;
+				
 				if(this.props.definition.valueMap) {
-					for(var i in this.props.definition.valueMap) {
-						if(this.props.definition.valueMap[i].value === value) {
-							return this.props.definition.valueMap[i];
+					var valueMap = this.props.valueMap;
+					this.props.definition.valueMap.$each(function(map) {
+						if(map.value === value) {
+							result = map;
 						}
-					}
+					});
 				}
 
-				return null;
+				return result;
 
 			},
 			__findModelAndProperty: function() {
