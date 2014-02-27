@@ -2,11 +2,14 @@ define(
 	['../base/EventObject'],
 	function(EventObject) {
 
+		window.timelines = [];
+
 		function Timeline(timeDataStore,currentMS) {
+			window.timelines.push(this);
 			EventObject.apply(this);
 			this._timeDataStore = timeDataStore;
 			this._currentMS = currentMS;
-			this._lastTickMS = currentMS;
+			this._lastTickMS = (new Date()).getTime();
 			this._currentData = null;
 
 			var sync = this;
@@ -22,6 +25,13 @@ define(
 			this._state = Timeline.PLAYING;
 			this._lastTickMS = (new Date()).getTime();
 		}
+		Timeline.prototype.pause = function() {
+			this._state = Timeline.PAUSED;
+		}
+		Timeline.prototype.playAt = function(ms) {
+			this._currentMS = ms;
+			this.play();
+		}
 		Timeline.prototype.onNewData = function(callback) {
 			return this._on('new-data',callback);
 		}
@@ -30,7 +40,6 @@ define(
 				var ms = (new Date()).getTime();
 				var msdelta = ms - this._lastTickMS;
 				this._lastTickMS = ms;
-
 				this._currentMS += msdelta;
 
 				this._currentData = this._timeDataStore.getDataAt(this._currentMS);

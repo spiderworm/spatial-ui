@@ -16,8 +16,15 @@ define(
 			this.addData(startMS,startData);
 		}
 		TimeDataStore.prototype.addData = function(timestamp,data) {
-			this._dataPoints.push(new TimeDataPoint(timestamp,data));
-			while(this._dataPoints.length > 100) {
+			var i = 0;
+			for(var j=this._dataPoints.length-1; j>=0; j--) {
+				if(this._dataPoints[j].timestamp <= timestamp) {
+					i = j+1;
+					break;
+				}
+			}
+			this._dataPoints.splice(i,0,new TimeDataPoint(timestamp,data));
+			while(this._dataPoints.length > 500) {
 				this._dataPoints.shift();
 			}
 		}
