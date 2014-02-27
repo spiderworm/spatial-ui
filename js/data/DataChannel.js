@@ -1,9 +1,9 @@
 define(
 	[
-		'../../base/EventObject',
-		'../util/comm',
-		'./MockSocket',
-		'./dataInterpreters'
+		'../base/EventObject',
+		'./util/comm',
+		'./util/MockSocket',
+		'./util/dataInterpreters'
 	],
 	function(
 		EventObject,

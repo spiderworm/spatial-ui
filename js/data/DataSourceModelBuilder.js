@@ -1,10 +1,10 @@
 define(
 	[
-		'../../base/Model',
-		'../TimeDataStore',
-		'../Timeline',
-		'../TimelineModelSynchronizer',
-		'../../util/clone'
+		'../base/Model',
+		'./TimeDataStore',
+		'./Timeline',
+		'./TimelineModelSynchronizer',
+		'../util/clone'
 	],
 	function(
 		Model,
@@ -21,7 +21,7 @@ define(
 
 
 
-		function DataSourceModelBinder(channel) {
+		function DataSourceModelBuilder(channel) {
 
 			this._data = {};
 			var clientModel = this._clientModel = new Model({},"clientModel");
@@ -42,10 +42,10 @@ define(
 			});
 
 		}
-		DataSourceModelBinder.prototype.getClientModel = function() {
+		DataSourceModelBuilder.prototype.getClientModel = function() {
 			return this._clientModel;
 		}
-		DataSourceModelBinder.prototype.__handleData = function(update,timestamp) {
+		DataSourceModelBuilder.prototype.__handleData = function(update,timestamp) {
 
 			function handle(update,data) {
 
@@ -108,7 +108,7 @@ define(
 		}
 
 
-		return DataSourceModelBinder;
+		return DataSourceModelBuilder;
 
 	}
 );

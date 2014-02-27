@@ -3,15 +3,15 @@ define(
 		'../../util/InstanceStore',
 		'../../base/EventObject',
 		'../../base/Model',
-		'../util/DataChannel',
-		'../util/DataSourceModelBinder'
+		'../DataChannel',
+		'../DataSourceModelBuilder'
 	],
 	function(
 		InstanceStore,
 		EventObject,
 		Model,
 		Channel,
-		DataSourceModelBinder
+		DataSourceModelBuilder
 	) {
 
 
@@ -25,16 +25,8 @@ define(
 
 				var channel = this._channel = new Channel(url,connectionType,dataFormat);
 
-				var dataSourceModelBinder = new DataSourceModelBinder(channel);
-				var clientModel = this._model = dataSourceModelBinder.getClientModel();
-
-				clientModel.$onUpdated(function(update,source) {
-					this.$each(function(val,key) {
-						if(val && val.$getID && val.$getID() && val.$getID()[0] === "s") {
-							debugger;
-						}
-					});
-				}).asynchronous = false;
+				var dataSourceModelBuilder = new DataSourceModelBuilder(channel);
+				var clientModel = this._model = dataSourceModelBuilder.getClientModel();
 
 				var connection = this;
 				channel.open(function() {
