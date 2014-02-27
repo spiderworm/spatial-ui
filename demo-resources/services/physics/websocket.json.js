@@ -22,11 +22,11 @@ require(
 
 
 
-		var physicsTickMS = 1000/50;
-		var serverSendMS = 1000/30;
+		var physicsTickMS = 1000/30;
+		var serverSendMS = 1000/20;
 
-		//var gravitationalConstant = 6.674e-11;
-		//var gravitationalConstant = 1e+3;
+		var gravitationalConstant = 6.674e-17;
+		var gravitationalConstant = 6.674e-19;
 		var gravitationalConstant = 0;
 
 		var shipSize = 1000;
@@ -59,8 +59,16 @@ require(
 
 		function PhysicsSystem() {
 			var system = new CANNON.World();
+			system.solver.iterations = 20;
+			system.solver.tolerance = 0;
 			system.gravity.set(0,0,0);
 			system.broadphase = new CANNON.NaiveBroadphase();
+			system.defaultContactMaterial.contactEquationStiffness = 1e20;
+			system.defaultContactMaterial.contactEquationRegularizationTime = 1;
+			console.info(system.defaultContactMaterial.friction);
+			console.info(system.defaultContactMaterial.restitution);
+			console.info(system.defaultContactMaterial.contactEquationStiffness);
+			console.info(system.defaultContactMaterial.contactEquationRegularizationTime);
 			return system;
 		}
 
@@ -74,10 +82,11 @@ require(
 		}
 
 		function PhysicsShip() {
-			var shape = new CANNON.Sphere(shipSize/2);
+			var shape = new CANNON.Sphere(shipSize);
 			var body = new CANNON.RigidBody(shipMass,shape);
 			body.angularVelocity.set(0,0,0);
 			body.position.set(shipPosition.x,shipPosition.y,shipPosition.z);
+			body.addEventListener('collide',function() { console.info('collision'); });
 			return body;
 		}
 
@@ -176,13 +185,19 @@ require(
 					continue;
 				}
 
-				var dist2 = Math.pow(wells[i].position.x,2) + Math.pow(wells[i].position.y,2) + Math.pow(wells[i].position.z,2);
-				var force = gravitationalConstant * myMass * wells[i].mass / dist2
+				var dist2 = Math.pow(wells[i].position.x - myPosition.x,2) + Math.pow(wells[i].position.y - myPosition.y,2) + Math.pow(wells[i].position.z - myPosition.z,2);
+				var force = gravitationalConstant * myMass * wells[i].mass / dist2;
 				var impulse = new CANNON.Vec3(
 					force * (wells[i].position.x - myPosition.x/dist2),
 					force * (wells[i].position.y - myPosition.y/dist2),
 					force * (wells[i].position.z - myPosition.z/dist2)
 				);
+
+				if(dist2 === 0) {
+					console.info(this.id + " " + wells[i].source.id);
+					console.info(this.body.position.x + " " + this.body.position.y + " " + this.body.position.z);
+					console.info(wells[i].source.body.position.x + " " + wells[i].source.body.position.y + " " + wells[i].source.body.position.z);
+				}
 
 				this.body.applyImpulse(impulse,myPosition);
 
@@ -403,9 +418,9 @@ require(
 					},
 					"sun": {
 						"position": {
-							"x": 0,
-							"y": 0,
-							"z": 0,
+							"x": sunPosition.x,
+							"y": sunPosition.y,
+							"z": sunPosition.z,
 							"velocity": {
 								"x": 0,
 								"y": 0,
@@ -427,9 +442,9 @@ require(
 					},
 					"Teaatis": {
 						"position": {
-							"x": 0,
-							"y": 0,
-							"z": 0,
+							"x": teaatisPosition.x,
+							"y": teaatisPosition.y,
+							"z": teaatisPosition.z,
 							"velocity": {
 								"x": 0,
 								"y": 0,
@@ -452,10 +467,9 @@ require(
 					},
 					"myShip": {
 						"position": {
-							"id": "myShip1",
-							"x": 0,
-							"y": 0,
-							"z": 0,
+							"x": shipPosition.x,
+							"y": shipPosition.y,
+							"z": shipPosition.z,
 							"velocity": {
 								"x": 0,
 								"y": 0,

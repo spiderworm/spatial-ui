@@ -11,6 +11,7 @@ define(
 			this._currentMS = currentMS;
 			this._lastTickMS = (new Date()).getTime();
 			this._currentData = null;
+			this._playSpeed = 1;
 
 			var sync = this;
 			function tick() {
@@ -22,6 +23,7 @@ define(
 		Timeline.prototype = new EventObject();
 		Timeline.PLAYING = 'playing';
 		Timeline.prototype.play = function() {
+			this._playSpeed = 1;
 			this._state = Timeline.PLAYING;
 			this._lastTickMS = (new Date()).getTime();
 		}
@@ -32,6 +34,9 @@ define(
 			this._currentMS = ms;
 			this.play();
 		}
+		Timeline.prototype.setPlaySpeed = function(speed) {
+			this._playSpeed = speed;
+		}
 		Timeline.prototype.onNewData = function(callback) {
 			return this._on('new-data',callback);
 		}
@@ -40,7 +45,7 @@ define(
 				var ms = (new Date()).getTime();
 				var msdelta = ms - this._lastTickMS;
 				this._lastTickMS = ms;
-				this._currentMS += msdelta;
+				this._currentMS += this._playSpeed * msdelta;
 
 				this._currentData = this._timeDataStore.getDataAt(this._currentMS);
 

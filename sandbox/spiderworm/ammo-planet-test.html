@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+<script src="../../js/require-config.js"></script>
+<script src="../../js/external/require.js"></script>
+<script>
+require.config({baseUrl: '../../js'});
+</script>
+</head>
+<body style="width: 100%; height: 100%; margin: 0; padding: 0;">
+
+<canvas style="width: 100%; height: 100%"></canvas>
+
+<script>
+
+setTimeout(function() {
+
+require(
+	[
+		'THREE',
+		'external/cannon',
+		'external/OrbitControls',
+		'ui/util/everyFrame'
+	],
+	function(
+		THREE,
+		CANNON,
+		OrbitControls,
+		everyFrame
+	) {
+
+
+		var canvas = document.querySelector('canvas');
+
+		var scale = 1e4;
+
+
+
+		function Universe() {
+			this._children = [];
+			this._lastTime = (new Date()).getTime();
+
+			var physics = new CANNON.World();
+			physics.gravity.set(0,0,0);
+			physics.broadphase = new CANNON.NaiveBroadphase();
+			this.physics = physics;
+
+			this.scene = new THREE.Scene();
+
+			this.camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth/canvas.offsetHeight, .00001, 1e20);
+			this.camera.position.z = 50 * scale;
+			var orbitControls = new OrbitControls(this.camera);
+			orbitControls.update();
+
+			var universe = this;
+
+			setInterval(function(){
+				universe.step();
+			}, 1000/60);
+
+		}
+		Universe.prototype.add = function(obj) {
+			this._children.push(obj);
+			this.physics.add(obj.body);
+			this.scene.add(obj.view);
+		}
+		Universe.prototype.prepareForRender = function() {
+			for(var i=0; i<this._children.length; i++) {
+				this._children[i].prepareForRender();
+			}
+		}
+		Universe.prototype.step = function() {
+			var time = (new Date()).getTime();
+			var seconds = (time - this._lastTime)/1000;
+			this._lastTime = time;
+			this.physics.step(seconds);
+		}
+
+
+
+
+		function Planet(radius,mass) {
+			console.info(radius);
+			var shape = new CANNON.Sphere(radius/2);
+			var body = new CANNON.RigidBody(mass,shape);
+			this.body = body;
+
+			var geometry = new THREE.SphereGeometry(radius/2, 32, 32);
+			var material = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
+			this.view = new THREE.Mesh(geometry, material);
+		}
+		Planet.prototype.prepareForRender = function() {
+			this.view.position.x = this.body.position.x;
+			this.view.position.y = this.body.position.y;
+			this.view.position.z = this.body.position.z;
+			this.view.quaternion.x = this.body.quaternion.x;
+			this.view.quaternion.y = this.body.quaternion.y;
+			this.view.quaternion.z = this.body.quaternion.z;
+			this.view.quaternion.w = this.body.quaternion.w;
+		}
+
+
+
+
+		var universe = new Universe();
+
+
+
+
+		var renderer = new THREE.WebGLRenderer({canvas:canvas, alpha: true});
+		renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+
+
+		everyFrame(
+			function() {
+				universe.prepareForRender();
+				renderer.render(
+					universe.scene,
+					universe.camera
+				);
+			}
+		);
+
+
+		var sun = new Planet(scale*5,scale*50);
+		sun.body.position = new CANNON.Vec3(scale*0, scale*0, scale*0);
+		sun.body.angularVelocity = new CANNON.Vec3(0, .1, .1);
+		universe.add(sun);
+
+		var planet1 = new Planet(scale*1,scale*10);
+		planet1.body.position = new CANNON.Vec3(scale*10, scale*0, scale*0);
+		planet1.body.velocity = new CANNON.Vec3(scale*-1, scale*0, scale*0);
+		planet1.body.angularVelocity = new CANNON.Vec3(0, .1, .1);
+		universe.add(planet1);
+
+
+	}
+);
+
+}, 1000);
+
+</script>
+
+</body>
+</html>
