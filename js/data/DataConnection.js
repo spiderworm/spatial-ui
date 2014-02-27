@@ -1,10 +1,10 @@
 define(
 	[
-		'../../util/InstanceStore',
-		'../../base/EventObject',
-		'../../base/Model',
-		'../DataChannel',
-		'../DataSourceModelBuilder'
+		'../util/InstanceStore',
+		'../base/EventObject',
+		'../base/Model',
+		'./DataChannel',
+		'./DataSourceModelBuilder'
 	],
 	function(
 		InstanceStore,

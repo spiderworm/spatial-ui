@@ -1,6 +1,6 @@
 define(
 	[
-		'../base/DataConnection',
+		'../DataConnection',
 		'../../base/Model',
 		'../../registry'
 	],
