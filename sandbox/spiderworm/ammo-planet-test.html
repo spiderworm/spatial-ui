@@ -32,7 +32,7 @@ require(
 
 		var canvas = document.querySelector('canvas');
 
-		var scale = 1e4;
+		var scale = 1e3;
 
 
 
@@ -42,13 +42,18 @@ require(
 
 			var physics = new CANNON.World();
 			physics.gravity.set(0,0,0);
+			physics.broadphase = new CANNON.NaiveBroadphase();			
+			physics.solver.iterations = 2000;
+			physics.solver.tolerance = 0;
 			physics.broadphase = new CANNON.NaiveBroadphase();
+			physics.defaultContactMaterial.contactEquationStiffness = 1e20;
+			physics.defaultContactMaterial.contactEquationRegularizationTime = 1;
 			this.physics = physics;
 
 			this.scene = new THREE.Scene();
 
 			this.camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth/canvas.offsetHeight, .00001, 1e20);
-			this.camera.position.z = 50 * scale;
+			this.camera.position.z = 30 * scale;
 			var orbitControls = new OrbitControls(this.camera);
 			orbitControls.update();
 
@@ -80,9 +85,14 @@ require(
 
 
 		function Planet(radius,mass) {
-			console.info(radius);
 			var shape = new CANNON.Sphere(radius/2);
 			var body = new CANNON.RigidBody(mass,shape);
+			body.addEventListener(
+				'collide',
+				function() {
+					console.info('collision',arguments);
+				}
+			);
 			this.body = body;
 
 			var geometry = new THREE.SphereGeometry(radius/2, 32, 32);

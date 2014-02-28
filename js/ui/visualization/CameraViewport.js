@@ -19,10 +19,10 @@ define(
 				return {};
 			},
 			render: function() {
-				return <canvas className="three-dee"></canvas>;
+				return <div className="camera-visualization visualization"><canvas></canvas></div>;
 			},
 			componentDidMount: function() {
-				this.__scene.start(this.getDOMNode());
+				this.__scene.start(this.getDOMNode().childNodes[0]);
 			}
 		});
 

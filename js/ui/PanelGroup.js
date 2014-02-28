@@ -14,10 +14,10 @@ define(
 
 			getInitialState: function() {
 
-				var screen = this;
+				var panelGroup = this;
 
 				var layoutCheckingInterval = setInterval(function() {
-					screen.__checkLayout();
+					panelGroup.__checkLayout();
 				},1000);
 
 				return {
@@ -27,6 +27,11 @@ define(
 			},
 
 			render: function() {
+				var panelGroup = this;
+				setTimeout(function() {
+					panelGroup.__checkLayout();
+				},0);
+
 				var appModel = this.props.appModel;
 				var editable = this.props.editable;
 				var gridMode = this.state.gridMode;
@@ -54,15 +59,17 @@ define(
 			},
 
 			__checkLayout: function() {
-				var node = this.getDOMNode();
-				var gridMode = false;
-				if(node.offsetWidth > 400) {
-					gridMode = true;
-				}
-				if(this.state.gridMode !== gridMode) {
-					this.setState({
-						gridMode: gridMode
-					});
+				if(this.isMounted()) {
+					var node = this.getDOMNode();
+					var gridMode = false;
+					if(node.offsetWidth > 400) {
+						gridMode = true;
+					}
+					if(this.state.gridMode !== gridMode) {
+						this.setState({
+							gridMode: gridMode
+						});
+					}
 				}
 			}
 
