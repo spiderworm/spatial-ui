@@ -40,12 +40,14 @@ define(
 				
 				var subControls = this._getSubControlNodes();
 
-				return this._getControlNode([
+				var node = this._getControlNode([
 					this._getLabelTextNode(),
 					inlineControls,
 					subControls
 				]);
+				node.props.className = node.props.className + " multi-control";
 
+				return node;
 			}
 
 		});

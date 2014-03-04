@@ -12,26 +12,39 @@
 						"index": 0,
 						"path": "/controls/helm/impulse"
 					},
-					"pitch": {
+					"axis": {
 						"type": "control",
+						"subtype": "multi",
+						"label": "axis",
 						"index": 1,
-						"path": "/controls/helm/pitch"
-					},
-					"yaw": {
-						"type": "control",
-						"index": 2,
-						"path": "/controls/helm/yaw"
+						"inlineControls": {
+							"pitch": {
+								"type": "control",
+								"index": 0,
+								"path": "/controls/helm/pitch"
+							},
+							"yaw": {
+								"type": "control",
+								"index": 1,
+								"path": "/controls/helm/yaw"
+							},
+							"roll": {
+								"type": "control",
+								"index": 2,
+								"path": "/controls/helm/roll"
+							}
+						}
 					}
 				}
 			},
 			"impulse": {
 				"type": "control",
 				"subtype": "multi",
-				"label": "Impulse",
 				"inlineControls": {
 					"throttle": {
 						"type": "control",
 						"subtype": "range",
+						"label": "Impulse",
 						"description": "impulse engines provide traditional Newtonian movement around space",
 						"min": -1000,
 						"max": 1000,
@@ -49,96 +62,33 @@
 			},
 			"pitch": {
 				"type": "control",
-				"subtype": "multi",
-				"label": "Pitch",
-				"inlineControls": {
-					"throttle": {
-						"type": "control",
-						"subtype": "range",
-						"description": "turns the ship on the X-axis",
-						"min": -1000,
-						"max": 1000,
-						"valuePath": "/physics/values/thrusters/pitch/throttle"
-					},
-					"kill": {
-						"type": "control",
-						"subtype": "button",
-						"description": "kill the pitch thrusters",
-						"display": "0",
-						"message": "x",
-						"valuePath": "/physics/values/thrusters/kill"
-					},
-					"autoStablize": {
-						"type": "control",
-						"subtype": "checkbox",
-						"label": "auto-stablize",
-						"description": "stablize X-axis rotation when at 0",
-						"allowedValues": [1,0],
-						"valuePath": "/physics/values/thrusters/pitch/stablize"
-					}
-				}
+				"subtype": "range",
+				"label": "pitch",
+				"layout": "vertical",
+				"description": "turns the ship on the X-axis",
+				"min": -1000,
+				"max": 1000,
+				"valuePath": "/physics/values/thrusters/pitch/throttle"
 			},
 			"yaw": {
 				"type": "control",
-				"subtype": "multi",
-				"label": "Yaw",
-				"inlineControls": {
-					"throttle": {
-						"type": "control",
-						"subtype": "range",
-						"description": "turns the ship on the Y-axis",
-						"min": -1000,
-						"max": 1000,
-						"valuePath": "/physics/values/thrusters/yaw/throttle"
-					},
-					"kill": {
-						"type": "control",
-						"subtype": "button",
-						"description": "kill the yaw thrusters",
-						"display": "0",
-						"message": "y",
-						"valuePath": "/physics/values/thrusters/kill"
-					},
-					"autoStablize": {
-						"type": "control",
-						"subtype": "checkbox",
-						"label": "auto-stablize",
-						"description": "stablize Y-axis rotation when at 0",
-						"allowedValues": [1,0],
-						"valuePath": "/physics/values/thrusters/yaw/stablize"
-					}
-				}
+				"subtype": "range",
+				"label": "yaw",
+				"layout": "vertical",
+				"description": "turns the ship on the Y-axis",
+				"min": -1000,
+				"max": 1000,
+				"valuePath": "/physics/values/thrusters/yaw/throttle"
 			},
 			"roll": {
 				"type": "control",
-				"subtype": "multi",
-				"label": "Roll",
-				"inlineControls": {
-					"throttle": {
-						"type": "control",
-						"subtype": "range",
-						"description": "turns the ship on the Z-axis",
-						"min": -1000,
-						"max": 1000,
-						"valuePath": "/physics/values/thrusters/roll/throttle"
-					},
-					"kill": {
-						"type": "control",
-						"subtype": "button",
-						"description": "kill the roll thrusters",
-						"display": "0",
-						"message": "z",
-						"valuePath": "/physics/values/thrusters/kill"
-					},
-					"autoStablize": {
-						"type": "control",
-						"subtype": "checkbox",
-						"label": "auto-stablize",
-						"description": "stablize Z-axis rotation when at 0",
-						"allowedValues": [1,0],
-						"valuePath": "/physics/values/thrusters/roll/stablize"
-					}
-				}
+				"subtype": "range",
+				"label": "roll",
+				"layout": "vertical",
+				"description": "turns the ship on the Z-axis",
+				"min": -1000,
+				"max": 1000,
+				"valuePath": "/physics/values/thrusters/roll/throttle"
 			}
 		},
 		"engineering": {

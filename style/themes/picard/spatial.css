@@ -1,212 +1,72 @@
+@import url('../archer/spatial.css');
+
+@import url('./screens.css');
+@import url('./panels.css');
+
 @import url('./screen-layouts/grid.css');
+@import url('./controls.css');
 
-.spatial-master {
-	position: relative;
-	font-size: .35cm;
-
-	background-color: black;
-	color: white;
-
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-
-.spatial-master :link,
-.spatial-master :visited {
-	color: inherit;
+.spatial-master,
+.spatial-master .panel,
+.spatial-master .screen,
+.spatial-master .screens-nav {
+	border: .05cm solid rgba(255,24,0,.5);
+	border-radius: .1cm;
+	box-shadow: 0 0 .5cm rgba(255,24,0,.5);
+	background-color: rgba(0,0,0,.95);
+	font-family: Arial, Verdana, sans-serif;
 }
 
 .spatial-master button,
 .spatial-master input,
-.spatial-master select {
-	font-size: inherit;
+.spatial-master input[type="checkbox"] + .label-text,
+.spatial-master select,
+.spatial-master .alternate-input,
+.spatial-master .control {
+	vertical-align: middle;
 }
 
-.spatial-master h1 {
-	margin-top: 0;
+.spatial-master input[type="checkbox"] {
+	height: .6cm;
+	width: .6cm;
+	background-color: rgb(255,0,7);
+	border-width: 0;
 }
 
-.spatial-master .screen-group.edit-mode .panel {
-	border-color: rgba(255,0,0,.5);
-}
+.spatial-master button {
+	border-radius: .1cm;
+	min-height: .6cm;
+	min-width: .6cm;
 
-.spatial-master .screen-group > .screens-nav {
-	text-transform: uppercase;
-	padding: .125cm;
-	text-align: center;
-	margin: 0 1.5cm 0 0;
-}
-
-.spatial-master ul.screens-nav {
-	list-style-type: none;
-}
-
-.spatial-master .screen-group > .screens-nav > * {
-	display: inline-block;
+	border: .05cm solid rgb(255,0,71);
+	background-color: transparent;
+	box-shadow: 0 0 .5cm rgb(255,24,0);
+	color: white;
+	font-weight: bold;
 }
 
 .spatial-master .screen-group .toggle-edit-button {
-	background-color: #999;
-	color: black;
-	border-width: 0;
-	margin: .125cm;
-	vertical-align: middle;
-	position: absolute;
-	top: .125cm;
-	right: .125cm;
-	width: 1cm;
-	height: .7cm;
-}
-
-.spatial-master .screen-group.edit-mode .toggle-edit-button {
-	background-color: #c00;
-}
-
-.spatial-master .screen-group > .screens-nav :link {
-	display: inline-block;
-	text-decoration: none;
-	padding: .1cm .25cm;
-	border: .05cm solid white;
-	background-color: black;
+	background-color: transparent;
+	background-image: 
+		radial-gradient(
+			circle 1cm at 5px 5px,
+			rgba(255, 255, 255, 0.5) 0%,
+			rgba(255, 255, 255, 0) 100%
+		),
+		radial-gradient(
+			circle closest-side,
+			rgb(182, 0, 0) 0%,
+			rgb(150, 0, 0) 100%
+		)
+	;
 	color: white;
-	margin: .125cm;
-	font-size: .5cm;
-	line-height: .5cm;
-	font-weight: bold;
-	opacity: .5;
-}
-
-.spatial-master .screen-group > .screens-nav > .active :link,
-.spatial-master .screen-group > .screens-nav > .active :visited {
-	color: black;
-	background-color: white;
-	border-color: black;
-	opacity: 1;
-}
-
-.spatial-master .screen-group > .screens-nav :hover {
-	opacity: 1;
-}
-
-.spatial-master > .screen-group > .screens {
-	margin-top: .1cm;
-	position: relative;
-}
-
-.spatial-master .screen {
-	opacity: 1;
-	transition: all .2s ease-in-out;
-	z-index: 2;
-	margin: 0 0 .5cm 0;
-	overflow: hidden;
-}
-
-.spatial-master .screen > h1 {
+	top: 0;
+	right: 0;
+	width: 1.5cm;
+	height: 1.5cm;
 	margin: 0;
 }
 
-.spatial-master .screen > h1 .label {
-	display: none;
-}
-
-.spatial-master .screen.hidden {
-	opacity: 0;
-	height: 0;
-	margin-bottom: 0;
-}
-
-
-.spatial-master .panel {
-	background-color: rgba(0,0,0,.8);
-	vertical-align: top;
-	border: 0 solid rgba(255,255,255,.5);
-	border-width: .05cm 0;
-	padding: 10px 10px 0 10px;
-	min-height: 3.25cm;
-}
-
-.spatial-master .panel > h1 {
-	margin: -11px -10px 0 -11px;
-	background-color: rgba(255,255,255,.1);
-	color: white;
-	padding: 2px 5px;
-	text-transform: uppercase;
-}
-
-.spatial-master .control {
-	padding-left: 2.25cm;
-	margin: .25cm 0;
-	display: block;
-}
-
-.spatial-master .control .label-text {
-	margin-right: .2cm;
-	font-weight: bold;
-	text-transform: lowercase;
-}
-
-.spatial-master .control > .label-text,
-.spatial-master .control > label > .label-text {
-	display: inline-block;
-	margin-left: -2.25cm;
-	margin-right: .25cm;
-	width: 2cm;
-	vertical-align: top;
-}
-
-.spatial-master .control .control {
-	padding-left: 0;
-}
-
-.spatial-master .control .control > .label-text,
-.spatial-master .control .control > label > .label-text {
-	display: inline-block;
-	margin-left: -1.75cm;
-	margin-right: .25cm;
-	width: 1.5cm;
-	vertical-align: top;
-}
-
-.spatial-master .control.inline-control {
-	margin: 0 .25cm 0 0;
-	display: inline-block;
-}
-
-.spatial-master .control.inline-control .label-text {
-	text-transform: none;
-	font-weight: normal;
-	min-width: 0;
-	margin-right: 0;
-	white-space: nowrap;
-}
-
-.spatial-master .control .inline-control.control > .label-text,
-.spatial-master .control .inline-control.control > label > .label-text {
-	margin-left: 0;
-}
-
-.spatial-master .control input,
-.spatial-master .control button,
-.spatial-master .control select {
-	vertical-align: middle;
-}
-
-.spatial-master .slider-control.control > label > .value-display {
-	border: 1px solid white;
-}
-
-.spatial-master .slider-control.control > label > .value-display,
-.spatial-master .slider-control.control > label > .value-editor {
-	margin-right: .25cm;
-	width: 2cm;
-	text-align: right;
-	display: inline-block;
-}
-
-.spatial-master .three-dee {
-	display: none;
+.spatial-master .screen-group.edit-mode .toggle-edit-button {
+	background-color: rgb(255,0,41);
 }

@@ -1,0 +1,45 @@
+
+.spatial-master .screen {
+	opacity: 1;
+	transition: all .2s ease-in-out;
+}
+
+.spatial-master .screen.hidden {
+	opacity: 0;
+	height: 0;
+	margin-bottom: 0;
+}
+
+
+
+.spatial-master .screen-group > .screens-nav {
+	padding: 0;
+}
+
+.spatial-master .screen-group > .screens-nav :link {
+	font-weight: bold;
+	display: inline-block;
+	margin: 0;
+	background-color: black;
+	text-decoration: none;
+	opacity: .5;
+	padding: .25cm 1cm;
+}
+
+.spatial-master .screen-group > .screens-nav :link,
+.spatial-master .screen-group > .screens-nav :visited {
+	border: 0 solid rgb(255,0,48);
+	border-width: 0 .05cm;
+	color: rgb(255,0,48);
+}
+
+.spatial-master .screen-group > .screens-nav .active :link,
+.spatial-master .screen-group > .screens-nav .active :visited {
+	background-color: rgb(100,28,0);
+	color: rgb(255,0,48);
+	opacity: 1;
+}
+
+.spatial-master .screen-group > .screens-nav :hover {
+	opacity: 1;
+}

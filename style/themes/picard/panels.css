@@ -1,0 +1,37 @@
+
+.spatial-master .panel {
+	padding: 10px;
+	min-height: 3.25cm;
+
+	font-size: .35cm;
+	color: rgb(255,83,65);
+/*
+	background-image:
+		linear-gradient(
+			0deg,
+			rgba(255, 71, 0, 0) 20%,
+			rgba(255, 71, 0, .1) 50%,
+			rgba(255, 71, 0, 0) 80%
+		),
+		linear-gradient(
+			90deg,
+			rgba(255, 71, 0, 0) 20%,
+			rgba(255, 71, 0, .1) 50%,
+			rgba(255, 71, 0, 0) 80%
+		)
+	;
+	background-size: .15cm .15cm;
+*/
+}
+
+.spatial-master .panel > h1 {
+	text-transform: uppercase;
+	font-size: .5cm;
+	margin-bottom: 0;
+	color: rgb(167, 25, 25);
+}
+
+.spatial-master .screen-group.edit-mode .panel {
+	border-color: rgb(255,0,71);
+	border-width: .2cm;
+}

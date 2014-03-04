@@ -68,30 +68,6 @@
 	background-color: #c00;
 }
 
-.spatial-master .screen-group > .screens-nav :link {
-	display: inline-block;
-	text-decoration: none;
-	padding: .1cm .25cm;
-	background-color: black;
-	color: white;
-	margin: .125cm;
-	font-size: .5cm;
-	line-height: .5cm;
-	font-weight: bold;
-	opacity: .5;
-}
-
-.spatial-master .screen-group > .screens-nav > .active :link,
-.spatial-master .screen-group > .screens-nav > .active :visited {
-	color: black;
-	background-color: white;
-	opacity: 1;
-}
-
-.spatial-master .screen-group > .screens-nav :hover {
-	opacity: 1;
-}
-
 .spatial-master > .screen-group > .screens {
 	margin-top: .1cm;
 	position: relative;
@@ -123,18 +99,10 @@
 	color: black;
 	vertical-align: top;
 	border-width: .2cm 0;
-	padding: 10px 10px 0 10px;
 	min-height: 3.25cm;
 }
 
-.spatial-master .panel > h1 {
-	margin: -11px -10px 0 -11px;
-	background-color: rgba(255,255,255,.1);
-	color: white;
-	padding: 2px 5px;
-	text-transform: uppercase;
-}
-
+/*
 .spatial-master .control {
 	padding-left: 2.25cm;
 	margin: .25cm 0;
@@ -201,14 +169,14 @@
 .spatial-master .slider-control.control > label > .value-display {
 	border: 1px solid white;
 }
-
-.spatial-master .slider-control.control > label > .value-display,
-.spatial-master .slider-control.control > label > .value-editor {
-	margin-right: .25cm;
+*/
+.spatial-master .slider-control .value-display,
+.spatial-master .slider-control .value-editor {
+	display: inline-block;
 	width: 2cm;
 	text-align: right;
-	display: inline-block;
 }
+
 
 .spatial-master .visualization {
 	display: none;

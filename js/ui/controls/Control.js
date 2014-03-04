@@ -12,43 +12,111 @@ define(
 		modelMixin
 	) {
 
+
+
+
+
+
+
+
+
+
+		function ValueManager(model,baseModel,user,onValue) {
+			this._model = model;
+			this._baseModel = baseModel;
+			this._user = user;
+			this._onValue = onValue;
+			this._modelValue = undefined;
+			this._blocking = false;
+
+			var manager = this;
+
+			model.$subscribeTo('valuePath',function(valuePath) {
+				if(valuePath) {
+					modelMixin._deepSubscribeTo(
+						baseModel,
+						valuePath,
+						function(value) { manager._modelUpdatedValue(value); }
+					);
+				} else {
+					manager._modelUpdatedValue(model.value);
+				}
+			});
+
+			model.$subscribeTo('value',function(value) {
+				if(!model.valuePath) {
+					manager._modelUpdatedValue(value);
+				}
+			});
+
+		}
+		ValueManager.prototype.userUpdatedValue = function(value) {
+			this._clearTimeout();
+			this._value = value;
+			this._blocking = true;
+
+			var manager = this;
+			this._timeout = setTimeout(function() {
+				manager._clearTimeout();
+				manager._value = manager._modelValue;
+				manager._blocking = false;
+				manager._reportValue();
+			}, 1000);
+
+			if(this._model.valuePath) {
+				modelMixin._deepSetValue(this._baseModel,this._model.valuePath,value,this._user);
+			} else {
+				this._model.$update({value: value},this._user);
+			}
+
+		}
+		ValueManager.prototype._modelUpdatedValue = function(value) {
+			this._modelValue = value;
+			if(!this._blocking) {
+				this._value = value;
+				this._reportValue();
+			}
+		}
+		ValueManager.prototype._clearTimeout = function() {
+			if(this._timeout) {
+				clearTimeout(this._timeout);
+				this._timeout = null;
+			}
+		}
+		ValueManager.prototype._reportValue = function() {
+			this._onValue(this._value);
+		}
+
+
+
+
 		var controlMixin = {
 			mixins: [modelMixin],
 			getKey: function(signature) {
 				return keyGenerator.mixin.getKey(signature);
 			},
 			getDefaultProps: function() {
-
 				var view = this;
 
-				function setValue(value) {
-					view.setState({
-						value: value
-					});
-					if(view.state.inactiveValue === undefined) {
-						view.setState({
-							inactiveValue: value
-						});
-					}
-				}
+				this._valueManager = new ValueManager(
+					this.props.definition,
+					this.props.appModel,
+					this.props.user,
+					function(value) {
 
-				this.props.definition.$subscribeTo('valuePath',function(valuePath) {
-					if(valuePath) {
-						view._deepSubscribeTo(
-							view.props.appModel,
-							valuePath,
-							setValue
-						);
-					} else {
-						setValue(view.props.definition.value);
-					}
-				});
+						if(!view.state || value !== view.state.value) {
+							view.setState({
+								value: value
+							});
+							if(view.state.inactiveValue === undefined) {
+								view.setState({
+									inactiveValue: value
+								});
+							}
+						}
 
-				this.props.definition.$subscribeTo('value',function(value) {
-					if(!view.props.definition.valuePath) {
-						setValue(value);
 					}
-				});
+				);
 
 				return {};
 
@@ -98,16 +166,8 @@ define(
 						this.props.definition.$ping({value: value},this.props.user);
 					}
 				} else {
-					if(this.props.definition.valuePath) {
-						this._deepSetValue(
-							this.props.appModel,
-							this.props.definition.valuePath,
-							value,
-							this.props.user
-						);
-					} else {
-						this.props.definition.$update({value: value},this.props.user);
-					}
+					this.setState({value: value});
+					this._valueManager.userUpdatedValue(value);
 				}
 			},
 			_getControlNode: function(children) {
@@ -121,9 +181,25 @@ define(
 				clss += this._getClassName();
 				clss = clss.match(/^(.*[^ ]) ?$/)[1];
 				if(this.props.inline) {
-					return <span className={clss} title={this._getDescription()}>{children}</span>;
+					return (
+						<span
+							className={clss}
+							title={this._getDescription()}
+							data-layout={this.props.layout}
+						>
+							{children}
+						</span>
+					);
 				} else {
-					return <div className={clss} title={this._getDescription()}>{children}</div>;
+					return (
+						<div
+							className={clss}
+							title={this._getDescription()}
+							data-layout={this.props.layout}
+						>
+							{children}
+						</div>
+					);
 				}
 			},
 			_getLabelTextNode: function() {
@@ -162,6 +238,9 @@ define(
 						return (display * 100).toFixed(0) + "%";
 					break;
 					default:
+						if(typeof display === "number") {
+							display = display.toFixed(2);
+						}
 						return display;
 					break;
 				}

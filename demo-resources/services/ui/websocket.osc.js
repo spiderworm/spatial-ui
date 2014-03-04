@@ -40,23 +40,9 @@ require(
 									index: 0,
 									label: "engines",
 									controls: {
-										type: 'control-group',
+										type: 'control',
 										index: 0,
-										impulse: {
-											type: 'control',
-											index: 0,
-											path: '/controls/helm/impulse'
-										},
-										rotX: {
-											type: 'control',
-											index: 1,
-											path: '/controls/helm/pitch'
-										},
-										rotY: {
-											type: 'control',
-											index: 1,
-											path: '/controls/helm/yaw'
-										}
+										path: "/controls/helm/steering"
 									}
 								}
 							}
