@@ -6,7 +6,7 @@ require = {
 		"JSXTransformer": "external/JSXTransformer",
 		"THREE": "external/three",
 		"THREE.GeometryExporter": "external/three.geometryExporter",
-		"jsosc": "data/util/jsosc/lib"
+		"jsosc": "external/jsosc/lib"
 	},
 	"shim": {
 		"THREE": {

@@ -1,8 +1,5 @@
-importScripts('../../../js/external/require.js');
-
-require.config({
-	baseUrl: '../../../js/'
-});
+importScripts('../util/requireBootstrap');
+requireBoostrap('../../../js');
 
 require(
 	[
