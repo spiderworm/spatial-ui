@@ -1,13 +1,9 @@
 define(
 	[
-		'./OSC/OSCMessage',
-		'./OSC/DataReader',
-		'./OSC/DataWriter'
+		'jsosc/OSCMessage'
 	],
 	function(
-		OSCMessage,
-		OSCDataReader,
-		OSCDataWriter
+		OSCMessage
 	) {
 
 

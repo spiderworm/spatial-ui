@@ -5,7 +5,8 @@ require = {
 		"jsx": "external/require-jsx",
 		"JSXTransformer": "external/JSXTransformer",
 		"THREE": "external/three",
-		"THREE.GeometryExporter": "external/three.geometryExporter"
+		"THREE.GeometryExporter": "external/three.geometryExporter",
+		"jsosc": "data/util/jsosc/lib"
 	},
 	"shim": {
 		"THREE": {
