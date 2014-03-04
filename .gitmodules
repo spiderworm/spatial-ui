@@ -1,0 +1,3 @@
+[submodule "jsosc"]
+	path = js/data/util/jsosc
+	url = https://github.com/glikker/jsosc.git
