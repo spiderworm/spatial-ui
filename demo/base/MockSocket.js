@@ -2,11 +2,13 @@ define(
 	[
 		'base/EventObject',
 		'./ServiceDataChannel',
+		'./SiblingServiceConnection',
 		'data/util/dataInterpreters'
 	],
 	function(
 		EventObject,
 		ServiceDataChannel,
+		SiblingServiceConnection,
 		dataInterpreters
 	) {
 
@@ -19,8 +21,22 @@ define(
 			channel.onData(function(data) {
 				service.setDataReceived(data);
 			});
+
+
+			var socket = this;
+			self.addEventListener(
+				'message',
+				function(event) {
+					if(event.data === "@@@mock-socket-connect@@@") {
+						var otherService = new SiblingServiceConnection(event.ports[0],service);
+					}
+				},
+				false
+			);
+			
 			channel.sendRaw('@@@ready@@@');
 			service.send();
+
 		}
 
 		return MockSocket;

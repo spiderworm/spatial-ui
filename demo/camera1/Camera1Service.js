@@ -7,7 +7,7 @@ define(
 	) {
 
 		function Camera1Service() {
-			MockService.apply(this);
+			MockService.apply(this,['camera1']);
 
 			this.setData(
 				{

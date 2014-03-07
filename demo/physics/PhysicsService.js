@@ -9,7 +9,7 @@ define(
 	) {
 
 		function PhysicsService() {
-			MockService.apply(this);
+			MockService.apply(this,['physics']);
 
 			var physicsTickMS = 1000/30;
 			var serviceSendMS = 1000/20;

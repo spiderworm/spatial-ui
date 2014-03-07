@@ -1,10 +1,10 @@
-importScripts('../util/requireBootstrap.js');
+importScripts('../base/requireBootstrap.js');
 requireBoostrap('../../js');
 
 require(
 	[
 		'../demo/controls/ControlsService',
-		'../demo/util/MockSocket'
+		'../demo/base/MockSocket'
 	],
 	function(
 		ControlsService,

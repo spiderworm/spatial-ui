@@ -7,7 +7,7 @@ define(
 	) {
 
 		function StoryService() {
-			MockService.apply(this);
+			MockService.apply(this,['story']);
 
 			this.setData({
 				"story": {

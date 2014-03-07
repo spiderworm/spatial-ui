@@ -1,10 +1,10 @@
-importScripts('../util/requireBootstrap.js');
+importScripts('../base/requireBootstrap.js');
 requireBoostrap('../../js');
 
 require(
 	[
 		'../demo/camera1/Camera1Service',
-		'../demo/util/MockSocket'
+		'../demo/base/MockSocket'
 	],
 	function(
 		Camera1Service,

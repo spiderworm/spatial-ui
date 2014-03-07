@@ -7,7 +7,7 @@ define(
 	) {
 
 		function ControlsService() {
-			MockService.apply(this);
+			MockService.apply(this,['controls']);
 
 			this.setData(
 				{

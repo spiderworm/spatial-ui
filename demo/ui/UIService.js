@@ -7,7 +7,7 @@ define(
 	) {
 
 		function UIService() {
-			MockService.apply(this);
+			MockService.apply(this,['ui']);
 
 			this.setData(
 				{

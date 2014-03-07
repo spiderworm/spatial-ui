@@ -10,6 +10,8 @@ define(
 
 		function MockService(namespace) {
 			EventObject.apply(this);
+			this.namespace = namespace;
+			this._siblingServices = {};
 			this._data = {};
 		}
 		MockService.prototype = new EventObject();
@@ -33,6 +35,10 @@ define(
 				}
 			}
 
+		}
+
+		MockService.prototype.registerSiblingService = function(namespace,siblingService) {
+			this._siblingServices[namespace] = siblingService;
 		}
 
 		MockService.prototype.setData = function(data) {

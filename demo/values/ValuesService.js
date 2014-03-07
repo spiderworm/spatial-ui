@@ -7,7 +7,7 @@ define(
 	) {
 
 		function ValuesService() {
-			MockService.apply(this);
+			MockService.apply(this,['values']);
 
 			this.setData(
 				{
