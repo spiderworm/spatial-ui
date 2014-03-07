@@ -30,6 +30,7 @@ define(
 						appModel={this.props.appModel}
 						inline={this.props.inline}
 						layout={this.props.definition.layout === "vertical" ? "vertical" : "horizontal"}
+						style={this.props.style}
 					>
 						{
 							this.state.editValueMode ?
@@ -136,10 +137,6 @@ define(
 				var nodes = (
 					<span
 						className="alternate-slider alternate-input"
-						style={{
-							display: 'inline-block',
-							position: 'relative'
-						}}
 						data-layout={vertical ? "vertical" : "horizontal"}
 						onMouseDown={this.__handleMouseDown}
 						onMouseMove={this.__handleMouseMove}

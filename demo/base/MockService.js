@@ -1,30 +1,24 @@
 define(
 	[
-		'base/EventObject'
+		'base/EventObject',
+		'data/DataChannel'
 	],
 	function(
-		EventObject
+		EventObject,
+		DataChannel
 	) {
 
-		function MockWebSocketServer(interpreter){
+		function MockService(namespace) {
 			EventObject.apply(this);
-			this._interpreter = interpreter;
-
-			var server = this;
-
-			self.addEventListener(
-				'message',
-				function(event) {
-					var result = interpreter.interpret(event.data);
-					console.info('message received: ' + JSON.stringify(result));
-					server._fire('data-received',[result]);
-				},
-				false
-			);
+			this._data = {};
 		}
-		MockWebSocketServer.prototype = new EventObject();
+		MockService.prototype = new EventObject();
 
-		MockWebSocketServer.prototype.getData = function(path) {
+		MockService.prototype.onSend = function(callback) {
+			return this._on('send',callback);
+		}
+
+		MockService.prototype.getData = function(path) {
 
 			if(!path) {
 				return dataUtil.clone(this._data);
@@ -41,11 +35,11 @@ define(
 
 		}
 
-		MockWebSocketServer.prototype.setData = function(data) {
+		MockService.prototype.setData = function(data) {
 			this._data = data;
 		}
 
-		MockWebSocketServer.prototype.updateData = function(a,b) {
+		MockService.prototype.updateData = function(a,b) {
 			if(arguments.length === 1) {
 				dataUtil.update(this._data,a);
 			}
@@ -54,7 +48,11 @@ define(
 			}
 		}
 
-		MockWebSocketServer.prototype.onDataReceived = function(a,b) {
+		MockService.prototype.setDataReceived = function(data) {
+			this._fire('data-received',[data]);
+		}
+
+		MockService.prototype.onDataReceived = function(a,b) {
 			var callback = function() {};
 
 			if(arguments.length === 1) {
@@ -71,24 +69,17 @@ define(
 			return this._on('data-received',callback);
 		}
 
-		MockWebSocketServer.prototype.send = function() {
+		MockService.prototype.send = function() {
 			this.__sendData(this._data);
 		}
 
-		MockWebSocketServer.prototype.sendUpdate = function(update) {
+		MockService.prototype.sendUpdate = function(update) {
 			this.updateData(update);
 			this.__sendData(update);
 		}
 
-		MockWebSocketServer.prototype.__sendData = function(data) {
-			var message = this._interpreter.stringify(data);
-			if(message instanceof Array) {
-				for(var i in message) {
-					self.postMessage(message[i].serialize());
-				}
-			} else {
-				self.postMessage(message);
-			}
+		MockService.prototype.__sendData = function(data) {
+			this._fire('send',[data]);
 		}
 
 
@@ -193,7 +184,19 @@ define(
 
 
 
-		return MockWebSocketServer;
+
+
+
+
+
+
+
+
+
+
+
+
+		return MockService;
 
 	}
 );

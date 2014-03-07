@@ -1,16 +1,8 @@
 
-.spatial-master {
-}
-
 .spatial-master .screen {
 	position: relative;
 	margin: 0;
 	overflow-y: auto;
-}
-
-.spatial-master > .screen-group {
-	left: .5cm;
-	padding: 0;
 }
 
 .spatial-master > .screen-group > .screens-nav {
@@ -19,13 +11,6 @@
 	left: 0;
 	right: 0;
 	z-index: 2;
-
-	height: 1cm;
-	display: block;
-	text-align: left;
-	white-space: nowrap;
-	overflow-x: auto;
-	overflow-y: hidden;
 }
 
 .spatial-master > .screen-group > .screens {
@@ -45,9 +30,6 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-
-	margin-top: 0;
-	padding-top: 1.3cm;
 }
 
 .spatial-master .screen-group .toggle-edit-button {

@@ -13,6 +13,8 @@ define(
 		function StoryDataConnection(user,url,connectionType,dataFormat) {
 			DataConnection.apply(this,[user,url,connectionType,dataFormat]);
 
+			this._channel.sendRaw('/@connect story');
+
 			this.__connections = {};
 			this._resultModel = new Model();
 
@@ -48,6 +50,8 @@ define(
 		}
 		StoryDataConnection.prototype.__addConnection = function(key,url,type,format) {
 			this.__connections[key] = new DataConnection(this._user,url,type,format);
+
+			this.__connections[key]._channel.sendRaw('/@connect ' + key);
 			var story = this;
 			this.__connections[key].getModel().$subscribeTo(
 				key,

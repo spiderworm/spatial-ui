@@ -1,23 +1,46 @@
 define(
 	[
-		'../../base/EventObject'
+		'../../base/EventObject',
+		'../../util/InstanceStore'
 	],
 	function(
-		EventObject
+		EventObject,
+		InstanceStore
 	) {
 
+		var instances = new InstanceStore();
+
 		function MockServer(url) {
+			var instance = instances.find(arguments);
+			if(instance) {
+				return instance;
+			}
+			instances.add(this,arguments);
+
 			EventObject.apply(this);
+			this._ready = false;
 			var worker = this.__worker = new Worker(url);
 			var server = this;
 			this.__worker.addEventListener(
 				'message',
 				function(e) {
-					server._fire('message-ready',[e.data]);
+					if(!server._ready && e.data === "@@@ready@@@") {
+						server._ready = true;
+						server._fire('ready');
+					} else {
+						server._fire('message-ready',[e.data]);
+					}
 				}
 			);
 		}
 		MockServer.prototype = new EventObject();
+		MockServer.prototype.onReady = function(callback) {
+			var handler = this._on('ready',callback);
+			if(this._ready) {
+				handler.fire();
+			}
+			return handler;
+		}
 		MockServer.prototype.onMessage = function(callback) {
 			return this._on('message-ready',callback);
 		}

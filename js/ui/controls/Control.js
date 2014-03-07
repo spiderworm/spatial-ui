@@ -186,6 +186,7 @@ define(
 							className={clss}
 							title={this._getDescription()}
 							data-layout={this.props.layout}
+							style={this.props.style}
 						>
 							{children}
 						</span>
@@ -196,6 +197,7 @@ define(
 							className={clss}
 							title={this._getDescription()}
 							data-layout={this.props.layout}
+							style={this.props.style}
 						>
 							{children}
 						</div>

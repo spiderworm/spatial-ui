@@ -91,7 +91,6 @@ define(
 
 			delve(obj,'');
 
-			console.info("sending: ", messages);
 			if (messages.length == 0)
 				{ return null; }
 			else if (messages.length == 1)

@@ -20,10 +20,18 @@ define(
 			render: function() {
 
 				return (
-					<Control definition={this.props.definition} appModel={this.props.appModel} inline={this.props.inline}>
-						<button type="button" name={this.props.modelPropertyName} onClick={this._nextValue} disabled={this._isDisabled()}>
-							{this._getValueDisplay()}
-						</button>
+					<Control
+						className="button-control"
+						definition={this.props.definition}
+						appModel={this.props.appModel}
+						inline={this.props.inline}
+						style={this.props.style}
+					>
+						<span className="button-wrap">
+							<button type="button" name={this.props.modelPropertyName} onClick={this._nextValue} disabled={this._isDisabled()}>
+								{this._getValueDisplay()}
+							</button>
+						</span>
 					</Control>
 				);
 

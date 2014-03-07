@@ -53,7 +53,7 @@
 	"textures" :
 	{
 		"Texture_37_tx_copernicus": {
-			"url"    : "demo-resources/materials/tx_copernicus.jpg",
+			"url"    : "demo/materials/tx_copernicus.jpg",
 			"repeat" : [ 1, 1 ],
 			"offset" : [ 0, 0 ],
 			"magFilter" : "LinearFilter",
@@ -62,7 +62,7 @@
 		},
 
 		"Texture_36_tx_copernicus": {
-			"url"    : "demo-resources/materials/tx_copernicus.jpg",
+			"url"    : "demo/materials/tx_copernicus.jpg",
 			"repeat" : [ 1, 1 ],
 			"offset" : [ 0, 0 ],
 			"magFilter" : "LinearFilter",

@@ -2,30 +2,31 @@
 .spatial-master .control {
 }
 
-.spatial-master .inline-control {
+.spatial-master .control > label {
 	display: inline-block;
-	margin-right: .1cm;
 }
 
-.spatial-master .control .label-text,
-.spatial-master .control input,
-.spatial-master .control .alternate-input,
-.spatial-master .control .value-display,
-.spatial-master .control .value-editor {
-	margin: .1cm;
+.spatial-master .control > .label-text,
+.spatial-master .control > label > .label-text {
+	position: absolute;
+	top: 50%;
+	line-height: 10px;
+	margin-top: -5px;
+	width: 2cm;
 }
 
-.spatial-master .control .label-text {
-	display: inline-block;
-	text-transform: lowercase;
-	text-decoration: underline;
-	color: rgb(255,83,65);
+.spatial-master .control[data-layout="vertical"] {
+	text-align: center;
 }
 
-.spatial-master .control[data-layout="vertical"] .label-text {
+.spatial-master .control[data-layout="vertical"] > .label-text,
+.spatial-master .control[data-layout="vertical"] > label > .label-text {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: .5cm;
+	line-height: normal;
+	margin: 0;
 	width: auto;
-}
-
-.spatial-master .control .control .label-text {
-	text-align: right;
 }

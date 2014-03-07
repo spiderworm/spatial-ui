@@ -3,19 +3,7 @@
 	display: none;
 }
 
-.spatial-master .slider-control .value-display {
-	height: .4cm;
-	padding-bottom: .1cm;
-}
-
-.spatial-master .slider-control .value-editor {
-	height: .5cm;
-	padding-bottom: 0;
-}
-
 .spatial-master .slider-control .value-editor input {
-	width: 100%;
-	height: .36cm;
 	background-color: transparent;
 	border-color: rgba(255,71,0,.5);
 	border-width: 0 0 .04cm 0;
@@ -23,54 +11,16 @@
 	text-align: inherit;
 	color: inherit;
 	padding: 0;
-	margin-top: -.15cm;
+	width: 100%;
+	height: 100%;
 }
 
 .spatial-master .slider-control .value-editor input:focus {
 	outline: none;
 }
 
-.spatial-master .slider-control[data-layout="horizontal"] .value-display,
-.spatial-master .slider-control[data-layout="horizontal"] .value-editor {
-	text-align: left;
-	width: 1.5cm;
-}
-
-.spatial-master .slider-control[data-layout="vertical"] {
-	text-align: center;
-	width: 1cm;
-}
-
-.spatial-master .slider-control[data-layout="vertical"] .label-text {
-	width: auto;
-	display: block;
-	text-align: inherit;
-}
-
-.spatial-master .slider-control[data-layout="vertical"] .value-display,
-.spatial-master .slider-control[data-layout="vertical"] .value-editor {
-	width: auto;
-	display: block;
-	text-align: center;
-}
-
-
-
-
 .spatial-master .slider-control .alternate-slider {
 	background-color: black;
-}
-
-
-.spatial-master .slider-control .alternate-slider[data-layout="horizontal"] {
-	width: 4cm;
-	height: .6cm;
-}
-
-.spatial-master .slider-control .alternate-slider[data-layout="vertical"] {
-	display: block;
-	height: 4cm;
-	width: .75cm;
 }
 
 .spatial-master .slider-control .alternate-slider > .lower-range {
@@ -90,12 +40,72 @@
 	z-index: 3;
 }
 
-.spatial-master .slider-control .alternate-slider[data-layout="horizontal"] > .value-knob {
+
+
+
+
+
+.spatial-master .slider-control[data-layout="horizontal"] .value-display,
+.spatial-master .slider-control[data-layout="horizontal"] .value-editor {
+	position: absolute;
+	top: 50%;
+	left: 2cm;
+	margin-top: -10px;
+	height: 20px;
+	line-height: 20px;
+	text-align: left;
+	width: 1.5cm;
+}
+
+.spatial-master .slider-control[data-layout="horizontal"] .alternate-slider {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 3cm;
+}
+
+.spatial-master .slider-control[data-layout="horizontal"] .alternate-slider > .value-knob {
 	margin-left: -.05cm;
 	width: .1cm;
 }
 
-.spatial-master .slider-control .alternate-slider[data-layout="vertical"] > .value-knob {
+
+
+.spatial-master .slider-control[data-layout="vertical"] {
+	text-align: center;
+}
+
+.spatial-master .slider-control[data-layout="vertical"] .label-text,
+.spatial-master .slider-control[data-layout="vertical"] .value-display,
+.spatial-master .slider-control[data-layout="vertical"] .value-editor,
+.spatial-master .slider-control[data-layout="vertical"] .alternate-slider {
+	position: absolute;
+	left: 0;
+	right: 0;
+	width: auto;
+	height: auto;
+	display: block;
+	text-align: center;
+	margin: 0;
+}
+
+.spatial-master .slider-control[data-layout="vertical"] .label-text {
+	top: 0;
+	height: .5cm;
+}
+.spatial-master .slider-control[data-layout="vertical"] .value-display,
+.spatial-master .slider-control[data-layout="vertical"] .value-editor {
+	top: .5cm;
+	height: .5cm;
+}
+
+.spatial-master .slider-control[data-layout="vertical"] .alternate-slider {
+	top: 1cm;
+	bottom: 0;
+}
+
+.spatial-master .slider-control[data-layout="vertical"] .alternate-slider > .value-knob {
 	margin-top: -.05cm;
 	height: .1cm;
 }

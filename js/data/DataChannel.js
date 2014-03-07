@@ -21,15 +21,23 @@ define(
 			EventObject.apply(this);
 			this._url = url;
 			this._interpreter = interpreter;
+			this._outbox = [];
 		}
 		DataChannelBase.prototype = new EventObject();
 		DataChannelBase.prototype.open = function(callback) {
 			throw new Error('not implemented');
 		}
+		DataChannelBase.prototype.isOpen = function() {
+			throw new Error('not implemented');
+		}
 		DataChannelBase.prototype.send = function(obj) {
-			this._send(
+			this.sendRaw(
 				this._interpreter.stringify(obj)
 			);
+		}
+		DataChannelBase.prototype.sendRaw = function(raw) {
+			this._outbox.push(raw);
+			this._sendNext();
 		}
 		DataChannelBase.prototype.onData = function(callback) {
 			return this._on('data-received',callback);
@@ -39,12 +47,20 @@ define(
 		}
 		DataChannelBase.prototype._setOpened = function() {
 			this._fire('opened');
+			this._sendNext();
 		}
 		DataChannelBase.prototype._handleRaw = function(raw) {
 			var data = this._interpreter.interpret(raw);
 			this._fire('data-received',[data]);
 		}
-		DataChannelBase.prototype._send = function(raw) {
+		DataChannelBase.prototype._sendNext = function() {
+			if(this.isOpen() && this._outbox.length > 0) {
+				var raw = this._outbox.shift();
+				this._sendNow(raw);
+				this._sendNext();
+			}
+		}
+		DataChannelBase.prototype._sendNow = function(raw) {
 			throw new Error('not implemented');
 		}
 
@@ -69,7 +85,10 @@ define(
 				}
 			);
 		}
-		AJAXDataChannel.prototype.send = function() {
+		AJAXDataChannel.prototype.isOpen = function() {
+			return false;
+		}
+		AJAXDataChannel.prototype._sendNow = function() {
 			throw new Error('sending over an AJAXDataChannel is totally not supported, dude');
 		}
 
@@ -105,28 +124,34 @@ define(
 		WebSocketDataChannel.prototype.open = function(callback) {
 			if(!this.__socket) {
 				console.log("WebSocket: " + this._url + ", " + this._interpreter.wsProtocol);
-				this.__socket = new this.SocketConstructor(
+				var socket = this.__socket = new this.SocketConstructor(
 					this._url, this._interpreter.wsProtocol
 				);
-				this.__socket.binaryType = "arraybuffer";
+				socket.binaryType = "arraybuffer";
 
 				var channel = this;
 
-				this.__socket.onopen = function() {
+				socket.onopen = function() {
 					callback();
 					channel._setOpened();
 				}
-				this.__socket.onmessage = function (event) {
+				socket.onmessage = function (event) {
 					channel._handleRaw(event.data);
 				}
-				this.__socket.onerror = function (event) {
+				socket.onerror = function (event) {
 					console.log("WS Channel error: ", event);
 				}
 			}
 		}
-		WebSocketDataChannel.prototype._send = function(raw) {
+		WebSocketDataChannel.prototype.isOpen = function() {
+			return this.__socket.readyState === 1;
+		}
+		WebSocketDataChannel.prototype._sendNow = function(raw) {
 			this.__socket.send(raw);
 		}
+
+
+
 
 
 		function MockWebSocketDataChannel(url,interpreter) {
@@ -134,13 +159,6 @@ define(
 		}
 		MockWebSocketDataChannel.prototype = new WebSocketDataChannel();
 		MockWebSocketDataChannel.prototype.SocketConstructor = MockSocket;
-
-
-
-
-
-
-
 
 
 

@@ -119,6 +119,20 @@ define(
 				var inline = this.props.inline;
 				var definition = this.state.definition;
 
+				var x = this.props.definition.x || 0;
+				var y = this.props.definition.y || 0;
+				var z = this.props.definition.z || 1;
+				var width = this.props.definition.width || 8;
+				var height = this.props.definition.height || 2;
+
+				var style = {
+					left: x + 'cm',
+					top: y + 'cm',
+					zIndex: z,
+					width: width + 'cm',
+					height: height + 'cm'
+				};
+
 				if(definition) {
 
 					if(ready) {
@@ -154,16 +168,17 @@ define(
 								definition: definition,
 								appModel: appModel,
 								inline: inline,
-								user: this.props.user
+								user: this.props.user,
+								style: style
 							});
 						}
 
 					} else {
 
 						if(inline) {
-							return <span>Loading...</span>;
+							return <span style={style}>Loading...</span>;
 						} else {
-							return <div>Loading...</div>;
+							return <div style={style}>Loading...</div>;
 						}
 
 					}
@@ -171,9 +186,9 @@ define(
 				}
 
 				if(inline) {
-					return <span>Control "{this.state.path}" unavailable.</span>;
+					return <span style={style}>Control "{this.state.path}" unavailable.</span>;
 				} else {
-					return <div>Control "{this.state.path}" unavailable.</div>;
+					return <div style={style}>Control "{this.state.path}" unavailable.</div>;
 				}
 
 			}

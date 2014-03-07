@@ -46,9 +46,9 @@ define(
 
 			if(registry.get('mock')) {
 				model.story.$update({
-					url: 'demo-resources/services/story/websocket.json.js',
+					url: 'demo/story/mockSocket.js',
 					connectionType: 'mock-websocket',
-					dataFormat: 'json',
+					dataFormat: 'osc',
 					connect: true
 				});
 			}

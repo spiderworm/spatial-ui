@@ -1,3 +1,7 @@
 .spatial-master .multi-control > .label-text {
-	vertical-align: top;
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 0;
+	line-height: normal;
 }
