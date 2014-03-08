@@ -25,7 +25,8 @@ define(
 			if(arguments.length === 1) {
 				callback = a;
 				return this._subscribe('updated',function() {
-					callback.apply(this,[this]);
+					try { callback.apply(this,[this]); }
+					catch (error) { }
 				});
 			} else if (arguments.length === 2) {
 				prop = a;
