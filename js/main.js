@@ -31,7 +31,7 @@ if (window.require !== window.requirejs) {
 	}
 	API.prototype.setStoryConnectionInfo = function(url,connectionType,dataFormat,connect) {
 		if(this.isReady()) {
-			this.getStartupModel().story.$update({
+			app.getStartupModel().story.$update({
 				url: url,
 				connectionType: connectionType || 'websocket',
 				dataFormat: dataFormat || 'osc',
@@ -41,7 +41,7 @@ if (window.require !== window.requirejs) {
 	}
 	API.prototype.connect = function() {
 		if(this.isReady()) {
-			this.getStartupModel().story.$update({connect: true});
+			app.getStartupModel().story.$update({connect: true});
 		}
 	}
 	API.prototype.onReady = function(callback) {
