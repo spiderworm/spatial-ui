@@ -30,22 +30,22 @@ define(
 		}
 
 		function App() {
-			this._rendered = false;
-			this._started = false;
+			this._ui = null;
 
-			var model = this._model = new Model({
+			this._user = userManager.getCurrentUser();
+
+			var model = this._startupModel = new Model({
 				story: {
 					url: '',
 					connectionType: 'websocket',
 					dataFormat: 'osc',
 					connect: false
-				}
+				},
+				ui: (new StoryConnectViewModel()).ui
 			});
 
-			modelUtil.setRootModel(this._model);
-
 			if(registry.get('mock')) {
-				model.story.$update({
+				this._startupModel.story.$update({
 					url: 'demo/story/mockSocket.js',
 					connectionType: 'mock-websocket',
 					dataFormat: 'osc',
@@ -54,50 +54,48 @@ define(
 			}
 
 			var app = this;
-			this._model.$subscribeTo(function() {
-				app._render();
-			});
-		}
-		App.prototype.start = function() {
-			this._started = true;
-
-			var user = userManager.getCurrentUser();
-			this._user = user;
-
-			this._model.$update({
-				ui: (new StoryConnectViewModel()).ui
-			});
-
-			var app = this;
-
-			this._model.story.$subscribeTo('connect',function(connect){
+			this._startupModel.story.$subscribeTo('connect',function(connect){
 				if(connect) {
-					app.__storyConnection = new StoryConnection(
-						user,
-						app._model.story.url,
-						app._model.story.connectionType,
-						app._model.story.dataFormat
-					);
-					app.__storyConnection.getModel().$subscribeTo(
-						function(connectionModel) {
-							app._model.$update(connectionModel);
-						}
-					);
-					app._model.$update({connect: false});
+					app._startupModel.story.$update({connect: false});
+					app.connect();
 				}
 			});
 
+			this._setModel(this._startupModel);
 		}
-		App.prototype.isStarted = function() {
-			return this._started;
+		App.prototype.connect = function() {
+			this.__storyConnection = new StoryConnection(
+				this._user,
+				this._startupModel.story.url,
+				this._startupModel.story.connectionType,
+				this._startupModel.story.dataFormat
+			);
+			this._setModel(this.__storyConnection.getModel());
 		}
 		App.prototype.getModel = function() {
 			return this._model;
 		}
+		App.prototype.getStartupModel = function() {
+			return this._startupModel;
+		}
+		App.prototype._setModel = function(model) {
+			this._model = model;
+
+			modelUtil.setRootModel(model);
+
+			var app = this;
+			model.$subscribeTo(function() {
+				app._render();
+			});
+		}
 		App.prototype._render = function() {
-			if(!this._rendered) {
-				this._rendered = true;
-				var appUI = React.renderComponent(
+			if(this._ui) {
+				this._ui.setProps({
+					model: this._model,
+					user: this._user
+				});
+			} else {
+				this._ui = React.renderComponent(
 					AppUI({model: this._model, user: this._user}),
 					document.body
 				);

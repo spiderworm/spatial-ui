@@ -183,11 +183,11 @@ define(
 			_getSubPieces: function(definitions) {
 				var result = [];
 				definitions.$map(function(definition,id) {
-					if(definition && typeof(definition) === "object" && definition.$hasKey('index')) {
-						result[definition.index] = {
+					if(definition && typeof(definition) === "object") {
+						result.push({
 							id: id,
 							definition: definition
-						};
+						});
 					}
 				});
 				return result;

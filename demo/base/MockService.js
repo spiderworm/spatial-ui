@@ -1,20 +1,96 @@
 define(
 	[
 		'base/EventObject',
-		'data/DataChannel'
+		'data/DataChannel',
+		'./gameModes'
 	],
 	function(
 		EventObject,
-		DataChannel
+		DataChannel,
+		gameModes
 	) {
 
 		function MockService(namespace) {
 			EventObject.apply(this);
 			this.namespace = namespace;
-			this._siblingServices = {};
+			this._serviceConnections = {};
 			this._data = {};
+			this._modes = {};
+			this._story = null;
+			this.mode = null;
+
+			var service = this;
+			this.subscribeToStory(function(storyService) {
+				service._story = storyService;
+				storyService.subscribeToModeID(function(id) {
+					service.setModeByID(id);
+				});
+			});
+
+			this.onModeChange(function(mode) {
+				service.setData(mode ? mode.data : {});
+				service.send();
+			});
 		}
 		MockService.prototype = new EventObject();
+
+		MockService.prototype.subscribeToStory = function(callback) {
+			var handler = this.onServiceConnection(function(siblingService) {
+				if(siblingService.namespace === "story") {
+					callback(siblingService);
+				}
+			});
+			if(this._serviceConnections['story']) {
+				handler.fire([this._serviceConnections['story']]);
+			}
+			return handler;
+		}
+
+		MockService.prototype.onServiceConnection = function(callback) {
+			return this._on('service-connection',callback);
+		}
+
+		MockService.prototype.addMode = function(mode) {
+			this._modes[mode.id] = mode;
+		}
+
+		MockService.prototype.setMode = function(mode) {
+			if(mode) {
+				this.addMode(mode);
+			}
+			if(this.mode !== mode) {
+				this.mode = mode;
+				if(mode) {
+					this._data = mode.data;
+				} else {
+					this._data = {};
+				}
+				this.sendClear();
+				this.send();
+				this._fire('mode-change',[mode]);
+			}
+		}
+
+		MockService.prototype.setModeByID = function(modeID) {
+			this.setMode(this._modes[modeID]);
+		}
+
+		MockService.prototype.setStoryModeID = function(modeID) {
+			if(!this._story) {
+				throw new Error('not connected to story');
+			}
+			this._story.setModeID(modeID);
+		}
+
+		MockService.prototype.subscribeToMode = function(callback) {
+			var handler = this.onModeChange(callback);
+			handler.fire([this.mode]);
+			return handler;
+		}
+
+		MockService.prototype.onModeChange = function(callback) {
+			return this._on('mode-change',callback);
+		}
 
 		MockService.prototype.onSend = function(callback) {
 			return this._on('send',callback);
@@ -37,8 +113,9 @@ define(
 
 		}
 
-		MockService.prototype.registerSiblingService = function(namespace,siblingService) {
-			this._siblingServices[namespace] = siblingService;
+		MockService.prototype.addServiceConnection = function(connection) {
+			this._serviceConnections[connection.namespace] = connection;
+			this._fire('service-connection',[connection]);
 		}
 
 		MockService.prototype.setData = function(data) {
@@ -77,6 +154,10 @@ define(
 
 		MockService.prototype.send = function() {
 			this.__sendData(this._data);
+		}
+
+		MockService.prototype.sendClear = function() {
+			this._fire('send',[{'@clear': 'ui'}]);
 		}
 
 		MockService.prototype.sendUpdate = function(update) {

@@ -103,7 +103,14 @@ define(
 
 			handle(update,this._data);
 
-			this._timeDataStore.addData(timestamp,clone(this._data));
+			var data = clone(this._data);
+
+			if(update && update['@clear'] === "ui") {
+				data.debug = true;
+			}
+
+
+			this._timeDataStore.addData(timestamp,data);
 
 		}
 

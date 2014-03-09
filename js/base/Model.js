@@ -64,12 +64,24 @@ define(
 			return keys;
 		}
 		Model.prototype.$overwrite = function(vals,source) {
-			for(var name in this) {
-				if(this.$hasKey(name)) {
-					delete this[name];
+			var updates = {};
+			this.$each(function(value,index) {
+				if(!vals.hasOwnProperty(index)) {
+					delete this[index];
+					updates[index] = undefined;
+				}
+			});
+			for(var name in vals) {
+				if(this.$hasKey.apply(vals,[name])) {
+					if(typeof vals[name] === "object" && this[name] && typeof this[name] === "object") {
+						this[name].$overwrite(vals[name],source);
+					} else {
+						this[name] = vals[name];
+						updates[name] = vals[name];
+					}
 				}
 			}
-			this.$update(vals,source);
+			this.$setUpdated(updates,source);
 		}
 		Model.prototype.$update = function(vals,source) {
 
@@ -139,7 +151,7 @@ define(
 			}
 		}
 		Model.prototype.$hasKey = function(name) {
-			if(this.hasOwnProperty(name) && name[0] !== "_") {
+			if(this.hasOwnProperty(name) && name[0] !== "_" && name[0] !== "$") {
 				return true;
 			}
 		}

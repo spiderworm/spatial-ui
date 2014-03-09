@@ -4,7 +4,10 @@ define(
 		function TimelineModelSynchronizer(timeline,model) {
 			this._model = model;
 			timeline.onNewData(function(data) {
-				model.$update(data);
+				if(data && data.ui && data.ui.panels && data.ui.panels.panel1) {
+					//debugger;
+				}
+				model.$overwrite(data);
 			});
 		}
 

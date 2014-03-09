@@ -38,7 +38,7 @@ define(
 						server._ready = true;
 						server._fire('ready');
 						
-					} else {
+					} else if(e.data) {
 						server._fire('message-ready',[e.data]);
 					}
 				}
