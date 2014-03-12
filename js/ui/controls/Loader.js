@@ -1,7 +1,7 @@
 define(
 	[
 		'react',
-		'jsx!../modelMixin'
+		'../modelMixin'
 	],
 	function(
 		React,

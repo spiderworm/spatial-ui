@@ -73,7 +73,7 @@ define(
 			});
 			for(var name in vals) {
 				if(this.$hasKey.apply(vals,[name])) {
-					if(typeof vals[name] === "object" && this[name] && typeof this[name] === "object") {
+					if(typeof vals[name] === "object" && this[name] instanceof Model) {
 						this[name].$overwrite(vals[name],source);
 					} else {
 						this[name] = vals[name];
@@ -120,11 +120,7 @@ define(
 		}
 		Model.prototype.$setUpdated = function(updates,source) {
 			this._$modelizeRecursively();
-			if(!updates) {
-				updates = this._$reconcileShadow();
-			} else {
-				this._$reconcileShadow();
-			}
+			updates = this._$reconcileShadow();
 			var updated = false;
 			for(var name in updates) {
 				updated = true;

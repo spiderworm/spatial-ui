@@ -7,6 +7,8 @@ define(
 	) {
 
 		function SiblingServiceConnection(port,myService) {
+			try {
+
 			EventObject.apply(this);
 			this._port = port;
 			this.namespace = "";
@@ -32,6 +34,9 @@ define(
 						var mode = event.data.match(/^@@@mode (.*)/)[1];
 						siblingService.modeID = mode;
 						siblingService._fire('mode-change',[mode]);
+					} else if(event.data.indexOf('@@@set-mode ' === 0)) {
+						var modeID = event.data.match(/^@@@set\-mode (.*)/)[1];
+						myService.setModeByID(modeID);
 					}
 				} else {
 					console.info(event.data);
@@ -39,6 +44,10 @@ define(
 				}
 			}
 			port.postMessage('@@@get-service@@@');
+
+			} catch(e) {
+				console.info(e);
+			}
 		}
 		SiblingServiceConnection.prototype = new EventObject();
 
@@ -49,7 +58,7 @@ define(
 		}
 
 		SiblingServiceConnection.prototype.setModeID = function(modeID) {
-			port.postMessage('@@@set-mode ' + modeID);
+			this._port.postMessage('@@@set-mode ' + modeID);
 		}
 
 		return SiblingServiceConnection;

@@ -8,17 +8,19 @@ define(
 
 		function StoryStartupMode() {
 			ServiceMode.apply(this);
-			this.data = {
-				"story": {
-					"connectionDefinitions": {
-						"ui": {
-							"url": "demo/ui/mockSocket.js",
-							"type": "mock-websocket",
-							"format": "osc"
+			this.setData(
+				{
+					"story": {
+						"connectionDefinitions": {
+							"ui": {
+								"url": "demo/ui/mockSocket.js",
+								"type": "mock-websocket",
+								"format": "osc"
+							}
 						}
 					}
 				}
-			};
+			);
 		}
 		StoryStartupMode.id = "startup";
 		StoryStartupMode.prototype = new ServiceMode();

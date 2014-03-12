@@ -10,7 +10,14 @@ define(
 		var readyHandlers = [];
 		var ScreenGroup, Screen, PanelGroup, Panel, ControlGroup, ControlLoader, VisualizationLoader;
 
+		function checkReady() {
+			if(ScreenGroup && Screen && PanelGroup && Panel && ControlGroup && ControlLoader && VisualizationLoader) {
+				setReady();
+			}
+		}
+
 		function setReady() {
+			//console.info('set ready');
 			ready = true;
 			for(var i=0; i<readyHandlers.length; i++) {
 				readyHandlers[i]();
@@ -21,40 +28,34 @@ define(
 			readyHandlers.push(callback);
 		}
 
-		require(
-			[
-				'jsx!ui/ScreenGroup',
-				'jsx!ui/Screen',
-				'jsx!ui/PanelGroup',
-				'jsx!ui/Panel',
-				'jsx!ui/ControlGroup',
-				'jsx!ui/controls/Loader',
-				'jsx!ui/visualization/Loader'
-			],
-			function(
-				A,
-				B,
-				C,
-				D,
-				E,
-				F,
-				G
-			) {
-
-				ScreenGroup = A;
-				Screen = B;
-				PanelGroup = C;
-				Panel = D;
-				ControlGroup = E;
-				ControlLoader = F;
-				VisualizationLoader = G;
-
-				setReady();
-
-			}
-		);
-
-
+		require(['jsx!ui/ScreenGroup'],function(module) {
+			//console.info('ScreenGroup callback');
+			ScreenGroup = module; checkReady();
+		});
+		require(['jsx!ui/Screen'],function(module) {
+			//console.info('Screen callback');
+			Screen = module; checkReady();
+		});
+		require(['jsx!ui/PanelGroup'],function(module) {
+			//console.info('PanelGroup callback');
+			PanelGroup = module; checkReady();
+		});
+		require(['jsx!ui/Panel'],function(module) {
+			//console.info('Panel callback');
+			Panel = module; checkReady();
+		});
+		require(['jsx!ui/ControlGroup'],function(module) {
+			//console.info('ControlGroup callback');
+			ControlGroup = module; checkReady();
+		});
+		require(['jsx!ui/controls/Loader'],function(module) {
+			//console.info('ControlLoader callback');
+			ControlLoader = module; checkReady();
+		});
+		require(['jsx!ui/visualization/Loader'],function(module) {
+			//console.info('VisualizationLoader callback');
+			VisualizationLoader = module; checkReady();
+		});
 
 
 		var Piece = React.createClass({

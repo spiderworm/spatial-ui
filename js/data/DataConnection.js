@@ -4,34 +4,33 @@ define(
 		'../base/EventObject',
 		'../base/Model',
 		'./DataChannel',
-		'./DataSourceModelBuilder'
+		'./ChannelModel'
 	],
 	function(
 		InstanceStore,
 		EventObject,
 		Model,
 		Channel,
-		DataSourceModelBuilder
+		ChannelModel
 	) {
 
 
 
 
-		var dataConnectionSource = {name:'dataConnectionSource'};
-
-		function DataConnection(user,url,connectionType,dataFormat) {
+		function DataConnection(id,user,url,connectionType,dataFormat) {
 			EventObject.apply(this);
+			this.id = id;
 			if(url && connectionType && dataFormat) {
 
 				var channel = this._channel = new Channel(url,connectionType,dataFormat);
 
-				var dataSourceModelBuilder = new DataSourceModelBuilder(channel);
-				var clientModel = this._model = dataSourceModelBuilder.getClientModel();
+				var clientModel = this._model = new ChannelModel(id + ' model',channel);
 
 				var connection = this;
 				channel.open(function() {
 					connection._setConnected();
 				});
+
 				clientModel.$deepOnUpdated(function(updateObj,source) {
 					if(source === user) {
 						channel.send(updateObj);

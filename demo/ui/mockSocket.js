@@ -13,6 +13,5 @@ require(
 
 		var service = new UIService();
 		var socket = new MockSocket(service,'osc');
-
 	}
 );

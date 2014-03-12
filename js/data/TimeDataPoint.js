@@ -1,8 +1,9 @@
 define(
 	function() {
 
-		function TimeDataPoint(timestamp,data) {
+		function TimeDataPoint(timestamp,update,data) {
 			this.timestamp = timestamp;
+			this.update = update;
 			this.data = data;
 		}
 

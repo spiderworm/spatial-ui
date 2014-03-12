@@ -1,18 +1,20 @@
 define(
 	[
-		'jsosc/OSCMessage'
+		'jsosc/OSCMessage',
+		'./ServicePacket'
 	],
 	function(
-		OSCMessage
+		OSCMessage,
+		ServicePacket
 	) {
 
 
 
 		function JSONDataInterpreter() { this.wsProtocol = 'json'; }
-		JSONDataInterpreter.prototype.interpret = function(text) {
-			return JSON.parse(text);
+		JSONDataInterpreter.prototype.interpret = function(raw) {
+			return new ServicePacket((new Date()).getTime(),JSON.parse(raw));
 		}
-		JSONDataInterpreter.prototype.stringify = function(obj) {
+		JSONDataInterpreter.prototype.stringify = function(obj,timestamp) {
 			return JSON.stringify(obj);
 		}
 
@@ -24,7 +26,6 @@ define(
 
 		function OSCDataInterpreter() { this.wsProtocol = 'osc'; }
 		OSCDataInterpreter.prototype.interpret = function(raw) {
-
 			var result = {};
 			var message = new OSCMessage(raw);
 			function recurse(message)
@@ -58,9 +59,13 @@ define(
 			}
 
 			recurse(message);
-			return result;
+
+			return new ServicePacket(
+				message.timestamp,
+				result
+			);
 		}
-		OSCDataInterpreter.prototype.stringify = function(obj) {
+		OSCDataInterpreter.prototype.stringify = function(obj,timestamp) {
 			var messages = [];
 
 			function delve(obj,basePath) {
@@ -70,7 +75,7 @@ define(
 						if(typeof obj[i] === "object") {
 							delve(obj[i],path);
 						} else {
-							var message = new OSCMessage(path);
+							var message = new OSCMessage(path,timestamp);
 							switch(typeof obj[i]) {
 								case "string":
 									message.addString(obj[i]);
@@ -93,10 +98,8 @@ define(
 
 			if (messages.length == 0)
 				{ return null; }
-			else if (messages.length == 1)
-				{ return messages[0].serialize(); }
 			else
-				{ return (new OSCMessage(messages)).serialize(); }
+				{ return (new OSCMessage(messages,timestamp)).serialize(); }
 		}
 
 

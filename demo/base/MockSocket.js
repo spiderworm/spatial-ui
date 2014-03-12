@@ -12,31 +12,52 @@ define(
 		dataInterpreters
 	) {
 
+		try {
+
 		function MockSocket(service,dataFormat) {
-			var interpreter = dataInterpreters[dataFormat];
-			var channel = this._channel = new ServiceDataChannel(interpreter);
-			service.onSend(function(data) {
-				channel.send(data);
-			});
-			channel.onData(function(data) {
-				service.setDataReceived(data);
-			});
+			try {
+
+				this._service = service;
+				var interpreter = dataInterpreters[dataFormat];
+				var channel = this._channel = new ServiceDataChannel(interpreter);
+				
+				channel.onData(function(data) {
+					service.setDataReceived(data);
+				});
+
+				var socket = this;
+				self.addEventListener(
+					'message',
+					function(event) {
+						if(event.data === "@@@mock-socket-connect@@@") {
+							var otherService = new SiblingServiceConnection(event.ports[0],service);
+						}
+					},
+					false
+				);
+				
+				channel.sendRaw('@@@ready@@@');
+
+				var socket = this;
+				service.outbox.onNew(function() {
+					socket._checkMessages();
+				});
+				this._checkMessages();
+
+			} catch(e) {
+				console.info(e);
+			}
+		}
+		MockSocket.prototype._checkMessages = function() {
+			var packets = this._service.outbox.pullMessages();
+			for(var i in packets) {
+				this._channel.send(packets[i].data,packets[i].timestamp);
+			}
+		}
 
 
-			var socket = this;
-			self.addEventListener(
-				'message',
-				function(event) {
-					if(event.data === "@@@mock-socket-connect@@@") {
-						var otherService = new SiblingServiceConnection(event.ports[0],service);
-					}
-				},
-				false
-			);
-			
-			channel.sendRaw('@@@ready@@@');
-			service.send();
-
+		} catch(e) {
+			console.info(e);
 		}
 
 		return MockSocket;

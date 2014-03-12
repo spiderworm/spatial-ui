@@ -4,9 +4,10 @@ define(
 
 		window.timelines = [];
 
-		function Timeline(timeDataStore,currentMS) {
-			window.timelines.push(this);
+		function Timeline(id,timeDataStore,currentMS) {
 			EventObject.apply(this);
+			window.timelines.push(this);
+			this.id = id;
 			this._timeDataStore = timeDataStore;
 			this._currentMS = currentMS;
 			this._lastTickMS = (new Date()).getTime();

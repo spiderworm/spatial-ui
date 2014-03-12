@@ -18,11 +18,12 @@ define(
 			var service = this;
 
 			var startupMode = new UIStartupMode();
-			startupMode.onDone(function() {
-				service.setStoryModeID(UIGameplayMode.id);
+			service.onDataReceived("/ui/mode",function(mode) {
+				service.setStoryModeID(UIGameplayMode.id)
 			});
 			this.addMode(startupMode);
 			this.addMode(new UIGameplayMode());
+
 		}
 		UIService.prototype = new MockService();
 		UIService.prototype.setMode = function(mode) {
