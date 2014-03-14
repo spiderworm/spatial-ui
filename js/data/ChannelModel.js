@@ -23,14 +23,12 @@ define(
 
 		function ChannelModelFactory(id,channel) {
 
-			this._data = {};
 			var model = new Model({},id);
-
 			var ms = (new Date()).getTime();
+			
+			var timeDataStore = new TimeDataStore(ms,{});
 
-			this._timeDataStore = new TimeDataStore(ms,this._data);
-
-			var timeline = new Timeline(id + ' timeline',this._timeDataStore,ms-100);
+			var timeline = new Timeline(id + ' timeline',timeDataStore,ms-100);
 			timeline.onNewData(function(data) {
 				if(data) {
 					model.$overwrite(data);
@@ -38,9 +36,8 @@ define(
 			});
 			timeline.play();
 
-			var factory = this;
 			channel.onData(function(update,timestamp) {
-				factory._timeDataStore.addUpdate(timestamp,update);
+				timeDataStore.addUpdate(timestamp,update);
 			});
 
 			return model;

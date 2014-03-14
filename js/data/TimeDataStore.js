@@ -41,7 +41,7 @@ define(
 			this._dataPoints.splice(i,0,timeDataPoint);
 			for(var j=i; j<this._dataPoints.length; j++) {
 				var data = this._dataPoints[j-1] ? this._dataPoints[j-1].data : {};
-				timeDataPoint.data = applyUpdate(data,this._dataPoints[j].update);
+				this._dataPoints[j].data = applyUpdate(data,this._dataPoints[j].update);
 			}
 			while(this._dataPoints.length > 500) {
 				this._dataPoints.shift();
