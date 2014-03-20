@@ -17,7 +17,6 @@ define(
 		}
 
 		function setReady() {
-			//console.info('set ready');
 			ready = true;
 			for(var i=0; i<readyHandlers.length; i++) {
 				readyHandlers[i]();
@@ -29,31 +28,24 @@ define(
 		}
 
 		require(['jsx!ui/ScreenGroup'],function(module) {
-			//console.info('ScreenGroup callback');
 			ScreenGroup = module; checkReady();
 		});
 		require(['jsx!ui/Screen'],function(module) {
-			//console.info('Screen callback');
 			Screen = module; checkReady();
 		});
 		require(['jsx!ui/PanelGroup'],function(module) {
-			//console.info('PanelGroup callback');
 			PanelGroup = module; checkReady();
 		});
 		require(['jsx!ui/Panel'],function(module) {
-			//console.info('Panel callback');
 			Panel = module; checkReady();
 		});
 		require(['jsx!ui/ControlGroup'],function(module) {
-			//console.info('ControlGroup callback');
 			ControlGroup = module; checkReady();
 		});
 		require(['jsx!ui/controls/Loader'],function(module) {
-			//console.info('ControlLoader callback');
 			ControlLoader = module; checkReady();
 		});
 		require(['jsx!ui/visualization/Loader'],function(module) {
-			//console.info('VisualizationLoader callback');
 			VisualizationLoader = module; checkReady();
 		});
 
