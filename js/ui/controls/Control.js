@@ -214,21 +214,6 @@ define(
 					</span>
 				);
 			},
-			_getSubControlNodes: function() {
-				var appModel = this.props.appModel;
-
-				var view = this;
-
-				var subControls = this._getSubControls();
-
-				if(subControls) {
-					return (
-						<Piece appModel={appModel} definition={subControls} user={this.props.user}></Piece>
-					);
-				}
-
-				return null;
-			},
 			_getValueDisplay: function(value) {
 				value = arguments.length > 0 ? value : this.state.value;
 				
@@ -270,12 +255,6 @@ define(
 					value = arguments.length !== 0 ? value : this.state.value;
 				}
 				return this.__getPropertyForValue('label',value) || "";
-			},
-			_getSubControls: function(value) {
-				if(this.state) {
-					value = arguments.length !== 0 ? value : this.state.value;
-				}
-				return this.__getPropertyForValue('subControls',value) || null;
 			},
 			_getSize: function(value) {
 				if(this.state) {
@@ -361,16 +340,11 @@ define(
 						{this.props.children}
 					</label>
 				);
-				var subControls = this._getSubControlNodes();
-				return this._getControlNode([contents,subControls]);
+				return this._getControlNode([contents]);
 			}
 		});
 
 		Control.mixin = controlMixin;
-
-		Control.supportsDefinition = function(definition) {
-			return definition && typeof definition === "object";
-		}
 
 		return Control;
 

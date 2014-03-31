@@ -13,22 +13,17 @@ define(
 					ui: {
 						screens: {
 							type: 'screen-group',
-							index: 0,
 							0: {
-								index: 0,
 								type: 'screen',
 								label: 'helm',
 								visualization: {
 									type: 'visualization',
-									index: 0,
 									path: '/camera1'
 								},
 								panels: {
 									type: 'panel-group',
-									index: 1,
 									panel1: {
 										type: 'panel',
-										index: 0,
 										label: "engines",
 										controls: {
 											type: 'control-group',
@@ -46,76 +41,89 @@ define(
 								}
 							},
 							1: {
-								index: 1,
 								type: 'screen',
 								label: 'weapons',
 								panels: {
 									type: 'panel-group',
-									index: 0,
 									0: {
 										type: 'panel',
 										label: 'Torpedos',
-										index: 0,
 										x: 0,
 										y: 0,
 										z: 0,
 										controls: {
-											index: 0,
 											type: 'control-group',
 											0: {
 												type: 'control',
 												x: 0,
 												y: 0,
 												z: 1,
+												width: 3,
+												height: .5,
 												path: '/controls/weapons/torpedos/stock'
 											},
 											1: {
 												type: 'control',
 												x: 0,
-												y: .5,
+												y: 1,
 												z: 1,
+												width: 3,
+												height: .5,
 												path: '/controls/systems/tubes'
 											},
 											2: {
 												type: 'control',
 												x: 0,
-												y: 2,
+												y: 4,
 												z: 1,
+												width: 12,
+												height: .5,
 												path: '/controls/engineering/energy/levels/tubes'
 											}
 										}
 									},
 									1: {
 										type: 'panel',
-										index: 1,
 										label: 'Phasers',
 										x: 0,
 										y: 8,
 										z: 2,
+										width: 3,
+										height: .5,
 										controls: {
 											type: 'control-group',
-											index: 0,
 											0: {
 												type: 'control',
-												index: 0,
-												path: '/controls/weapons/phasers/switch'
+												path: '/controls/weapons/phasers/switch',
+												x: 0,
+												y: 3,
+												z: 1,
+												width: 3,
+												height: .5
 											},
 											1: {
 												type: 'control',
-												index: 1,
-												path: '/controls/weapons/phasers/frequency'
+												path: '/controls/weapons/phasers/frequency',
+												x: 0,
+												y: 4,
+												z: 1,
+												width: 3,
+												height: .5
 											},
 											2: {
 												type: 'control',
-												index: 2,
-												path: '/controls/engineering/energy/levels/phasers'
+												path: '/controls/engineering/energy/levels/phasers',
+												x: 0,
+												y: 5,
+												z: 1,
+												width: 3,
+												height: .5
 											}
 										}
 									}
 								}
 							},
 							2: {
-								index: 2,
 								type: 'screen',
 								label: 'engineering'
 							}
@@ -133,7 +141,6 @@ define(
 							screens: {
 								3: {
 									type: 'screen',
-									index: 3,
 									label: 'yoo-hoo'
 								}
 							}
@@ -156,10 +163,8 @@ define(
 								0: {
 									panels: {
 										type: 'panel-group',
-										index: 0,
 										0: {
 											type: 'panel',
-											index: 0,
 											label: 'hey there',
 											x: 10,
 											y: 3,

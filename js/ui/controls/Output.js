@@ -20,7 +20,13 @@ define(
 			render: function() {
 
 				return (
-					<Control className="output-control" definition={this.props.definition} appModel={this.props.appModel} inline={this.props.inline}>
+					<Control
+						className="output-control"
+						definition={this.props.definition}
+						appModel={this.props.appModel}
+						inline={this.props.inline}
+						style={this.props.style}
+					>
 						<span>
 							{this._getValueDisplay()}
 						</span>
@@ -29,14 +35,6 @@ define(
 
 			}
 		});
-
-
-		OutputControl.supportsDefinition = function(definition) {
-			return (
-				Control.supportsDefinition(definition)
-			);
-		}
-
 
 		return OutputControl;
 

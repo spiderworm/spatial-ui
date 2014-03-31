@@ -17,81 +17,72 @@ define(
 								"type": "control",
 								"subtype": "multi",
 								"label": "steering",
-								"subControls": {
-									"type":"control-group",
-									"impulse": {
-										"type": "control",
-										"index": 0,
-										"x": 0.25,
-										"y": 0.25,
-										"z": 1,
-										"width": 7,
-										"height": 6,
-										"path": "/controls/helm/impulse"
-									},
-									"pitch": {
-										"type": "control",
-										"index": 0,
-										"x": 0.25,
-										"y": 1.5,
-										"z": 1,
-										"width": 1.25,
-										"height": 4,
-										"path": "/controls/helm/pitch"
-									},
-									"yaw": {
-										"type": "control",
-										"index": 1,
-										"x": 1.75,
-										"y": 1.5,
-										"z": 2,
-										"width": 1.25,
-										"height": 4,
-										"path": "/controls/helm/yaw"
-									},
-									"roll": {
-										"type": "control",
-										"index": 2,
-										"x": 3.25,
-										"y": 1.5,
-										"z": 3,
-										"width": 1.25,
-										"height": 4,
-										"path": "/controls/helm/roll"
-									}
+								"impulse": {
+									"type": "control",
+									"x": 0.25,
+									"y": 0.25,
+									"z": 1,
+									"width": 7,
+									"height": 6,
+									"path": "/controls/helm/impulse"
+								},
+								"pitch": {
+									"type": "control",
+									"x": 0.25,
+									"y": 1.5,
+									"z": 1,
+									"width": 1.25,
+									"height": 4,
+									"path": "/controls/helm/pitch"
+								},
+								"yaw": {
+									"type": "control",
+									"x": 1.75,
+									"y": 1.5,
+									"z": 2,
+									"width": 1.25,
+									"height": 4,
+									"path": "/controls/helm/yaw"
+								},
+								"roll": {
+									"type": "control",
+									"x": 3.25,
+									"y": 1.5,
+									"z": 3,
+									"width": 1.25,
+									"height": 4,
+									"path": "/controls/helm/roll"
 								}
 							},
 							"impulse": {
 								"type": "control",
 								"subtype": "multi",
-								"inlineControls": {
-									"throttle": {
-										"type": "control",
-										"subtype": "range",
-										"label": "Impulse",
-										"description": "impulse engines provide traditional Newtonian movement around space",
-										"min": -1000,
-										"max": 1000,
-										"valuePath": "/physics/values/thrusters/forward",
-										"x": 0,
-										"y": 0,
-										"z": 0,
-										"width": 6.25,
-										"height": 1
-									},
-									"kill": {
-										"type": "control",
-										"subtype": "button",
-										"description": "kill the impulse engines",
-										"display": "0",
-										"message": "forward",
-										"valuePath": "/physics/values/thrusters/kill",
-										"x": 5.5,
-										"y": 0,
-										"z": 0,
-										"width": 2,
-										"height": 1
-									}
+								"throttle": {
+									"type": "control",
+									"subtype": "range",
+									"label": "Impulse",
+									"description": "impulse engines provide traditional Newtonian movement around space",
+									"min": -1000,
+									"max": 1000,
+									"valuePath": "/physics/values/thrusters/forward",
+									"x": 0,
+									"y": 0,
+									"z": 0,
+									"width": 6.25,
+									"height": 1
+								},
+								"kill": {
+									"type": "control",
+									"subtype": "button",
+									"description": "kill the impulse engines",
+									"display": "0",
+									"message": "forward",
+									"valuePath": "/physics/values/thrusters/kill",
+									"x": 5.5,
+									"y": 0,
+									"z": 0,
+									"width": 2,
+									"height": 1
 								}
 							},
 							"pitch": {
@@ -202,173 +193,233 @@ define(
 								"type": "control",
 								"subtype": "multi",
 								"label": "tubes",
-								"subControls": {
-									"type":"control-group",
-									"0": {
-										"type": "control",
-										"index": 0,
-										"path": "/controls/systems/tubes/1"
-									},
-									"1": {
-										"type": "control",
-										"index": 1,
-										"path": "/controls/systems/tubes/2"
-									}
-								},
+								x: 0,
+								y: 0,
+								z: 1,
+								width: 3,
+								height: .5,
 								"1": {
 									"type": "control",
 									"subtype": "multi",
 									"label": "tube 1",
-									"inlineControls": [
-										{
-											"type": "control",
-											"subtype": "output",
-											"description": "current ammo in tube",
-											"valuePath": "/values/systems/tubes/1/currentAmmo"
-										},
-										{
-											"type": "control",
-											"subtype": "output",
-											"description": "percentage that current ammo is loaded",
-											"valuePath": "/values/systems/tubes/1/loadedPercent",
-											"format": "%"
-										},
-										{
-											"type": "control",
-											"subtype": "button",
-											"description": "attack target with tube contents",
-											"valuePath": "/values/systems/tubes/1/fire",
-											"button": true,
-											"allowedValues": [1,0],
-											"display": "fire",
-											"disabled": true
-										},
-										{
-											"type": "control",
-											"subtype": "checkbox",
-											"description": "automatically fire when ammo is loaded",
-											"label": "auto fire",
-											"valuePath": "/values/systems/tubes/1/autoFire",
-											"checkbox": true,
-											"allowedValues": [1,0]
-										}
-									],
-									"subControls": {
-										"type": "control-group",
-										"0": {
-											"type": "control",
-											"subtype": "multi",
-											"inlineControls": [
-												{
-													"type": "control",
-													"subtype": "drop-list",
-													"allowedValues": [null,"torpedos"],
-													"valueMap": [
-														{
-															"value": null,
-															"display": "none"
-														}
-													],
-													"valuePath": "/values/systems/tubes/1/selectedAmmo"
-												},
-												{
-													"type": "control",
-													"subtype": "button",
-													"allowedValues": [1,0],
-													"valuePath": "/values/systems/tubes/1/load",
-													"display": "load"
-												},
-												{
-													"type": "control",
-													"subtype": "button",
-													"allowedValues": [1,0],
-													"valuePath": "/values/systems/tubes/1/unload",
-													"display": "unload"
-												},
-												{
-													"type": "control",
-													"subtype": "checkbox",
-													"allowedValues": [1,0],
-													"valuePath": "/values/systems/tubes/1/keepLoaded",
-													"label": "keep loaded"
-												}
-											]
-										}
+									x: .5,
+									y: .5,
+									z: 1,
+									width: 3,
+									height: .5,
+									ammo: {
+										"type": "control",
+										"subtype": "output",
+										"description": "current ammo in tube",
+										"valuePath": "/values/systems/tubes/1/currentAmmo",
+										x: 2,
+										y: 0,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									loadedPercent: {
+										"type": "control",
+										"subtype": "output",
+										"description": "percentage that current ammo is loaded",
+										"valuePath": "/values/systems/tubes/1/loadedPercent",
+										"format": "%",
+										x: 4,
+										y: 0,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									fireButton: {
+										"type": "control",
+										"subtype": "button",
+										"description": "attack target with tube contents",
+										"valuePath": "/values/systems/tubes/1/fire",
+										"button": true,
+										"allowedValues": [1,0],
+										"display": "fire",
+										"disabled": true,
+										x: 6,
+										y: 0,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									autoFire: {
+										"type": "control",
+										"subtype": "checkbox",
+										"description": "automatically fire when ammo is loaded",
+										"label": "auto fire",
+										"valuePath": "/values/systems/tubes/1/autoFire",
+										"checkbox": true,
+										"allowedValues": [1,0],
+										x: 9,
+										y: 0,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									selectedAmmo: {
+										"type": "control",
+										"subtype": "drop-list",
+										"allowedValues": [null,"torpedos"],
+										"valueMap": [
+											{
+												"value": null,
+												"display": "none"
+											}
+										],
+										"valuePath": "/values/systems/tubes/1/selectedAmmo",
+										x: 0,
+										y: .5,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									loadButton: {
+										"type": "control",
+										"subtype": "button",
+										"allowedValues": [1,0],
+										"valuePath": "/values/systems/tubes/1/load",
+										"display": "load",
+										x: 3,
+										y: .5,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									unloadButton: {
+										"type": "control",
+										"subtype": "button",
+										"allowedValues": [1,0],
+										"valuePath": "/values/systems/tubes/1/unload",
+										"display": "unload",
+										x: 6,
+										y: .5,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									keepLoaded: {
+										"type": "control",
+										"subtype": "checkbox",
+										"allowedValues": [1,0],
+										"valuePath": "/values/systems/tubes/1/keepLoaded",
+										"label": "keep loaded",
+										x: 9,
+										y: .5,
+										z: 1,
+										width: 3,
+										height: .5
 									}
 								},
 								"2": {
 									"type": "control",
 									"subtype": "multi",
 									"label": "tube 2",
-									"inlineControls": [
-										{
-											"type": "control",
-											"subtype": "output",
-											"valuePath": "/values/systems/tubes/2/currentAmmo"
-										},
-										{
-											"type": "control",
-											"subtype": "output",
-											"description": "percentage that current ammo is loaded",
-											"valuePath": "/values/systems/tubes/2/loadedPercent",
-											"format": "%"
-										},
-										{
-											"type": "control",
-											"subtype": "button",
-											"valuePath": "/values/systems/tubes/2/fire",
-											"allowedValues": [1,0],
-											"display": "fire"
-										},
-										{
-											"type": "control",
-											"subtype": "checkbox",
-											"label": "auto fire",
-											"valuePath": "/values/systems/tubes/2/autoFire",
-											"allowedValues": [1,0]
-										}
-									],
-									"subControls": {
-										"type": "control-group",
-										"0": {
-											"type": "control",
-											"subtype": "multi",
-											"inlineControls": [
-												{
-													"type": "control",
-													"subtype": "drop-list",
-													"allowedValues": [null,"torpedos"],
-													"valueMap": [
-														{
-															"value": null,
-															"display": "none"
-														}
-													],
-													"valuePath": "/values/systems/tubes/2/selectedAmmo"
-												},
-												{
-													"type": "control",
-													"subtype": "button",
-													"allowedValues": [1,0],
-													"valuePath": "/values/systems/tubes/2/load",
-													"display": "load"
-												},
-												{
-													"type": "control",
-													"subtype": "button",
-													"allowedValues": [1,0],
-													"valuePath": "/values/systems/tubes/2/unload",
-													"display": "unload"
-												},
-												{
-													"type": "control",
-													"subtype": "checkbox",
-													"allowedValues": [1,0],
-													"valuePath": "/values/systems/tubes/2/keepLoaded",
-													"label": "keep loaded"
-												}
-											]
-										}
+									x: .5,
+									y: 1.75,
+									z: 1,
+									width: 3,
+									height: .5,
+									ammo: {
+										"type": "control",
+										"subtype": "output",
+										"valuePath": "/values/systems/tubes/2/currentAmmo",
+										x: 2,
+										y: 0,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									loadedPercent: {
+										"type": "control",
+										"subtype": "output",
+										"description": "percentage that current ammo is loaded",
+										"valuePath": "/values/systems/tubes/2/loadedPercent",
+										"format": "%",
+										x: 4,
+										y: 0,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									fireButton: {
+										"type": "control",
+										"subtype": "button",
+										"valuePath": "/values/systems/tubes/2/fire",
+										"allowedValues": [1,0],
+										"display": "fire",
+										x: 6,
+										y: 0,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									autoFire: {
+										"type": "control",
+										"subtype": "checkbox",
+										"label": "auto fire",
+										"valuePath": "/values/systems/tubes/2/autoFire",
+										"allowedValues": [1,0],
+										x: 9,
+										y: 0,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									selectedAmmo: {
+										"type": "control",
+										"subtype": "drop-list",
+										"allowedValues": [null,"torpedos"],
+										"valueMap": [
+											{
+												"value": null,
+												"display": "none"
+											}
+										],
+										"valuePath": "/values/systems/tubes/2/selectedAmmo",
+										x: 0,
+										y: .5,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									loadButton: {
+										"type": "control",
+										"subtype": "button",
+										"allowedValues": [1,0],
+										"valuePath": "/values/systems/tubes/2/load",
+										"display": "load",
+										x: 3,
+										y: .5,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									unloadButton: {
+										"type": "control",
+										"subtype": "button",
+										"allowedValues": [1,0],
+										"valuePath": "/values/systems/tubes/2/unload",
+										"display": "unload",
+										x: 6,
+										y: .5,
+										z: 1,
+										width: 3,
+										height: .5
+									},
+									keepLoaded: {
+										"type": "control",
+										"subtype": "checkbox",
+										"allowedValues": [1,0],
+										"valuePath": "/values/systems/tubes/2/keepLoaded",
+										"label": "keep loaded",
+										x: 9,
+										y: .5,
+										z: 1,
+										width: 3,
+										height: .5
 									}
 								}
 							}

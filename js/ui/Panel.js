@@ -21,11 +21,7 @@ define(
 		var Panel = React.createClass({
 			mixins: [keyGenerator.mixin],
 			getDefaultProps: function() {
-				try {
-					Panel.addInstance(this,[this.props.definition]);
-				} catch(e) {
-					console.info('failed',this.props.definition);
-				}
+				Panel.addInstance(this,[this.props.definition]);
 				this.props.definition.x = this.props.definition.x || 0;
 				this.props.definition.y = this.props.definition.y || 0;
 				this.props.definition.z = this.props.definition.z || 1;

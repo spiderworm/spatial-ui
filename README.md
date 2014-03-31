@@ -39,6 +39,17 @@
 		<h3>0.2</h3>
 		<ul>
 			<li>
+				Edit mode support for controls, panels, and screens.
+			</li>
+			<li>
+				Support for additional control positioning schemas, including horizontal left/center/right positioning and vertical top/center/bottom positioning.
+			</li>
+		</ul>
+	</li>
+	<li>
+		<h3>0.3</h3>
+		<ul>
+			<li>
 				Support for label-less controls.
 			</li>
 			<li>
@@ -50,7 +61,7 @@
 		</ul>
 	</li>
 	<li>
-		<h3>0.3</h3>
+		<h3>0.4</h3>
 		<ul>
 			<li>
 				New controls:
@@ -75,7 +86,7 @@
 		</ul>
 	</li>
 	<li>
-		<h3>0.4</h3>
+		<h3>0.5</h3>
 		<ul>
 			<li>
 				Support for 3D object inspection visualization.

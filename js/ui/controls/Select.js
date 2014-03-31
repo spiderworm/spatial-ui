@@ -24,7 +24,13 @@ define(
 				var view = this;
 
 				return (
-					<Control definition={this.props.definition} appModel={this.props.appModel} inline={this.props.inline}>
+					<Control
+						className="select-control"
+						definition={this.props.definition}
+						appModel={this.props.appModel}
+						inline={this.props.inline}
+						style={this.props.style}
+					>
 						<select value={this.state.value} onChange={this.handleValueChange} disabled={this._isDisabled()}>
 							{this.props.definition.allowedValues.$map(function(allowedValue) {
 								return (
@@ -45,15 +51,6 @@ define(
 			}
 
 		});
-
-
-		SelectControl.supportsDefinition = function(definition) {
-			return (
-				Control.supportsDefinition(definition) &&
-				definition.allowedValues &&
-				!ButtonControl.supportsDefinition(definition)
-			);
-		}
 
 
 		return SelectControl;

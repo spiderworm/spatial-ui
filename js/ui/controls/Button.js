@@ -40,14 +40,6 @@ define(
 		});
 
 
-		ButtonControl.supportsDefinition = function(definition) {
-			return (
-				Control.supportsDefinition(definition) &&
-				definition.button
-			);
-		}
-
-
 		return ButtonControl;
 
 	}
