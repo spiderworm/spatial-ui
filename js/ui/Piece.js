@@ -10,6 +10,12 @@ define(
 		var readyHandlers = [];
 		var ScreenGroup, Screen, PanelGroup, Panel, ControlGroup, ControlLoader, VisualizationLoader;
 
+		function checkReady() {
+			if(ScreenGroup && Screen && PanelGroup && Panel && ControlGroup && ControlLoader && VisualizationLoader) {
+				setReady();
+			}
+		}
+
 		function setReady() {
 			ready = true;
 			for(var i=0; i<readyHandlers.length; i++) {
@@ -21,40 +27,27 @@ define(
 			readyHandlers.push(callback);
 		}
 
-		require(
-			[
-				'jsx!ui/ScreenGroup',
-				'jsx!ui/Screen',
-				'jsx!ui/PanelGroup',
-				'jsx!ui/Panel',
-				'jsx!ui/ControlGroup',
-				'jsx!ui/controls/Loader',
-				'jsx!ui/visualization/Loader'
-			],
-			function(
-				A,
-				B,
-				C,
-				D,
-				E,
-				F,
-				G
-			) {
-
-				ScreenGroup = A;
-				Screen = B;
-				PanelGroup = C;
-				Panel = D;
-				ControlGroup = E;
-				ControlLoader = F;
-				VisualizationLoader = G;
-
-				setReady();
-
-			}
-		);
-
-
+		require(['jsx!ui/ScreenGroup'],function(module) {
+			ScreenGroup = module; checkReady();
+		});
+		require(['jsx!ui/Screen'],function(module) {
+			Screen = module; checkReady();
+		});
+		require(['jsx!ui/PanelGroup'],function(module) {
+			PanelGroup = module; checkReady();
+		});
+		require(['jsx!ui/Panel'],function(module) {
+			Panel = module; checkReady();
+		});
+		require(['jsx!ui/ControlGroup'],function(module) {
+			ControlGroup = module; checkReady();
+		});
+		require(['jsx!ui/controls/Loader'],function(module) {
+			ControlLoader = module; checkReady();
+		});
+		require(['jsx!ui/visualization/Loader'],function(module) {
+			VisualizationLoader = module; checkReady();
+		});
 
 
 		var Piece = React.createClass({
@@ -183,11 +176,11 @@ define(
 			_getSubPieces: function(definitions) {
 				var result = [];
 				definitions.$map(function(definition,id) {
-					if(definition && typeof(definition) === "object" && definition.$hasKey('index')) {
-						result[definition.index] = {
+					if(definition && typeof(definition) === "object") {
+						result.push({
 							id: id,
 							definition: definition
-						};
+						});
 					}
 				});
 				return result;

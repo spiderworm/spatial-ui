@@ -18,8 +18,6 @@ define(
 				};
 			},
 			render: function() {
-				var subControls = this._getSubControlNodes();
-
 				return this._getControlNode([
 					React.DOM.label(
 						{},
@@ -34,23 +32,11 @@ define(
 							),
 							this._getLabelTextNode()
 						]
-					),
-					subControls
+					)
 				]);
-
 			}
 
 		});
-
-
-		CheckboxControl.supportsDefinition = function(definition) {
-			return (
-				Control.supportsDefinition(definition) &&
-				definition.checkbox &&
-				definition.allowedValues
-			);
-		}
-
 
 		return CheckboxControl;
 

@@ -14,7 +14,6 @@ if (window.require !== window.requirejs) {
 		],
 		function(App) {
 			app = new App();
-			app.start();
 		}
 	);
 	
@@ -32,7 +31,7 @@ if (window.require !== window.requirejs) {
 	}
 	API.prototype.setStoryConnectionInfo = function(url,connectionType,dataFormat,connect) {
 		if(this.isReady()) {
-			this.getModel().story.$update({
+			app.getStartupModel().story.$update({
 				url: url,
 				connectionType: connectionType || 'websocket',
 				dataFormat: dataFormat || 'osc',
@@ -42,7 +41,7 @@ if (window.require !== window.requirejs) {
 	}
 	API.prototype.connect = function() {
 		if(this.isReady()) {
-			this.getModel().story.$update({connect: true});
+			app.getStartupModel().story.$update({connect: true});
 		}
 	}
 	API.prototype.onReady = function(callback) {
@@ -50,7 +49,7 @@ if (window.require !== window.requirejs) {
 		this.__checkReady();
 	}
 	API.prototype.isReady = function() {
-		return app && app.isStarted();
+		return app && true;
 	}
 	API.prototype.__checkReady = function() {
 		if(this.isReady()) {

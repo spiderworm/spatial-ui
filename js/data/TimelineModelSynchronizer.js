@@ -4,7 +4,9 @@ define(
 		function TimelineModelSynchronizer(timeline,model) {
 			this._model = model;
 			timeline.onNewData(function(data) {
-				model.$update(data);
+				if(data) {
+					model.$overwrite(data);
+				}
 			});
 		}
 

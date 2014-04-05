@@ -25,13 +25,25 @@ define(
 				'message',
 				function(e) {
 					if(!server._ready && e.data === "@@@ready@@@") {
+
+						var servers = instances.getAllInstances();
+						for(var i in servers) {
+							if(server !== servers[i]) {
+								var messageChannel = new MessageChannel();
+								server.__worker.postMessage("@@@mock-socket-connect@@@",[messageChannel.port1]);
+								servers[i].__worker.postMessage("@@@mock-socket-connect@@@",[messageChannel.port2]);
+							}
+						}
+
 						server._ready = true;
 						server._fire('ready');
-					} else {
+						
+					} else if(e.data) {
 						server._fire('message-ready',[e.data]);
 					}
 				}
 			);
+
 		}
 		MockServer.prototype = new EventObject();
 		MockServer.prototype.onReady = function(callback) {

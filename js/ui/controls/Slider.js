@@ -114,15 +114,6 @@ define(
 		});
 
 
-		SliderControl.supportsDefinition = function(definition) {
-			return (
-				Control.supportsDefinition(definition) &&
-				(definition.min || definition.min === 0) &&
-				(definition.max || definition.max === 0)
-			);
-		}
-
-
 
 
 

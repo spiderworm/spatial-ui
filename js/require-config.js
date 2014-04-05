@@ -1,5 +1,5 @@
 require = {
-	"waitSeconds": 0,
+	"waitSeconds": 3,
 	"paths": {
 		"react": "external/react",
 		"jsx": "external/require-jsx",

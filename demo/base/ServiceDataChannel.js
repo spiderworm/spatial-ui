@@ -22,9 +22,9 @@ define(
 			);
 		}
 		ServiceDataChannel.prototype = new EventObject();
-		ServiceDataChannel.prototype.send = function(obj) {
+		ServiceDataChannel.prototype.send = function(obj,timestamp) {
 			this.sendRaw(
-				this._interpreter.stringify(obj)
+				this._interpreter.stringify(obj,timestamp)
 			);
 		}
 		ServiceDataChannel.prototype.sendRaw = function(raw) {
@@ -34,8 +34,8 @@ define(
 			return this._on('data-received',callback);
 		}
 		ServiceDataChannel.prototype._handleRaw = function(raw) {
-			var data = this._interpreter.interpret(raw);
-			this._fire('data-received',[data]);
+			var servicePacket = this._interpreter.interpret(raw);
+			this._fire('data-received',[servicePacket.data,servicePacket.timestamp]);
 		}
 
 

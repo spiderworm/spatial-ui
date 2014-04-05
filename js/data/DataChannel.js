@@ -50,8 +50,8 @@ define(
 			this._sendNext();
 		}
 		DataChannelBase.prototype._handleRaw = function(raw) {
-			var data = this._interpreter.interpret(raw);
-			this._fire('data-received',[data]);
+			var servicePacket = this._interpreter.interpret(raw);
+			this._fire('data-received',[servicePacket.data,servicePacket.timestamp]);
 		}
 		DataChannelBase.prototype._sendNext = function() {
 			if(this.isOpen() && this._outbox.length > 0) {
@@ -144,7 +144,7 @@ define(
 			}
 		}
 		WebSocketDataChannel.prototype.isOpen = function() {
-			return this.__socket.readyState === 1;
+			return this.__socket && this.__socket.readyState === 1;
 		}
 		WebSocketDataChannel.prototype._sendNow = function(raw) {
 			this.__socket.send(raw);

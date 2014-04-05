@@ -1,10 +1,10 @@
-importScripts('../util/requireBootstrap.js');
+importScripts('../base/requireBootstrap.js');
 requireBoostrap('../../js');
 
 require(
 	[
 		'../demo/ui/UIService',
-		'../demo/util/MockSocket'
+		'../demo/base/MockSocket'
 	],
 	function(
 		UIService,
@@ -13,6 +13,5 @@ require(
 
 		var service = new UIService();
 		var socket = new MockSocket(service,'osc');
-
 	}
 );

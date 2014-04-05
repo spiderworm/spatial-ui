@@ -79,20 +79,6 @@ define(
 			}
 		});
 
-
-		TextControl.supportsDefinition = function(definition) {
-			return (
-				Control.supportsDefinition(definition) && definition.type === "text"
-			);
-		}
-
-
-
-
-
-
-
-
 		return TextControl;
 
 	}

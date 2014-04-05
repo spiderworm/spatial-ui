@@ -11,7 +11,7 @@ define(
 	) {
 
 		function StoryDataConnection(user,url,connectionType,dataFormat) {
-			DataConnection.apply(this,[user,url,connectionType,dataFormat]);
+			DataConnection.apply(this,['story',user,url,connectionType,dataFormat]);
 
 			this._channel.sendRaw('/@connect story');
 
@@ -23,23 +23,29 @@ define(
 
 			this._model.$subscribeTo('story',function(story) {
 				if(story) {
+
 					story.$subscribeTo('connectionDefinitions',function(definitions) {
 						if(definitions) {
 
-							var keys = definitions.$getKeys();
-							for(var i in keys) {
-								if(definitions[keys[i]].url) {
-									storyConnection.__addConnection(
-										keys[i],
-										definitions[keys[i]].url,
-										definitions[keys[i]].type,
-										definitions[keys[i]].format
-									);
+							definitions.$subscribeTo(function() {
+
+								var keys = this.$getKeys();
+								for(var i in keys) {
+									if(this[keys[i]].url) {
+										storyConnection.__addConnection(
+											keys[i],
+											this[keys[i]].url,
+											this[keys[i]].type,
+											this[keys[i]].format
+										);
+									}
 								}
-							}
+
+							});
 
 						}
 					});
+
 				}
 			});
 
@@ -49,17 +55,19 @@ define(
 			return this._resultModel;
 		}
 		StoryDataConnection.prototype.__addConnection = function(key,url,type,format) {
-			this.__connections[key] = new DataConnection(this._user,url,type,format);
+			if(!this.__connections[key]) {
+				this.__connections[key] = new DataConnection(key,this._user,url,type,format);
 
-			this.__connections[key]._channel.sendRaw('/@connect ' + key);
-			var story = this;
-			this.__connections[key].getModel().$subscribeTo(
-				key,
-				function(subModel) {
-					story._resultModel[key] = subModel;
-					story._resultModel.$setUpdated();
-				}
-			);
+				this.__connections[key]._channel.sendRaw('/@connect ' + key);
+				var story = this;
+				this.__connections[key].getModel().$subscribeTo(
+					key,
+					function(subModel) {
+						story._resultModel[key] = subModel;
+						story._resultModel.$setUpdated();
+					}
+				);
+			}
 		}
 
 		return StoryDataConnection;

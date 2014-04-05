@@ -23,9 +23,9 @@ define(
 				var appModel = this.props.appModel;
 				var user = this.props.user;
 				var view = this;
-				var inlineControls;
-				if(this.props.definition.inlineControls) {
-					inlineControls = this.props.definition.inlineControls.$map(function(definition,id) {
+
+				var subcontrols = this.props.definition.$map(function(definition,id) {
+					if(definition && definition.type === "control") {
 						return (
 							<ControlLoader
 								key={view.getKey([view,definition])}
@@ -35,15 +35,12 @@ define(
 								user={user}
 							></ControlLoader>
 						);
-					});
-				}
-				
-				var subControls = this._getSubControlNodes();
+					}
+				});
 
 				var node = this._getControlNode([
 					this._getLabelTextNode(),
-					inlineControls,
-					subControls
+					subcontrols
 				]);
 				node.props.className = node.props.className + " multi-control";
 
@@ -51,14 +48,6 @@ define(
 			}
 
 		});
-
-
-		MultiControl.supportsDefinition = function(definition) {
-			return (
-				Control.supportsDefinition(definition) &&
-				definition.inlineControls
-			);
-		}
 
 
 		return MultiControl;
