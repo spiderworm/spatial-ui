@@ -334,9 +334,11 @@ define(
 		var Control = React.createClass({
 			mixins: [controlMixin],
 			render: function() {
+				var labelText = this._getLabelTextNode();
+
 				var contents = (
-					<label>
-						{this._getLabelTextNode()}
+					<label data-label-text={labelText ? "true" : "false"}>
+						{labelText}
 						{this.props.children}
 					</label>
 				);

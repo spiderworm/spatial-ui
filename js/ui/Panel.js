@@ -25,6 +25,8 @@ define(
 				this.props.definition.x = this.props.definition.x || 0;
 				this.props.definition.y = this.props.definition.y || 0;
 				this.props.definition.z = this.props.definition.z || 1;
+				this.props.definition.width = this.props.definition.width || 0;
+				this.props.definition.height = this.props.definition.height || 0;
 
 				var view = this;
 				this.props.definition.$subscribeTo(function() {
@@ -47,6 +49,8 @@ define(
 						position: 'absolute',
 						left: (this.props.definition.x*gridTileSizeCM) + 'cm',
 						top: (this.props.definition.y*gridTileSizeCM) + 'cm',
+						width: (this.props.definition.width*gridTileSizeCM) + 'cm',
+						height: (this.props.definition.height*gridTileSizeCM) + 'cm',
 						zIndex: this.props.definition.z
 					};
 

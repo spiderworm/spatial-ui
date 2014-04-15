@@ -25,6 +25,11 @@ define(
 									panel1: {
 										type: 'panel',
 										label: "engines",
+										x: 0,
+										y: 0,
+										z: 1,
+										width: 10,
+										height: 8,
 										controls: {
 											type: 'control-group',
 											steering: {

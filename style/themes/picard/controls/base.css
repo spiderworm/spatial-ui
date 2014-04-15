@@ -2,6 +2,10 @@
 .spatial-master .control {
 }
 
+.spatial-master .control[data-layout="vertical"] {
+	text-align: center;
+}
+
 .spatial-master .control > label {
 	display: inline-block;
 }
@@ -15,10 +19,6 @@
 	width: 2cm;
 }
 
-.spatial-master .control[data-layout="vertical"] {
-	text-align: center;
-}
-
 .spatial-master .control[data-layout="vertical"] > .label-text,
 .spatial-master .control[data-layout="vertical"] > label > .label-text {
 	position: absolute;
@@ -29,4 +29,25 @@
 	line-height: normal;
 	margin: 0;
 	width: auto;
+}
+
+.spatial-master .control > label > .label-control {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: auto;
+	height: auto;
+	line-height: normal;
+	margin: 0;
+}
+
+.spatial-master .control > [data-label-text="true"] > .label-control {
+	left: 2cm;
+}
+
+.spatial-master .control[data-layout="vertical"] > [data-label-text="true"] > .label-control {
+	left: 0;
+	top: .5cm;
 }

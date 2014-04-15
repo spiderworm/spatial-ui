@@ -78,10 +78,10 @@ define(
 									"display": "0",
 									"message": "forward",
 									"valuePath": "/physics/values/thrusters/kill",
-									"x": 5.5,
+									"x": 6.5,
 									"y": 0,
 									"z": 0,
-									"width": 2,
+									"width": 1,
 									"height": 1
 								}
 							},

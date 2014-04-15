@@ -27,7 +27,7 @@ define(
 						inline={this.props.inline}
 						style={this.props.style}
 					>
-						<span>
+						<span className="label-control">
 							{this._getValueDisplay()}
 						</span>
 					</Control>

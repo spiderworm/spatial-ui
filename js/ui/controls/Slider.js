@@ -40,6 +40,7 @@ define(
 									<input
 										type="text"
 										name="value"
+										className="label-control"
 										value={this.state.temporaryValue}
 										onChange={this.handleTemporaryValueUpdate}
 										onBlur={this.handleTemporaryValueReady}

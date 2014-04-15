@@ -27,7 +27,7 @@ define(
 						inline={this.props.inline}
 						style={this.props.style}
 					>
-						<span className="button-wrap">
+						<span className="button-wrap label-control">
 							<button type="button" name={this.props.modelPropertyName} onClick={this._nextValue} disabled={this._isDisabled()}>
 								{this._getValueDisplay()}
 							</button>

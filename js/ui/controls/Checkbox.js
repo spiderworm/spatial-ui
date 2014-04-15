@@ -18,19 +18,30 @@ define(
 				};
 			},
 			render: function() {
+				var labelText = this._getLabelTextNode();
 				return this._getControlNode([
 					React.DOM.label(
-						{},
+						{
+							"data-label-text": labelText ? true : false
+						},
 						[
-							React.DOM.input(
+							React.DOM.span(
 								{
-									type: "checkbox",
-									checked: this.state.value === this.props.definition.allowedValues[0],
-									onClick: this._nextValue,
-									disabled: this._isDisabled()
-								}
+									className: "label-control"
+								},
+								[
+									React.DOM.input(
+										{
+											type: "checkbox",
+											className: "label-control",
+											checked: this.state.value === this.props.definition.allowedValues[0],
+											onClick: this._nextValue,
+											disabled: this._isDisabled()
+										}
+									)
+								]
 							),
-							this._getLabelTextNode()
+							labelText
 						]
 					)
 				]);

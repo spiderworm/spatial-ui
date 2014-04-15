@@ -1,13 +1,5 @@
 
-.spatial-master .button-control .button-wrap {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 1cm;
-}
-
-.spatial-master .button-control .button-wrap > button {
+.spatial-master .button-control .label-control > button {
 	min-height: 0;
 	max-height: none;
 	min-width: 0;

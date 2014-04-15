@@ -31,7 +31,7 @@ define(
 						inline={this.props.inline}
 						style={this.props.style}
 					>
-						<select value={this.state.value} onChange={this.handleValueChange} disabled={this._isDisabled()}>
+						<select value={this.state.value} onChange={this.handleValueChange} disabled={this._isDisabled()} className="label-control">
 							{this.props.definition.allowedValues.$map(function(allowedValue) {
 								return (
 									<option

@@ -16,13 +16,15 @@ define(
 							panel1: {
 								type: 'panel',
 								label: "choose your experience",
+								width: 8,
+								height: 3.5,
 								controls: {
 									type: 'control-group',
 									playerMode: {
 										type: "control",
 										subtype: 'button',
 										display: 'player mode',
-										x: 0,
+										x: 1,
 										y: .5,
 										z: 1,
 										width: 6,
@@ -34,7 +36,7 @@ define(
 										type: "control",
 										subtype: 'button',
 										display: 'game master mode',
-										x: 0,
+										x: 1,
 										y: 1.75,
 										z: 1,
 										width: 6,
