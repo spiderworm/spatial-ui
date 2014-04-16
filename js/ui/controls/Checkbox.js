@@ -19,7 +19,7 @@ define(
 			},
 			render: function() {
 				var labelText = this._getLabelTextNode();
-				return this._getControlNode([
+				var node = this._getControlNode([
 					React.DOM.label(
 						{
 							"data-label-text": labelText ? true : false
@@ -33,7 +33,6 @@ define(
 									React.DOM.input(
 										{
 											type: "checkbox",
-											className: "label-control",
 											checked: this.state.value === this.props.definition.allowedValues[0],
 											onClick: this._nextValue,
 											disabled: this._isDisabled()
@@ -45,6 +44,8 @@ define(
 						]
 					)
 				]);
+				node.props.className += " checkbox-control";
+				return node;
 			}
 
 		});

@@ -42,7 +42,7 @@ define(
 					this._getLabelTextNode(),
 					subcontrols
 				]);
-				node.props.className = node.props.className + " multi-control";
+				node.props.className += " multi-control";
 
 				return node;
 			}

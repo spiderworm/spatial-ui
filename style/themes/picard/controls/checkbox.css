@@ -1,12 +1,14 @@
 
 .spatial-master .checkbox-control [data-label-text="true"] .label-control {
 	left: 0;
-	right: 2cm;
+	right: 2.1cm;
+	text-align: left;
 }
 
 .spatial-master .checkbox-control [data-label-text="true"] .label-text {
-	left: 2cm;
+	width: 2cm;
 	right: 0;
+	left: auto;
 }
 
 .spatial-master .checkbox-control .label-control > input[type="checkbox"] {
@@ -16,4 +18,5 @@
 	max-width: none;
 	height: 100%;
 	width: 100%;
+	margin: 0;
 }
