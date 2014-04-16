@@ -24,6 +24,11 @@
 */
 }
 
+.spatial-master .panel-group .panel {
+	min-width: 6cm;
+	margin: 1cm -.05cm -.05cm;
+}
+
 .spatial-master .panel > h1 {
 	text-transform: uppercase;
 	font-size: .5cm;

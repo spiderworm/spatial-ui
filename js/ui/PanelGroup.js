@@ -34,12 +34,11 @@ define(
 
 				var appModel = this.props.appModel;
 				var editable = this.props.editable;
-				var gridMode = this.state.gridMode;
+				var gridMode = true;
 
 				return (
 					<div
 						className="panel-group"
-						data-layout={gridMode ? "grid" : "default"}
 					>
 						{this._getSubPieceNodes(
 							this.props.definition,

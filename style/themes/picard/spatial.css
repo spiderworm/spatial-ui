@@ -3,7 +3,6 @@
 @import url('./screens.css');
 @import url('./panels.css');
 
-@import url('./screen-layouts/grid.css');
 @import url('./controls.css');
 
 .spatial-master,

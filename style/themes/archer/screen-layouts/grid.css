@@ -1,9 +1,0 @@
-
-.spatial-master .control {
-	position: absolute;
-}
-
-.spatial-master .panel-group[data-layout="grid"] .panel {
-	min-width: 6cm;
-	margin: 1cm 0 0;
-}

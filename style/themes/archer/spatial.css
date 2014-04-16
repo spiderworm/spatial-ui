@@ -1,5 +1,3 @@
-@import url('./screen-layouts/grid.css');
-
 .spatial-master {
 	position: relative;
 	font-size: .45cm;
@@ -87,6 +85,14 @@
 	vertical-align: top;
 }
 
+.spatial-master .control {
+	position: absolute;
+}
+
+.spatial-master .panel-group .panel {
+	min-width: 6cm;
+	margin: 1cm 0 0;
+}
 .spatial-master .visualization {
 	display: none;
 }
