@@ -71,8 +71,7 @@ define(
 
 				return {
 					path: '',
-					definition: null,
-					inline: false
+					definition: null
 				};
 				
 			},
@@ -116,7 +115,6 @@ define(
 			render: function() {
 
 				var appModel = this.props.appModel;
-				var inline = this.props.inline;
 				var definition = this.state.definition;
 
 				var x = this.props.definition.x || 0;
@@ -167,7 +165,6 @@ define(
 							return Constructor({
 								definition: definition,
 								appModel: appModel,
-								inline: inline,
 								user: this.props.user,
 								style: style
 							});
@@ -175,21 +172,13 @@ define(
 
 					} else {
 
-						if(inline) {
-							return <span style={style}>Loading...</span>;
-						} else {
-							return <div style={style}>Loading...</div>;
-						}
+						return <div style={style}>Loading...</div>;
 
 					}
 
 				}
 
-				if(inline) {
-					return <span style={style}>Control "{this.state.path}" unavailable.</span>;
-				} else {
-					return <div style={style}>Control "{this.state.path}" unavailable.</div>;
-				}
+				return <div style={style}>Control "{this.state.path}" unavailable.</div>;
 
 			}
 		});

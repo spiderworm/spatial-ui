@@ -31,7 +31,6 @@ define(
 								key={view.getKey([view,definition])}
 								appModel={appModel}
 								definition={definition}
-								inline={true}
 								user={user}
 							></ControlLoader>
 						);

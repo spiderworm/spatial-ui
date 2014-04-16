@@ -172,37 +172,21 @@ define(
 			},
 			_getControlNode: function(children) {
 				var clss = "control ";
-				if(this.props.inline) {
-					clss += "inline-control ";
-				}
 				if(this.props.className) {
 					clss += this.props.className;
 				}
 				clss += this._getClassName();
 				clss = clss.match(/^(.*[^ ]) ?$/)[1];
-				if(this.props.inline) {
-					return (
-						<span
-							className={clss}
-							title={this._getDescription()}
-							data-layout={this.props.layout}
-							style={this.props.style}
-						>
-							{children}
-						</span>
-					);
-				} else {
-					return (
-						<div
-							className={clss}
-							title={this._getDescription()}
-							data-layout={this.props.layout}
-							style={this.props.style}
-						>
-							{children}
-						</div>
-					);
-				}
+				return (
+					<div
+						className={clss}
+						title={this._getDescription()}
+						data-layout={this.props.layout}
+						style={this.props.style}
+					>
+						{children}
+					</div>
+				);
 			},
 			_getLabelTextNode: function() {
 				if(!this._getLabel() || this._getLabel().length === 0) {

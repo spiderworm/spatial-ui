@@ -28,7 +28,6 @@ define(
 						className="slider-control"
 						definition={this.props.definition}
 						appModel={this.props.appModel}
-						inline={this.props.inline}
 						layout={this.props.definition.layout === "vertical" ? "vertical" : "horizontal"}
 						style={this.props.style}
 					>

@@ -38,7 +38,11 @@ define(
 			},
 			render: function() {
 				return (
-					<Control className="text-control" definition={this.props.definition} appModel={this.props.appModel} inline={this.props.inline}>
+					<Control
+						className="text-control"
+						definition={this.props.definition}
+						appModel={this.props.appModel}
+					>
 						<input
 							type="text"
 							className="label-control"

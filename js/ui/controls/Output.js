@@ -24,7 +24,6 @@ define(
 						className="output-control"
 						definition={this.props.definition}
 						appModel={this.props.appModel}
-						inline={this.props.inline}
 						style={this.props.style}
 					>
 						<span className="label-control">
