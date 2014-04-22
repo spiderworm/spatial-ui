@@ -28,6 +28,7 @@ define(
 		OSCDataInterpreter.prototype.interpret = function(raw) {
 			var result = {};
 			var message = new OSCMessage(raw);
+			//console.log("received: " + message.toString());
 			function recurse(message)
 			{
 				if (message.bundle)
@@ -75,7 +76,8 @@ define(
 						if(typeof obj[i] === "object") {
 							delve(obj[i],path);
 						} else {
-							var message = new OSCMessage(path,timestamp);
+							var message = new OSCMessage(path,timestamp).addAuto(obj[i]);
+							/*
 							switch(typeof obj[i]) {
 								case "string":
 									message.addString(obj[i]);
@@ -88,6 +90,8 @@ define(
 									}
 								}
 							}
+							*/
+							//console.log("sending: " + message.toString());
 							messages.push(message);
 						}
 					}
