@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+<title>Test Runner</title>
+<script src="../../js/require-config.js"></script>
+<script src="../../js/external/require.js"></script>
+<script>
+
+require.config({
+	baseUrl: '../../js',
+	paths: {
+		'buster': '../tests/unit/buster'
+	},
+	shim: {
+		'buster': {
+			exports: 'buster'
+		}
+	}
+})
+
+</script>
+</head>
+<body>
+
+	<header>
+	</header>
+
+	<main>
+		<article>
+
+			<script>
+
+
+				function ModuleTester() {
+					this._value = "suite";
+
+					var tester = this;
+
+					var form = document.createElement('form');
+					form.onsubmit = function() { tester.run(); return false; }
+					
+					var input = document.createElement('input');
+					input.type = "text";
+					input.value = this._value;
+					input.addEventListener(
+						'change',
+						function() {
+							var testModName = input.value;
+							if(testModName !== tester._value) {
+								test._value = testModName;
+								tester.run();
+							}
+						}
+					);
+					form.appendChild(input);
+
+					var button = document.createElement('button');
+					button.type = "submit";
+					button.innerText = "run";
+					form.appendChild(button);
+
+					this._element = form;
+				}
+
+				ModuleTester.prototype = {
+					constructor: ModuleTester,
+					get element() {
+						return this._element;
+					},
+					set element() {
+						return;
+					},
+					run: function() {
+						if(this._value !== "") {
+
+							require(
+								['../tests/unit/' + this._value],
+								function(testMod) {
+									testMod();
+								}
+							);
+
+						}
+					}
+				};
+
+				var tester = new ModuleTester();
+				document.querySelector('main article').appendChild(tester.element);
+				tester.run();
+
+			</script>
+
+		</article>
+	</main>
+
+	<footer>
+	</footer>
+
+</body>
+</html>

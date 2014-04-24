@@ -156,7 +156,6 @@ define(
 								Constructor = CheckboxControl;
 							break;
 							case "output":
-							default:
 								Constructor = OutputControl;
 							break;
 						}
@@ -170,11 +169,9 @@ define(
 							});
 						}
 
-					} else {
-
-						return <div style={style}>Loading...</div>;
-
 					}
+					
+					return <div style={style}>Loading...</div>;
 
 				}
 

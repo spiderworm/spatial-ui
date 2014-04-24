@@ -1,9 +1,13 @@
 define(
 	[
-		'../base/ServiceMode'
+		'../base/ServiceMode',
+		'./UIGameplayMode',
+		'./UIGameMasterMode'
 	],
 	function(
-		ServiceMode
+		ServiceMode,
+		UIGameplayMode,
+		UIGameMasterMode
 	) {
 
 		function UIStartupMode() {
@@ -30,7 +34,7 @@ define(
 										width: 6,
 										height: 1,
 										valuePath: "/ui/mode",
-										message: "player"
+										message: UIGameplayMode.id
 									},
 									gameMasterMode: {
 										type: "control",
@@ -42,7 +46,7 @@ define(
 										width: 6,
 										height: 1,
 										valuePath: "/ui/mode",
-										message: "gamemaster"
+										message: UIGameMasterMode.id
 									}
 								}
 							}

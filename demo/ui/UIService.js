@@ -3,13 +3,15 @@ define(
 		'../base/MockService',
 		'../base/gameModes',
 		'./UIStartupMode',
-		'./UIGameplayMode'
+		'./UIGameplayMode',
+		'./UIGameMasterMode'
 	],
 	function(
 		MockService,
 		gameModes,
 		UIStartupMode,
-		UIGameplayMode
+		UIGameplayMode,
+		UIGameMasterMode
 	) {
 
 		function UIService() {
@@ -19,7 +21,12 @@ define(
 
 			var startupMode = new UIStartupMode();
 			service.onDataReceived("/ui/mode",function(mode) {
-				service.setStoryModeID(UIGameplayMode.id)
+				if(mode === UIGameplayMode.id) {
+					service.setStoryModeID(UIGameplayMode.id);
+				} else if(mode === UIGameMasterMode.id) {
+					console.info('test');
+					service.setStoryModeID(UIGameMasterMode.id);
+				}
 			});
 			this.addMode(startupMode);
 			this.addMode(new UIGameplayMode());
